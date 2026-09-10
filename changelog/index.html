@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.9</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.10</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,9 +131,20 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.9">
+          <article class="release current" data-version="0.1.10">
             <div class="release-card">
-              <header class="release-head"><div><h2 class="release-version">0.1.9</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <header class="release-head"><div><h2 class="release-version">0.1.10</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <h3>联机对手动画稳定性</h3>
+              <ul class="changes">
+                <li>双人 2048 的对手棋盘仅在收到新的棋盘局面或动画数据时重绘；对手停手时不再循环播放上一次的移动动画。</li>
+                <li>对局结束后会以居中结果层直接展示胜负；同一浏览器刷新房间链接会自动恢复已加入的房间与结算页，无需重新填写昵称。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.9">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.9</h2><p class="release-date">2026.09.11</p></div></header>
               <h3>移动端游玩范围与砖块加速</h3>
               <ul class="changes">
                 <li>俄罗斯方块手机端调整为暂不支持，并在游戏区域直接提示使用电脑端，避免小屏幕下影响操作体验。</li>
@@ -266,7 +277,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 10 · v0.1.9</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 11 · v0.1.10</span>
       </div>
     </section>
 
@@ -276,7 +287,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.9</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.10</span></div></footer>
 
   <script>
     (() => {
