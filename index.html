@@ -52,6 +52,9 @@
     .brand-mark span:nth-child(2), .brand-mark span:nth-child(3) { background: var(--cyan); }
     .collection-note { color: var(--muted); font-size: 13px; }
     .account-area { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .version-link { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 11px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font-size: 11px; font-weight: 750; white-space: nowrap; }
+    .version-link span:last-child { color: var(--cyan); font: 750 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .version-link:hover, .version-link:focus-visible { border-color: rgba(88, 213, 232, .6); color: var(--ink); outline: 0; }
     .auth-state { max-width: 180px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
     .account-button {
       min-height: 34px;
@@ -206,6 +209,10 @@
     @media (max-width: 480px) {
       .topbar { min-height: 62px; }
       .collection-note { display: none; }
+      .account-area { gap: 7px; }
+      .version-link { min-height: 32px; padding: 0 8px; }
+      .version-label, .auth-state { display: none; }
+      .account-button { min-height: 32px; padding: 0 10px; }
       h1 { font-size: 26px; }
       .intro { padding-top: 45px; }
       .game-card { min-height: 355px; }
@@ -223,6 +230,7 @@
       ARCADE ARCHIVE
     </a>
     <div class="account-area">
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.1"><span class="version-label">更新日志</span><span>v0.1.1</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
       <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>

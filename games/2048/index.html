@@ -69,16 +69,19 @@
       user-select: none;
     }
     .cell { display: grid; min-width: 0; min-height: 0; aspect-ratio: 1; place-items: center; border-radius: 5px; background: rgba(244, 243, 238, .08); }
-    .tile { display: grid; width: 100%; height: 100%; place-items: center; border-radius: 5px; color: #211b10; background: #c8b896; font-size: clamp(18px, 5vw, 42px); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; box-shadow: inset 0 1px rgba(255, 255, 255, .22), 0 6px 14px rgba(0, 0, 0, .18); will-change: transform, opacity; }
-    .board.is-moving .tile { animation-duration: 150ms; animation-timing-function: cubic-bezier(.22, .8, .32, 1); animation-fill-mode: both; }
-    .board.is-moving.move-left .tile { animation-name: slide-from-left; }
-    .board.is-moving.move-right .tile { animation-name: slide-from-right; }
-    .board.is-moving.move-up .tile { animation-name: slide-from-up; }
-    .board.is-moving.move-down .tile { animation-name: slide-from-down; }
-    @keyframes slide-from-left { from { transform: translateX(78%); opacity: .7; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slide-from-right { from { transform: translateX(-78%); opacity: .7; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slide-from-up { from { transform: translateY(78%); opacity: .7; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes slide-from-down { from { transform: translateY(-78%); opacity: .7; } to { transform: translateY(0); opacity: 1; } }
+    .tile { display: grid; width: 100%; height: 100%; place-items: center; border-radius: 5px; color: #211b10; background: #c8b896; font-size: clamp(18px, 5vw, 42px); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; box-shadow: inset 0 1px rgba(255, 255, 255, .22), 0 6px 14px rgba(0, 0, 0, .18); transform-origin: center; animation-duration: var(--motion-duration, 150ms); animation-timing-function: cubic-bezier(.2, .76, .28, 1); animation-fill-mode: both; will-change: transform, opacity, filter; }
+    .tile[data-motion="left"] { animation-name: tile-move-left; }
+    .tile[data-motion="right"] { animation-name: tile-move-right; }
+    .tile[data-motion="up"] { animation-name: tile-move-up; }
+    .tile[data-motion="down"] { animation-name: tile-move-down; }
+    .tile[data-motion="still"] { animation-name: tile-still; animation-duration: 100ms; }
+    .tile[data-motion="new"] { animation-name: tile-new; animation-duration: 230ms; animation-delay: var(--spawn-delay, 0ms); }
+    @keyframes tile-move-left { 0% { transform: translateX(var(--from-x)) scale(.97); } 78% { transform: translateX(0) scale(var(--arrival-scale)); } 100% { transform: translateX(0) scale(1); } }
+    @keyframes tile-move-right { 0% { transform: translateX(var(--from-x)) scale(.97); } 78% { transform: translateX(0) scale(var(--arrival-scale)); } 100% { transform: translateX(0) scale(1); } }
+    @keyframes tile-move-up { 0% { transform: translateY(var(--from-y)) scale(.97); } 78% { transform: translateY(0) scale(var(--arrival-scale)); } 100% { transform: translateY(0) scale(1); } }
+    @keyframes tile-move-down { 0% { transform: translateY(var(--from-y)) scale(.97); } 78% { transform: translateY(0) scale(var(--arrival-scale)); } 100% { transform: translateY(0) scale(1); } }
+    @keyframes tile-still { from { transform: scale(.985); filter: brightness(.92); } to { transform: scale(1); filter: brightness(1); } }
+    @keyframes tile-new { 0% { opacity: 0; transform: scale(.35) rotate(-4deg); } 72% { opacity: 1; transform: scale(1.09) rotate(1deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
     .tile-2 { background: #eee4d0; }
     .tile-4 { background: #e9d9b6; }
     .tile-8 { color: #fff; background: #f2a65a; }
@@ -139,6 +142,10 @@
       .tile { font-size: clamp(16px, 9vw, 32px); }
       .tile-128, .tile-256, .tile-512 { font-size: clamp(13px, 7vw, 26px); }
       .tile-1024, .tile-2048, .tile-high { font-size: clamp(11px, 6vw, 22px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tile { animation-duration: 1ms !important; animation-delay: 0ms !important; }
     }
   </style>
 </head>
@@ -225,7 +232,6 @@
       let playing = false;
       let won = false;
       let swipeStart = null;
-      let moveAnimationTimer = null;
       const authClient = window.gameAuth && window.gameAuth.client;
 
       function readBest() {
@@ -255,10 +261,10 @@
         for (let row = 0; row < SIZE; row += 1) {
           for (let col = 0; col < SIZE; col += 1) if (!board[row][col]) empty.push([row, col]);
         }
-        if (!empty.length) return false;
+        if (!empty.length) return null;
         const [row, col] = empty[Math.floor(Math.random() * empty.length)];
         board[row][col] = Math.random() < 0.9 ? 2 : 4;
-        return true;
+        return { row, col };
       }
 
       function startGame() {
@@ -267,60 +273,88 @@
         won = false;
         playing = true;
         ui.overlay.hidden = true;
-        spawnTile();
-        spawnTile();
-        render();
+        const spawned = [spawnTile(), spawnTile()].filter(Boolean);
+        render([], spawned);
       }
 
-      function slideLine(line) {
-        const values = line.filter(Boolean);
-        const result = [];
+      function coordinateFor(direction, line, position) {
+        if (direction === "left") return { row: line, col: position };
+        if (direction === "right") return { row: line, col: SIZE - 1 - position };
+        if (direction === "up") return { row: position, col: line };
+        return { row: SIZE - 1 - position, col: line };
+      }
+
+      function cellDistance(from, to) {
+        return Math.abs(from.row - to.row) + Math.abs(from.col - to.col);
+      }
+
+      function motionType(from, to) {
+        if (to.col < from.col) return "left";
+        if (to.col > from.col) return "right";
+        if (to.row < from.row) return "up";
+        if (to.row > from.row) return "down";
+        return "still";
+      }
+
+      function calculateMove(direction) {
+        const next = emptyBoard();
+        const animations = [];
         let gained = 0;
-        for (let index = 0; index < values.length; index += 1) {
-          if (values[index] === values[index + 1]) {
-            const merged = values[index] * 2;
-            result.push(merged);
-            gained += merged;
-            index += 1;
-          } else {
-            result.push(values[index]);
+
+        for (let line = 0; line < SIZE; line += 1) {
+          const sources = [];
+          for (let position = 0; position < SIZE; position += 1) {
+            const coordinate = coordinateFor(direction, line, position);
+            const value = board[coordinate.row][coordinate.col];
+            if (value) sources.push({ ...coordinate, value });
+          }
+
+          let targetPosition = 0;
+          for (let sourceIndex = 0; sourceIndex < sources.length; sourceIndex += 1) {
+            const first = sources[sourceIndex];
+            const second = sources[sourceIndex + 1];
+            const origins = [first];
+            let value = first.value;
+            let merged = false;
+
+            if (second && second.value === first.value) {
+              value *= 2;
+              gained += value;
+              merged = true;
+              origins.push(second);
+              sourceIndex += 1;
+            }
+
+            const to = coordinateFor(direction, line, targetPosition);
+            const from = origins.reduce((farthest, origin) => cellDistance(origin, to) > cellDistance(farthest, to) ? origin : farthest);
+            const distance = cellDistance(from, to);
+            next[to.row][to.col] = value;
+            animations.push({ row: to.row, col: to.col, from, motion: motionType(from, to), distance, merged });
+            targetPosition += 1;
           }
         }
-        while (result.length < SIZE) result.push(0);
-        return { line: result, gained };
+
+        const moved = next.some((row, rowIndex) => row.some((value, colIndex) => value !== board[rowIndex][colIndex]));
+        return { next, animations, gained, moved };
       }
 
       function move(direction) {
         if (!playing) return;
-        const next = emptyBoard();
-        let moved = false;
-        let gained = 0;
-        for (let index = 0; index < SIZE; index += 1) {
-          let line;
-          if (direction === "left" || direction === "right") line = board[index].slice();
-          else line = board.map(row => row[index]);
-          if (direction === "right" || direction === "down") line.reverse();
-          const result = slideLine(line);
-          if (direction === "right" || direction === "down") result.line.reverse();
-          if (direction === "left" || direction === "right") next[index] = result.line;
-          else result.line.forEach((value, row) => { next[row][index] = value; });
-          gained += result.gained;
-          if (result.line.some((value, position) => value !== line[position])) moved = true;
-        }
-        if (!moved) {
+        const result = calculateMove(direction);
+        if (!result.moved) {
           if (isGameOver()) endGame();
           return;
         }
-        board = next;
-        score += gained;
+        board = result.next;
+        score += result.gained;
         best = Math.max(best, score);
         saveBest();
-        spawnTile();
+        const spawned = spawnTile();
         if (!won && board.some(row => row.includes(2048))) {
           won = true;
           ui.state.textContent = "2048 已达成";
         }
-        render(direction);
+        render(result.animations, spawned ? [spawned] : []);
         if (isGameOver()) endGame();
       }
 
@@ -350,24 +384,41 @@
         return "tile-high";
       }
 
-      function render(direction = "") {
-        if (direction) {
-          window.clearTimeout(moveAnimationTimer);
-          boardElement.classList.remove("is-moving", "move-left", "move-right", "move-up", "move-down");
-          void boardElement.offsetWidth;
-          boardElement.classList.add("is-moving", `move-${direction}`);
-          moveAnimationTimer = window.setTimeout(() => {
-            boardElement.classList.remove("is-moving", `move-${direction}`);
-          }, 180);
-        }
+      function tileStep() {
+        const style = window.getComputedStyle(boardElement);
+        const gap = Number.parseFloat(style.columnGap) || 0;
+        const horizontalPadding = (Number.parseFloat(style.paddingLeft) || 0) + (Number.parseFloat(style.paddingRight) || 0);
+        return (boardElement.clientWidth - horizontalPadding - gap * (SIZE - 1)) / SIZE + gap;
+      }
+
+      function render(animations = [], newTiles = []) {
+        const animationMap = new Map(animations.map(animation => [`${animation.row}:${animation.col}`, animation]));
+        const newSet = new Set(newTiles.map(tile => `${tile.row}:${tile.col}`));
+        const step = tileStep();
+        const longestMove = animations.reduce((longest, animation) => Math.max(longest, animation.distance), 0);
+        const spawnDelay = longestMove ? 90 + longestMove * 30 : 0;
         boardElement.querySelectorAll(".cell").forEach(cell => cell.remove());
-        board.forEach(row => row.forEach(value => {
+        board.forEach((row, rowIndex) => row.forEach((value, colIndex) => {
           const cell = document.createElement("div");
           cell.className = "cell";
           if (value) {
             const tile = document.createElement("span");
+            const key = `${rowIndex}:${colIndex}`;
+            const animation = animationMap.get(key);
+            const motion = newSet.has(key) ? "new" : animation ? animation.motion : "still";
+            const distance = animation ? animation.distance : 0;
             tile.className = `tile ${tileClass(value)}`;
+            if (animation && animation.merged) tile.classList.add("is-merged");
+            tile.dataset.motion = motion;
+            tile.dataset.distance = String(distance);
             tile.textContent = String(value);
+            tile.style.setProperty("--motion-duration", `${105 + distance * 38}ms`);
+            tile.style.setProperty("--arrival-scale", animation && animation.merged ? "1.1" : "1.025");
+            if (animation) {
+              tile.style.setProperty("--from-x", `${(animation.from.col - colIndex) * step}px`);
+              tile.style.setProperty("--from-y", `${(animation.from.row - rowIndex) * step}px`);
+            }
+            if (motion === "new") tile.style.setProperty("--spawn-delay", `${spawnDelay}ms`);
             cell.append(tile);
           }
           boardElement.append(cell);
