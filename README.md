@@ -7,9 +7,13 @@
 ```text
 .
 |-- index.html             # 游戏目录页
+|-- assets/
+|   `-- reaction-cover.png # 反应速度封面
 `-- games/
     `-- tetra/
         `-- index.html     # 俄罗斯方块
+    `-- reaction/
+        `-- index.html     # 反应速度测试
 ```
 
 ## 新增游戏
@@ -27,3 +31,5 @@
 项目使用 Supabase Auth 和数据库保存账号与最高分。首次配置时，在 Supabase SQL Editor 运行根目录的 `supabase-setup.sql`，然后在 Authentication 设置中将站点地址配置为 GitHub Pages 地址。
 
 俄罗斯方块使用 `tetris` 作为 `game_slug`。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。
+
+反应速度测试目前将最近 20 次成绩保存在浏览器本机，后续可以接入同一套 Supabase 排行榜。
