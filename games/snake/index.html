@@ -165,6 +165,7 @@
             </div>
             <button class="secondary-button" id="resetButton" type="button">重新开始</button>
           </section>
+          <section class="desktop-game-leaderboard" data-game-leaderboard="snake" data-game-title="贪吃蛇" data-game-difficulty="normal" aria-label="贪吃蛇排行榜"></section>
         </aside>
       </section>
     </main>
@@ -174,6 +175,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-leaderboard.js"></script>
   <script>
     (() => {
       "use strict";
@@ -232,6 +234,7 @@
           p_score: Math.floor(value)
         });
         if (error) console.warn("Leaderboard sync failed:", error.message);
+        else window.gameLeaderboard?.refresh();
       }
 
       function startGame() {
@@ -357,6 +360,9 @@
       document.querySelectorAll("[data-difficulty]").forEach(button => button.addEventListener("click", () => {
         difficulty = button.dataset.difficulty;
         best = readBest();
+        const leaderboard = document.querySelector('[data-game-leaderboard="snake"]');
+        if (leaderboard) leaderboard.dataset.gameDifficulty = difficulty;
+        window.gameLeaderboard?.refresh();
         document.querySelectorAll("[data-difficulty]").forEach(item => item.classList.toggle("active", item === button));
         startGame();
       }));

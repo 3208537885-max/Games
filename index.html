@@ -230,7 +230,7 @@
       ARCADE ARCHIVE
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.2"><span class="version-label">更新日志</span><span>v0.1.2</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.3"><span class="version-label">更新日志</span><span>v0.1.3</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
       <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>
@@ -451,6 +451,26 @@
         return `${username}@${INTERNAL_AUTH_DOMAIN}`;
       }
 
+      async function describeAuthError(error, username) {
+        const message = String(error && error.message || "").toLowerCase();
+        if (signUpMode && (message.includes("already registered") || message.includes("already exists"))) {
+          return "该用户名已注册，请直接登录或换一个用户名。";
+        }
+        if (!signUpMode && message.includes("invalid login credentials")) {
+          const { data, error: profileError } = await client
+            .from("player_profiles")
+            .select("user_id")
+            .eq("username", username)
+            .maybeSingle();
+          if (!profileError) return data ? "密码不正确，请检查后重试。" : "该账号未注册，请先点击“注册”创建账号。";
+          return "账号或密码不正确。首次使用请先注册。";
+        }
+        if (message.includes("email not confirmed")) {
+          return "该账号尚未启用。请在 Supabase 后台关闭 Confirm email 后重新注册。";
+        }
+        return signUpMode ? "注册暂时失败，请稍后重试。" : "登录暂时失败，请稍后重试。";
+      }
+
       function setMessage(text, isError = false) {
         ui.message.textContent = text;
         ui.message.classList.toggle("error", isError);
@@ -613,7 +633,7 @@
           : await client.auth.signInWithPassword({ email, password });
         ui.submit.disabled = false;
         if (result.error) {
-          setMessage(result.error.message, true);
+          setMessage(await describeAuthError(result.error, username), true);
           return;
         }
         if (signUpMode && !result.data.session) {

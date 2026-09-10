@@ -151,6 +151,7 @@
             </div>
             <button class="secondary-button" id="resetButton" type="button">重新开始</button>
           </section>
+          <section class="desktop-game-leaderboard" data-game-leaderboard="breakout" data-game-title="打砖块" aria-label="打砖块排行榜"></section>
         </aside>
       </section>
     </main>
@@ -160,6 +161,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-leaderboard.js"></script>
   <script>
     (() => {
       "use strict";
@@ -212,6 +214,7 @@
           p_score: Math.floor(value)
         });
         if (error) console.warn("Leaderboard sync failed:", error.message);
+        else window.gameLeaderboard?.refresh();
       }
 
       function createBricks() {
