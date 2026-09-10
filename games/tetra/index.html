@@ -872,9 +872,9 @@
             <span class="panel-index">02</span>
           </div>
           <div class="control-list">
-            <div class="control-row"><span>水平移动</span><span class="key-group"><kbd>←</kbd><kbd>→</kbd></span></div>
-            <div class="control-row"><span>旋转方块</span><span class="key-group"><kbd>Z</kbd><kbd>↑</kbd></span></div>
-            <div class="control-row"><span>快速下落</span><span class="key-group"><kbd>↓</kbd></span></div>
+            <div class="control-row"><span>水平移动</span><span class="key-group"><kbd>A</kbd><kbd>←</kbd><kbd>D</kbd><kbd>→</kbd></span></div>
+            <div class="control-row"><span>旋转方块</span><span class="key-group"><kbd>W</kbd><kbd>↑</kbd></span></div>
+            <div class="control-row"><span>快速下落</span><span class="key-group"><kbd>S</kbd><kbd>↓</kbd></span></div>
             <div class="control-row"><span>瞬间落地</span><span class="key-group"><kbd>Space</kbd></span></div>
             <div class="control-row"><span>暂存方块</span><span class="key-group"><kbd>C</kbd></span></div>
             <div class="control-row"><span>暂停游戏</span><span class="key-group"><kbd>P</kbd></span></div>
@@ -1856,9 +1856,9 @@
 
       document.addEventListener("keydown", event => {
         const key = event.key.toLowerCase();
-        const prevent = ["arrowleft", "arrowright", "arrowdown", "arrowup", " ", "z", "x", "c", "shift", "p", "escape", "r"];
+        const prevent = ["arrowleft", "arrowright", "arrowdown", "arrowup", "a", "d", "s", "w", " ", "z", "x", "c", "shift", "p", "escape", "r"];
         if (prevent.includes(key)) event.preventDefault();
-        if (event.repeat && ["arrowup", "z", "x", "c", "shift", "p", "escape", "r", " "].includes(key)) return;
+        if (event.repeat && ["arrowup", "w", "z", "x", "c", "shift", "p", "escape", "r", " "].includes(key)) return;
 
         if (key === "p" || key === "escape") {
           togglePause();
@@ -1871,10 +1871,14 @@
         if (state !== "playing") return;
 
         switch (key) {
-          case "arrowleft": move(-1); break;
-          case "arrowright": move(1); break;
-          case "arrowdown": softDrop(true); break;
+          case "arrowleft":
+          case "a": move(-1); break;
+          case "arrowright":
+          case "d": move(1); break;
+          case "arrowdown":
+          case "s": softDrop(true); break;
           case "arrowup":
+          case "w":
           case "x": rotate(1); break;
           case "z": rotate(-1); break;
           case " ": hardDrop(); break;
