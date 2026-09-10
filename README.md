@@ -22,9 +22,13 @@
         `-- index.html     # 俄罗斯方块
     `-- reaction/
         `-- index.html     # 反应速度测试
+    `-- 2048-versus/
+        `-- index.html     # 双人 2048 限时竞速
 ```
 
 当前单人游戏包括俄罗斯方块、2048、贪吃蛇和打砖块；游戏页面都支持桌面操作，并针对手机触屏做了响应式适配。
+
+多人游戏目前提供双人 2048 限时竞速。登录玩家创建房间后会获得一个可分享链接；另一位玩家打开链接并填写显示名称即可匿名加入。双方就绪后由房主开始 90 秒比赛，成绩通过 Supabase Realtime 同步。
 
 ## 新增游戏
 
@@ -41,6 +45,8 @@
 项目使用 Supabase Auth 和数据库保存账号与最高分。玩家只填写用户名和密码：页面会在后台将用户名映射为内部登录标识，邮箱不会显示、收集或用于登录。首次配置时，在 Supabase SQL Editor 运行根目录的 `supabase-setup.sql`，然后在 Authentication 设置中将站点地址配置为 GitHub Pages 地址。
 
 在 Supabase Dashboard 依次打开 `Authentication`、`Providers`、`Email`，关闭 `Confirm email` 和 `Secure email change`。前者让用户名注册后可立即登录，后者让改用户名时不需要确认内部邮箱。
+
+启用联机功能后，也需要重新运行最新版 `supabase-setup.sql`。其中会创建联机房间和玩家表，并将它们加入 Supabase Realtime publication；若 SQL Editor 提示没有权限修改 publication，请在 Database 的 Replication 页面手动勾选 `multiplayer_rooms` 和 `multiplayer_players`。
 
 俄罗斯方块使用 `tetris` 作为 `game_slug`。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。
 

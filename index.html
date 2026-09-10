@@ -249,7 +249,7 @@
       小游戏大合集
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.5"><span class="version-label">更新日志</span><span>v0.1.5</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.6"><span class="version-label">更新日志</span><span>v0.1.6</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
       <button class="account-button secondary" id="authSettingsButton" type="button" hidden>账号设置</button>
@@ -367,19 +367,30 @@
     <section class="library" aria-labelledby="multi-title">
       <div class="section-head">
         <h2 id="multi-title">多人游戏</h2>
-        <span class="section-count">00 / 00</span>
+        <span class="section-count">01 / 01</span>
       </div>
-      <div class="empty-section">
-        <span class="empty-section-label">MULTIPLAYER / INCOMING</span>
-        <h3>多人游戏即将上线</h3>
-        <p>先把座位留在这里，之后可以继续加入联机和本地多人作品。</p>
+      <div class="game-grid">
+        <article class="game-card">
+          <a href="games/2048-versus/" aria-label="进入双人 2048 限时竞速">
+            <div class="game-cover art-cover cover-2048" aria-hidden="true">
+              <div class="cover-grid-2048"><span>2</span><span>4</span><span>8</span><span>16</span><span>VS</span><span>64</span><span>128</span><span>256</span><span>512</span><span>1024</span><span>·</span><span>2048</span></div>
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>MULTI / 001</span><span>2 PLAYERS</span></div>
+              <h3 class="game-name">2048 限时竞速</h3>
+              <p class="game-description">创建一个分享链接，邀请朋友进入同一房间，在 90 秒内比拼分数。</p>
+              <span class="play-link">创建或加入房间</span>
+            </div>
+          </a>
+        </article>
       </div>
     </section>
 
     <section class="library" aria-labelledby="tests-title">
       <div class="section-head">
-        <h2 id="tests-title">有趣的测试</h2>
-        <span class="section-count">01 / 02</span>
+        <h2 id="tests-title">小工具</h2>
+        <span class="section-count">01 / 01</span>
       </div>
       <div class="game-grid">
         <div class="game-entry">
@@ -401,14 +412,6 @@
             <span class="mini-status">正在读取</span>
           </aside>
         </div>
-
-        <article class="game-card placeholder" aria-label="即将加入的新测试">
-          <div>
-            <div class="placeholder-art" aria-hidden="true"></div>
-            <p class="placeholder-label">NEXT TEST / 002</p>
-          </div>
-          <h3>下一个有趣测试正在归档</h3>
-        </article>
       </div>
     </section>
     </div>

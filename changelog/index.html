@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.5</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.6</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,11 +131,22 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.5">
+          <article class="release current" data-version="0.1.6">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.6</h2><p class="release-date">2026.09.10</p></div><span class="release-tag">CURRENT</span></header>
+              <h3>双人 2048 限时竞速</h3>
+              <ul class="changes">
+                <li>主页调整为单人游戏、多人游戏和小工具三大分区，排行榜继续固定在目录右侧。</li>
+                <li>新增双人 2048 限时竞速：登录房主创建分享链接，朋友打开链接后无需登录即可加入。</li>
+                <li>房主在两人到齐后开始 90 秒比赛，双方分数和房间状态通过实时服务同步。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.5">
             <div class="release-card">
               <header class="release-head">
                 <div><h2 class="release-version">0.1.5</h2><p class="release-date">2026.09.10</p></div>
-                <span class="release-tag">CURRENT</span>
               </header>
               <h3>账号与完成记录</h3>
               <ul class="changes">
@@ -220,7 +231,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 06 · v0.1.5</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 07 · v0.1.6</span>
       </div>
     </section>
 
@@ -230,7 +241,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.5</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.6</span></div></footer>
 
   <script>
     (() => {
