@@ -119,7 +119,7 @@
           <p class="eyebrow">SINGLE PLAYER / 004</p>
           <h1 id="page-title">打砖块</h1>
         </div>
-        <p class="intro-copy">让能量球持续反弹，清掉一行就在顶部补上一行。</p>
+        <p class="intro-copy">让能量球持续反弹，清掉一行就在顶部补上一行；每击碎一块砖，球速都会提升 0.5%。</p>
       </section>
 
       <section class="game-layout" aria-label="打砖块游戏区域">
@@ -144,7 +144,7 @@
           </section>
           <section class="info-card">
             <h2>挡板控制</h2>
-            <p>电脑使用 ← → 或 A / D。手机可以直接在画布上拖动挡板，也可以按住方向按钮。开局常驻 6 行砖块；击碎任意完整一行后，顶部立刻补一行，并获得清行奖励。</p>
+            <p>电脑使用 ← → 或 A / D。手机可以直接在画布上拖动挡板，也可以按住方向按钮。开局常驻 6 行砖块；击碎任意完整一行后，顶部立刻补一行，并获得清行奖励。每破一砖，球速提高 0.5%。</p>
             <div class="control-grid" aria-label="挡板控制">
               <button class="control-button" type="button" data-direction="left" aria-label="挡板向左">←</button>
               <button class="control-button" type="button" data-direction="right" aria-label="挡板向右">→</button>
@@ -170,6 +170,7 @@
       const WIDTH = 720;
       const HEIGHT = 460;
       const VISIBLE_ROWS = 6;
+      const INITIAL_BALL_SPEED = Math.hypot(4, 4);
       const STORAGE_KEY = "breakout-best";
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
@@ -195,6 +196,7 @@
       let animationFrame = 0;
       let buttonDirection = null;
       let clearedRows = 0;
+      let speedMultiplier = 1;
 
       function readBest() {
         try { return Math.max(0, Number(window.localStorage.getItem(STORAGE_KEY)) || 0); } catch (_error) { return 0; }
@@ -255,12 +257,13 @@
       function startGame() {
         score = 0;
         clearedRows = 0;
+        speedMultiplier = 1;
         state = "playing";
         lastTime = 0;
         paddle = { x: WIDTH / 2 - 58, y: HEIGHT - 38, width: 116, height: 12, speed: 8 };
         ball = { x: WIDTH / 2, y: HEIGHT - 60, radius: 8, vx: 4, vy: -4 };
         bricks = createBricks();
-        ui.state.textContent = "已清除 0 行";
+        updateProgressState();
         ui.overlay.hidden = true;
         render();
       }
@@ -280,6 +283,20 @@
 
       function movePaddle(step) {
         paddle.x = Math.max(0, Math.min(WIDTH - paddle.width, paddle.x + step));
+      }
+
+      function updateProgressState(rowBonus = false) {
+        const bonus = rowBonus ? " · +50" : "";
+        ui.state.textContent = `已清除 ${clearedRows} 行 · 球速 ×${speedMultiplier.toFixed(3)}${bonus}`;
+      }
+
+      function setPaddleBounce(hit) {
+        const horizontal = hit * 5.6;
+        const vertical = -Math.max(3.5, 5.6 - Math.abs(horizontal) * .22);
+        const targetSpeed = INITIAL_BALL_SPEED * speedMultiplier;
+        const scale = targetSpeed / Math.hypot(horizontal, vertical);
+        ball.vx = horizontal * scale;
+        ball.vy = vertical * scale;
       }
 
       function followPointer(event) {
@@ -306,8 +323,7 @@
         }
         if (ball.vy > 0 && ball.y + ball.radius >= paddle.y && ball.y - ball.radius <= paddle.y + paddle.height && ball.x >= paddle.x && ball.x <= paddle.x + paddle.width) {
           const hit = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
-          ball.vx = hit * 5.6;
-          ball.vy = -Math.max(3.5, 5.6 - Math.abs(ball.vx) * .22);
+          setPaddleBounce(hit);
           ball.y = paddle.y - ball.radius - 1;
         }
         if (ball.y - ball.radius > HEIGHT) {
@@ -319,6 +335,7 @@
         if (brick) {
           brick.alive = false;
           score += 10;
+          speedMultiplier *= 1.005;
           best = Math.max(best, score);
           saveBest();
           const overlapLeft = Math.abs(ball.x + ball.radius - brick.x);
@@ -334,7 +351,9 @@
             best = Math.max(best, score);
             saveBest();
             replenishClearedRow();
-            ui.state.textContent = `已清除 ${clearedRows} 行 · +50`;
+            updateProgressState(true);
+          } else {
+            updateProgressState();
           }
         }
       }
