@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0c1015">
   <meta name="description" content="一个持续扩展的独立游戏库。">
-  <title>不会文科的小旺柴的游戏厅</title>
+  <title>小游戏大合集</title>
   <style>
     :root {
       --ink: #f4f3ee;
@@ -85,6 +85,8 @@
     .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
     h2 { margin: 0; font-size: 18px; line-height: 1.25; }
     .count, .section-count { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .home-content { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }
+    .home-sections { min-width: 0; }
     .library { padding-bottom: 58px; }
     .game-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .game-entry { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr) 138px; gap: 10px; align-items: stretch; }
@@ -103,6 +105,19 @@
     .mini-score { grid-column: 2; color: var(--ink); font: 800 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
     .mini-empty { margin-top: 14px; color: var(--muted); font-size: 11px; line-height: 1.5; }
     .mini-status { display: block; min-height: 16px; margin-top: 12px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .overall-leaderboard { position: sticky; top: 16px; padding: 16px; border: 1px solid rgba(88, 213, 232, .34); border-radius: var(--radius); background: var(--surface); }
+    .overall-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .overall-title { font-size: 15px; }
+    .overall-scope { color: var(--cyan); font: 750 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .overall-rule { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .overall-list { display: grid; gap: 11px; margin: 15px 0 0; padding: 0; list-style: none; }
+    .overall-row { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; gap: 7px; align-items: center; min-width: 0; }
+    .overall-rank { color: var(--lime); font: 800 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .overall-player { min-width: 0; overflow: hidden; color: var(--ink); font-size: 12px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+    .overall-score { color: var(--amber, #ffc763); font: 850 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .overall-meta { grid-column: 2 / 4; color: var(--muted); font-size: 10px; }
+    .overall-empty { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .overall-status { display: block; min-height: 16px; margin-top: 14px; color: var(--muted); font-size: 10px; }
     .empty-section { display: flex; min-height: 156px; flex-direction: column; justify-content: center; gap: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .empty-section-label { color: var(--cyan); font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; }
     .empty-section h3 { margin: 0; font-size: 21px; }
@@ -200,6 +215,8 @@
       .shell { width: min(100% - 28px, 620px); }
       .intro { grid-template-columns: 1fr; padding: 54px 0 38px; }
       .intro-copy { max-width: 480px; }
+      .home-content { grid-template-columns: 1fr; }
+      .overall-leaderboard { position: static; max-width: none; margin-bottom: 48px; }
       .game-grid { grid-template-columns: 1fr; }
       .game-entry { grid-template-columns: minmax(0, 1fr) 150px; }
       .game-card { min-height: 370px; }
@@ -225,12 +242,12 @@
 </head>
 <body>
   <header class="shell topbar">
-    <a class="brand" href="./" aria-label="Arcade Archive 首页">
+    <a class="brand" href="./" aria-label="小游戏大合集首页">
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      ARCADE ARCHIVE
+      小游戏大合集
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.3"><span class="version-label">更新日志</span><span>v0.1.3</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.4"><span class="version-label">更新日志</span><span>v0.1.4</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
       <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>
@@ -241,11 +258,13 @@
     <section class="intro" aria-labelledby="page-title">
       <div>
         <p class="eyebrow">SELECT A GAME</p>
-        <h1 id="page-title">不会文科的小旺柴的游戏厅</h1>
+        <h1 id="page-title">小游戏大合集</h1>
       </div>
       <p class="intro-copy">每个游戏都有自己的一扇入口。选择一个，直接开始。</p>
     </section>
 
+    <div class="home-content">
+    <div class="home-sections">
     <section class="library" aria-labelledby="single-title">
       <div class="section-head">
         <h2 id="single-title">单人游戏</h2>
@@ -329,7 +348,7 @@
             <div class="game-content">
               <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
               <h3 class="game-name">打砖块</h3>
-              <p class="game-description">砖块逐行出现，清空当前行后解锁下一行。</p>
+              <p class="game-description">开局 6 行砖块，清空任意一行后顶部立刻补上一行。</p>
               <span class="play-link">开始游戏</span>
             </div>
           </a>
@@ -389,6 +408,15 @@
         </article>
       </div>
     </section>
+    </div>
+
+    <aside class="overall-leaderboard" aria-labelledby="overallTitle">
+      <div class="overall-head"><h2 class="overall-title" id="overallTitle">总积分榜</h2><span class="overall-scope">四个单人游戏</span></div>
+      <p class="overall-rule">每项最高 100 分，按与当前第一成绩的比例换算。</p>
+      <ol class="overall-list" id="overallList"><li class="overall-empty">正在读取...</li></ol>
+      <span class="overall-status" id="overallStatus">正在读取</span>
+    </aside>
+    </div>
 
   </main>
 
@@ -411,7 +439,7 @@
 
   <footer>
     <div class="shell footer-inner">
-      <span>ARCADE ARCHIVE</span>
+      <span>小游戏大合集</span>
       <span>BUILT FOR PLAY</span>
     </div>
   </footer>
@@ -444,6 +472,10 @@
       let currentUser = null;
       let currentProfile = null;
       const leaderboardNodes = [...document.querySelectorAll("[data-leaderboard]")];
+      const overallUi = {
+        list: document.getElementById("overallList"),
+        status: document.getElementById("overallStatus")
+      };
       // Supabase Auth requires an email identifier; .example is an IANA-reserved domain.
       const INTERNAL_AUTH_DOMAIN = "players.arcadearchive.example.com";
 
@@ -588,8 +620,61 @@
         renderMini(node, rows);
       }
 
+      function renderOverall(rows, message = "") {
+        overallUi.list.replaceChildren();
+        if (message) {
+          const item = document.createElement("li");
+          item.className = "overall-empty";
+          item.textContent = message;
+          overallUi.list.append(item);
+          overallUi.status.textContent = "待完成配置";
+          return;
+        }
+        if (!rows.length) {
+          const item = document.createElement("li");
+          item.className = "overall-empty";
+          item.textContent = "还没有可计分的成绩";
+          overallUi.list.append(item);
+          overallUi.status.textContent = "等待第一位玩家";
+          return;
+        }
+        rows.forEach((row, index) => {
+          const item = document.createElement("li");
+          item.className = "overall-row";
+          const rank = document.createElement("span");
+          const player = document.createElement("span");
+          const points = document.createElement("span");
+          const meta = document.createElement("span");
+          rank.className = "overall-rank";
+          player.className = "overall-player";
+          points.className = "overall-score";
+          meta.className = "overall-meta";
+          rank.textContent = String(index + 1).padStart(2, "0");
+          player.textContent = currentUser && row.user_id === currentUser.id ? "你" : row.nickname || row.username || "玩家";
+          points.textContent = `${Number(row.total_points || 0)} 分`;
+          meta.textContent = `${Number(row.games_ranked || 0)} 个游戏计分 · 单项最高 ${Number(row.best_game_points || 0)} 分`;
+          item.append(rank, player, points, meta);
+          overallUi.list.append(item);
+        });
+        overallUi.status.textContent = `${rows.length} 位玩家`;
+      }
+
+      async function loadOverallLeaderboard() {
+        if (!client) {
+          renderOverall([], "登录服务未加载");
+          return;
+        }
+        const { data, error } = await client.rpc("get_overall_leaderboard");
+        if (error) {
+          renderOverall([], "请运行新版 Supabase SQL");
+          return;
+        }
+        renderOverall(data || []);
+      }
+
       function loadLeaderboards() {
         leaderboardNodes.forEach(node => void loadLeaderboard(node));
+        void loadOverallLeaderboard();
       }
 
       leaderboardNodes.forEach(node => {

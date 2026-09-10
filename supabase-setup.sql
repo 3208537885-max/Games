@@ -138,5 +138,67 @@ $$;
 revoke execute on function public.submit_score(text, text, integer) from public, anon;
 grant execute on function public.submit_score(text, text, integer) to authenticated;
 
+drop function if exists public.get_overall_leaderboard();
+create or replace function public.get_overall_leaderboard()
+returns table (
+  user_id uuid,
+  username text,
+  nickname text,
+  total_points integer,
+  games_ranked integer,
+  best_game_points integer
+)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  with eligible_scores as (
+    select user_id, game_slug, high_score
+    from public.game_scores
+    where difficulty = 'normal'
+      and high_score > 0
+      and game_slug in ('tetris', '2048', 'snake', 'breakout')
+  ),
+  game_leaders as (
+    select
+      game_slug,
+      max(high_score) as leading_score
+    from eligible_scores
+    group by game_slug
+  ),
+  proportional_points as (
+    select
+      score.user_id,
+      score.game_slug,
+      round(100.0 * score.high_score / leader.leading_score)::integer as game_points
+    from eligible_scores score
+    join game_leaders leader using (game_slug)
+  ),
+  totals as (
+    select
+      user_id,
+      sum(game_points)::integer as total_points,
+      count(*)::integer as games_ranked,
+      max(game_points)::integer as best_game_points
+    from proportional_points
+    group by user_id
+  )
+  select
+    totals.user_id,
+    profile.username,
+    profile.nickname,
+    totals.total_points,
+    totals.games_ranked,
+    totals.best_game_points
+  from totals
+  join public.player_profiles profile on profile.user_id = totals.user_id
+  order by totals.total_points desc, totals.games_ranked desc, totals.best_game_points desc, profile.username asc
+  limit 50;
+$$;
+
+revoke execute on function public.get_overall_leaderboard() from public;
+grant execute on function public.get_overall_leaderboard() to anon, authenticated;
+
 grant select on public.player_profiles to anon, authenticated;
 grant select on public.game_scores to anon, authenticated;
