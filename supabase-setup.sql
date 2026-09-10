@@ -263,10 +263,13 @@ create table if not exists public.multiplayer_players (
   user_id uuid references auth.users(id) on delete set null,
   display_name text not null,
   score integer not null default 0 check (score >= 0),
+  board_state jsonb not null default '[]'::jsonb,
   finished boolean not null default false,
   updated_at timestamptz not null default now(),
   primary key (room_id, player_token)
 );
+
+alter table public.multiplayer_players add column if not exists board_state jsonb not null default '[]'::jsonb;
 
 alter table public.multiplayer_rooms enable row level security;
 alter table public.multiplayer_players enable row level security;
@@ -325,14 +328,15 @@ begin
 end;
 $$;
 
-create or replace function public.report_multiplayer_score(p_room_id uuid, p_player_token uuid, p_score integer, p_finished boolean default false)
+drop function if exists public.report_multiplayer_score(uuid, uuid, integer, boolean);
+create or replace function public.report_multiplayer_score(p_room_id uuid, p_player_token uuid, p_score integer, p_board_state jsonb, p_finished boolean default false)
 returns public.multiplayer_players
 language plpgsql security definer set search_path = public
 as $$
 declare v_player public.multiplayer_players;
 begin
   if p_score < 0 or p_score > 100000000 then raise exception 'invalid score'; end if;
-  update public.multiplayer_players set score = greatest(score, p_score), finished = finished or p_finished, updated_at = now()
+  update public.multiplayer_players set score = greatest(score, p_score), board_state = p_board_state, finished = finished or p_finished, updated_at = now()
   where room_id = p_room_id and player_token = p_player_token
     and exists (select 1 from public.multiplayer_rooms where id = p_room_id and status = 'live' and now() <= ends_at)
   returning * into v_player;
@@ -352,8 +356,8 @@ revoke execute on function public.join_multiplayer_room(uuid, uuid, text) from p
 grant execute on function public.join_multiplayer_room(uuid, uuid, text) to anon, authenticated;
 revoke execute on function public.start_multiplayer_room(uuid) from public;
 grant execute on function public.start_multiplayer_room(uuid) to authenticated;
-revoke execute on function public.report_multiplayer_score(uuid, uuid, integer, boolean) from public;
-grant execute on function public.report_multiplayer_score(uuid, uuid, integer, boolean) to anon, authenticated;
+revoke execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, boolean) from public;
+grant execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, boolean) to anon, authenticated;
 
 grant select on public.player_profiles to anon, authenticated;
 grant select on public.game_scores to anon, authenticated;
