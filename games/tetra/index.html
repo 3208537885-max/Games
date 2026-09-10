@@ -603,6 +603,17 @@
 
     .best-row strong { color: #a6cfc4; font-variant-numeric: tabular-nums; }
 
+    .score-sync {
+      min-height: 16px;
+      margin-top: 9px;
+      color: #6f9388;
+      font-size: 8px;
+      line-height: 1.45;
+    }
+
+    .score-sync.success { color: var(--teal-soft); }
+    .score-sync.error { color: var(--coral); }
+
     .stats-grid {
       position: relative;
       z-index: 1;
@@ -907,6 +918,7 @@
             <div class="metric-label">Score / 得分</div>
             <div class="score-value" id="scoreText">000000</div>
             <div class="best-row"><span>个人最佳</span><strong id="bestText">000000</strong></div>
+            <div class="score-sync" id="scoreSyncText">登录游戏厅后同步最高分</div>
           </div>
           <div class="stats-grid">
             <div class="stat"><div class="metric-label">Lines</div><strong id="linesText">0</strong></div>
@@ -940,6 +952,8 @@
     <div class="sr-only" id="liveRegion" aria-live="polite"></div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
   <script>
     (() => {
       "use strict";
@@ -1013,6 +1027,7 @@
         primaryButton: document.getElementById("primaryButton"),
         score: document.getElementById("scoreText"),
         best: document.getElementById("bestText"),
+        scoreSync: document.getElementById("scoreSyncText"),
         lines: document.getElementById("linesText"),
         level: document.getElementById("levelText"),
         stage: document.getElementById("stageText"),
@@ -1050,6 +1065,36 @@
       let overlayMode = "start";
       let repeatTimer = null;
       let repeatInterval = null;
+      const authClient = window.gameAuth && window.gameAuth.client;
+
+      function setScoreSyncState(text, status = "") {
+        ui.scoreSync.textContent = text;
+        ui.scoreSync.classList.toggle("success", status === "success");
+        ui.scoreSync.classList.toggle("error", status === "error");
+      }
+
+      async function syncScoreToLeaderboard(value) {
+        if (!authClient || value <= 0) {
+          setScoreSyncState("登录游戏厅后同步最高分");
+          return;
+        }
+        const { data: sessionData } = await authClient.auth.getSession();
+        if (!sessionData.session) {
+          setScoreSyncState("登录游戏厅后同步最高分");
+          return;
+        }
+        setScoreSyncState("正在同步到最高分榜...");
+        const { error } = await authClient.rpc("submit_score", {
+          p_game_slug: "tetris",
+          p_score: Math.floor(value)
+        });
+        if (error) {
+          console.warn("Leaderboard sync failed:", error.message);
+          setScoreSyncState("排行榜尚未完成配置", "error");
+          return;
+        }
+        setScoreSyncState("已同步到最高分榜", "success");
+      }
 
       function storageGet(key) {
         try {
@@ -1363,6 +1408,7 @@
         ui.flow.classList.remove("active");
         playSound("gameover");
         updateUI();
+        void syncScoreToLeaderboard(score);
       }
 
       function showOverlay(eyebrow, title, text, buttonText) {
@@ -1860,6 +1906,14 @@
       ui.soundOn.style.display = soundEnabled ? "block" : "none";
       ui.soundOff.style.display = soundEnabled ? "none" : "block";
       ui.soundButton.setAttribute("aria-label", soundEnabled ? "关闭声音" : "开启声音");
+      if (authClient) {
+        authClient.auth.getSession().then(({ data }) => {
+          if (data.session) setScoreSyncState("已登录，结束后自动同步", "success");
+        });
+        authClient.auth.onAuthStateChange((_event, session) => {
+          setScoreSyncState(session ? "已登录，结束后自动同步" : "登录游戏厅后同步最高分", session ? "success" : "");
+        });
+      }
       updateUI();
       ensureQueue();
       drawPreviews();

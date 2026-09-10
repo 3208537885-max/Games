@@ -51,6 +51,22 @@
     .brand-mark span { background: var(--lime); }
     .brand-mark span:nth-child(2), .brand-mark span:nth-child(3) { background: var(--cyan); }
     .collection-note { color: var(--muted); font-size: 13px; }
+    .account-area { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .auth-state { max-width: 180px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .account-button {
+      min-height: 34px;
+      padding: 0 13px;
+      border: 1px solid rgba(200, 255, 95, .55);
+      border-radius: 6px;
+      color: #10160e;
+      background: var(--lime);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .account-button:hover { filter: brightness(1.08); }
+    .account-button.secondary { color: var(--ink); background: transparent; border-color: var(--line); }
 
     .intro {
       display: grid;
@@ -68,6 +84,35 @@
     .count { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
     .library { padding-bottom: 76px; }
     .game-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+    .leaderboard { padding: 0 0 76px; }
+    .leaderboard-note { color: var(--muted); font-size: 12px; }
+    .table-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .leaderboard-table th, .leaderboard-table td { padding: 15px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+    .leaderboard-table tr:last-child td { border-bottom: 0; }
+    .leaderboard-table th { color: var(--muted); font: 600 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .leaderboard-table td:first-child { width: 76px; color: var(--lime); font: 700 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .leaderboard-table td:last-child { width: 150px; color: var(--ink); font: 700 14px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
+    .leaderboard-empty { color: var(--muted); text-align: center !important; }
+
+    .auth-modal[hidden] { display: none; }
+    .auth-modal { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgba(5, 8, 12, .78); backdrop-filter: blur(10px); }
+    .auth-dialog { position: relative; width: min(100%, 420px); padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-raised); box-shadow: 0 28px 80px rgba(0, 0, 0, .4); }
+    .auth-close { position: absolute; top: 13px; right: 13px; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); background: transparent; font-size: 20px; line-height: 1; cursor: pointer; }
+    .auth-close:hover { color: var(--ink); border-color: var(--ink); }
+    .auth-kicker { margin: 0 0 9px; color: var(--lime); font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+    .auth-dialog h2 { margin: 0; font-size: 24px; }
+    .auth-dialog-copy { margin: 9px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .auth-form { display: grid; gap: 13px; }
+    .auth-form label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; }
+    .auth-form input { width: 100%; height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; outline: 0; color: var(--ink); background: var(--canvas); font: inherit; }
+    .auth-form input:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgba(200, 255, 95, .12); }
+    .auth-submit { height: 42px; margin-top: 3px; border: 0; border-radius: 5px; color: #10160e; background: var(--lime); font: inherit; font-weight: 800; cursor: pointer; }
+    .auth-submit:disabled { cursor: wait; opacity: .58; }
+    .auth-switch { margin: 17px 0 0; border: 0; padding: 0; color: var(--cyan); background: transparent; font: inherit; font-size: 12px; cursor: pointer; }
+    .auth-message { min-height: 18px; margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .auth-message.error { color: var(--coral); }
 
     .game-card {
       position: relative;
@@ -128,7 +173,11 @@
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
       ARCADE ARCHIVE
     </a>
-    <span class="collection-note">PERSONAL GAME COLLECTION</span>
+    <div class="account-area">
+      <span class="auth-state" id="authState">未登录</span>
+      <button class="account-button" id="authOpenButton" type="button">登录</button>
+      <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>
+    </div>
   </header>
 
   <main class="shell">
@@ -177,7 +226,40 @@
         </article>
       </div>
     </section>
+
+    <section class="leaderboard" aria-labelledby="leaderboard-title">
+      <div class="section-head">
+        <h2 id="leaderboard-title">最高分榜</h2>
+        <span class="leaderboard-note" id="leaderboardStatus">正在读取</span>
+      </div>
+      <div class="table-wrap">
+        <table class="leaderboard-table">
+          <thead>
+            <tr><th>排名</th><th>玩家</th><th>最高分</th></tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr><td class="leaderboard-empty" colspan="3">正在读取排行榜...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
+
+  <div class="auth-modal" id="authModal" hidden>
+    <section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="auth-close" id="authCloseButton" type="button" aria-label="关闭登录窗口">×</button>
+      <p class="auth-kicker">ARCADE ACCOUNT</p>
+      <h2 id="authTitle">登录游戏厅</h2>
+      <p class="auth-dialog-copy" id="authDescription">登录后可以保存你的最高分，并出现在排行榜中。</p>
+      <form class="auth-form" id="authForm">
+        <label>邮箱<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>密码<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="至少 6 位"></label>
+        <button class="auth-submit" id="authSubmit" type="submit">登录</button>
+      </form>
+      <button class="auth-switch" id="authModeButton" type="button">还没有账号？注册</button>
+      <p class="auth-message" id="authMessage" role="status"></p>
+    </section>
+  </div>
 
   <footer>
     <div class="shell footer-inner">
@@ -185,5 +267,164 @@
       <span>BUILT FOR PLAY</span>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/supabase-client.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const auth = window.gameAuth;
+      const client = auth && auth.client;
+      const ui = {
+        state: document.getElementById("authState"),
+        open: document.getElementById("authOpenButton"),
+        logout: document.getElementById("authLogoutButton"),
+        modal: document.getElementById("authModal"),
+        close: document.getElementById("authCloseButton"),
+        title: document.getElementById("authTitle"),
+        description: document.getElementById("authDescription"),
+        form: document.getElementById("authForm"),
+        email: document.getElementById("authEmail"),
+        password: document.getElementById("authPassword"),
+        submit: document.getElementById("authSubmit"),
+        mode: document.getElementById("authModeButton"),
+        message: document.getElementById("authMessage"),
+        leaderboard: document.getElementById("leaderboardBody"),
+        leaderboardStatus: document.getElementById("leaderboardStatus")
+      };
+      let signUpMode = false;
+      let currentUser = null;
+
+      function setMessage(text, isError = false) {
+        ui.message.textContent = text;
+        ui.message.classList.toggle("error", isError);
+      }
+
+      function openAuth() {
+        if (!client) {
+          ui.state.textContent = "登录服务未加载";
+          return;
+        }
+        ui.modal.hidden = false;
+        window.setTimeout(() => ui.email.focus(), 0);
+      }
+
+      function closeAuth() {
+        ui.modal.hidden = true;
+        setMessage("");
+      }
+
+      function setSignUpMode(nextMode) {
+        signUpMode = nextMode;
+        ui.title.textContent = signUpMode ? "创建游戏厅账号" : "登录游戏厅";
+        ui.description.textContent = signUpMode ? "注册后即可保存最高分，并出现在排行榜中。" : "登录后可以保存你的最高分，并出现在排行榜中。";
+        ui.submit.textContent = signUpMode ? "注册" : "登录";
+        ui.mode.textContent = signUpMode ? "已有账号？登录" : "还没有账号？注册";
+        ui.password.autocomplete = signUpMode ? "new-password" : "current-password";
+        setMessage("");
+      }
+
+      function renderAuth(session) {
+        currentUser = session && session.user ? session.user : null;
+        if (currentUser) {
+          const emailName = (currentUser.email || "玩家").split("@")[0];
+          ui.state.textContent = `已登录 ${emailName}`;
+          ui.open.hidden = true;
+          ui.logout.hidden = false;
+        } else {
+          ui.state.textContent = "未登录";
+          ui.open.hidden = false;
+          ui.logout.hidden = true;
+        }
+      }
+
+      function renderLeaderboard(rows) {
+        ui.leaderboard.replaceChildren();
+        if (!rows.length) {
+          ui.leaderboard.innerHTML = '<tr><td class="leaderboard-empty" colspan="3">还没有分数，成为第一个上榜的人吧。</td></tr>';
+          return;
+        }
+        rows.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          const rank = document.createElement("td");
+          const player = document.createElement("td");
+          const score = document.createElement("td");
+          rank.textContent = String(index + 1).padStart(2, "0");
+          player.textContent = currentUser && row.user_id === currentUser.id ? "你" : `玩家 ${row.user_id.slice(0, 6)}`;
+          score.textContent = Number(row.high_score || 0).toLocaleString("zh-CN");
+          tr.append(rank, player, score);
+          ui.leaderboard.append(tr);
+        });
+      }
+
+      async function loadLeaderboard() {
+        if (!client) {
+          ui.leaderboardStatus.textContent = "服务未加载";
+          renderLeaderboard([]);
+          return;
+        }
+        const { data, error } = await client
+          .from("game_scores")
+          .select("user_id, high_score, updated_at")
+          .eq("game_slug", "tetris")
+          .order("high_score", { ascending: false })
+          .order("updated_at", { ascending: true })
+          .limit(10);
+        if (error) {
+          ui.leaderboardStatus.textContent = "待完成数据库配置";
+          ui.leaderboard.innerHTML = '<tr><td class="leaderboard-empty" colspan="3">请先在 Supabase SQL Editor 运行 supabase-setup.sql。</td></tr>';
+          return;
+        }
+        ui.leaderboardStatus.textContent = `${data.length} 位玩家`;
+        renderLeaderboard(data);
+      }
+
+      ui.open.addEventListener("click", openAuth);
+      ui.close.addEventListener("click", closeAuth);
+      ui.mode.addEventListener("click", () => setSignUpMode(!signUpMode));
+      ui.modal.addEventListener("click", event => {
+        if (event.target === ui.modal) closeAuth();
+      });
+      ui.logout.addEventListener("click", async () => {
+        const { error } = await client.auth.signOut();
+        if (error) ui.state.textContent = "退出失败";
+      });
+      ui.form.addEventListener("submit", async event => {
+        event.preventDefault();
+        if (!client) return;
+        ui.submit.disabled = true;
+        setMessage(signUpMode ? "正在创建账号..." : "正在登录...");
+        const email = ui.email.value.trim();
+        const password = ui.password.value;
+        const result = signUpMode
+          ? await client.auth.signUp({ email, password })
+          : await client.auth.signInWithPassword({ email, password });
+        ui.submit.disabled = false;
+        if (result.error) {
+          setMessage(result.error.message, true);
+          return;
+        }
+        if (signUpMode && !result.data.session) {
+          setMessage("注册成功，请先检查邮箱并完成验证。", false);
+          return;
+        }
+        closeAuth();
+      });
+
+      if (client) {
+        client.auth.getSession().then(({ data }) => {
+          renderAuth(data.session);
+          loadLeaderboard();
+        });
+        client.auth.onAuthStateChange((_event, session) => {
+          renderAuth(session);
+          loadLeaderboard();
+        });
+      } else {
+        renderAuth(null);
+        loadLeaderboard();
+      }
+    })();
+  </script>
 </body>
 </html>
