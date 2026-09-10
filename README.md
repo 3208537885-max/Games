@@ -9,7 +9,7 @@
 |-- index.html             # 游戏目录页
 `-- games/
     `-- tetra/
-        `-- index.html     # 光谱方块
+        `-- index.html     # 俄罗斯方块
 ```
 
 ## 新增游戏

@@ -60,7 +60,7 @@
       padding: 76px 0 48px;
     }
     .eyebrow { margin: 0 0 16px; color: var(--lime); font-size: 12px; font-weight: 800; }
-    h1 { max-width: 760px; margin: 0; font-size: clamp(36px, 6vw, 68px); line-height: .98; font-weight: 820; }
+    h1 { max-width: 760px; margin: 0; font-size: 34px; line-height: 1.08; font-weight: 820; }
     .intro-copy { max-width: 315px; margin: 0 0 5px; color: var(--muted); font-size: 15px; line-height: 1.65; }
 
     .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
@@ -116,7 +116,7 @@
     @media (max-width: 480px) {
       .topbar { min-height: 62px; }
       .collection-note { display: none; }
-      h1 { font-size: 39px; }
+      h1 { font-size: 26px; }
       .intro { padding-top: 45px; }
       .game-card { min-height: 355px; }
     }
@@ -124,9 +124,9 @@
 </head>
 <body>
   <header class="shell topbar">
-    <a class="brand" href="./" aria-label="不会文科的小旺柴的游戏厅首页">
+    <a class="brand" href="./" aria-label="Arcade Archive 首页">
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      不会文科的小旺柴的游戏厅
+      ARCADE ARCHIVE
     </a>
     <span class="collection-note">PERSONAL GAME COLLECTION</span>
   </header>
@@ -135,7 +135,7 @@
     <section class="intro" aria-labelledby="page-title">
       <div>
         <p class="eyebrow">SELECT A GAME</p>
-        <h1 id="page-title">一间持续扩展的<br>游戏小档案室。</h1>
+        <h1 id="page-title">不会文科的小旺柴的游戏厅</h1>
       </div>
       <p class="intro-copy">每个游戏都有自己的一扇入口。选择一个，直接开始。</p>
     </section>
@@ -147,14 +147,14 @@
       </div>
 
       <div class="game-grid">
-        <a class="game-card" href="games/tetra/" aria-label="开始游玩光谱方块">
+        <a class="game-card" href="games/tetra/" aria-label="开始游玩俄罗斯方块">
           <div class="game-cover" aria-hidden="true">
             <img src="assets/tetra-cover.png" alt="" width="1280" height="720">
             <div class="cover-scan"></div>
           </div>
           <div class="game-content">
             <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
-            <h3 class="game-name">光谱方块</h3>
+            <h3 class="game-name">俄罗斯方块</h3>
             <p class="game-description">带有连击、暂存和节奏反馈的现代俄罗斯方块。</p>
             <span class="play-link">开始游戏</span>
           </div>
@@ -181,7 +181,7 @@
 
   <footer>
     <div class="shell footer-inner">
-      <span>不会文科的小旺柴的游戏厅</span>
+      <span>ARCADE ARCHIVE</span>
       <span>BUILT FOR PLAY</span>
     </div>
   </footer>
