@@ -10,11 +10,19 @@
 |-- assets/
 |   `-- reaction-cover.png # 反应速度封面
 `-- games/
+    `-- 2048/
+        `-- index.html     # 2048
+    `-- breakout/
+        `-- index.html     # 打砖块
+    `-- snake/
+        `-- index.html     # 贪吃蛇
     `-- tetra/
         `-- index.html     # 俄罗斯方块
     `-- reaction/
         `-- index.html     # 反应速度测试
 ```
+
+当前单人游戏包括俄罗斯方块、2048、贪吃蛇和打砖块；游戏页面都支持桌面操作，并针对手机触屏做了响应式适配。
 
 ## 新增游戏
 

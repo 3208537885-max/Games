@@ -135,6 +135,29 @@
     .game-cover img { display: block; width: 100%; height: 100%; min-height: 244px; object-fit: cover; object-position: center 43%; transform: scale(1.46); transition: transform .35s ease; }
     .game-card:hover .game-cover img, .game-card:focus-within .game-cover img { transform: scale(1.53); }
     .cover-scan { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(7, 19, 16, .02), rgba(12, 16, 21, .55)); }
+    .art-cover { display: grid; place-items: center; min-height: 244px; overflow: hidden; }
+    .cover-2048 { background: #1a1830; }
+    .cover-2048::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255, 199, 99, .16), transparent 48%), repeating-linear-gradient(135deg, rgba(88, 213, 232, .07) 0 1px, transparent 1px 18px); }
+    .cover-grid-2048 { position: relative; display: grid; grid-template-columns: repeat(4, 42px); gap: 7px; transform: rotate(-6deg); }
+    .cover-grid-2048 span { display: grid; aspect-ratio: 1; place-items: center; border: 1px solid rgba(255, 255, 255, .12); border-radius: 5px; color: #211b10; background: #ffc763; box-shadow: 0 10px 20px rgba(0, 0, 0, .2); font: 800 14px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .cover-grid-2048 span:nth-child(2), .cover-grid-2048 span:nth-child(7) { color: #102026; background: #58d5e8; }
+    .cover-grid-2048 span:nth-child(3), .cover-grid-2048 span:nth-child(12) { color: #fff; background: #ff8072; }
+    .cover-grid-2048 span:nth-child(5), .cover-grid-2048 span:nth-child(10) { color: #fff; background: #9b82ff; }
+    .cover-grid-2048 span:nth-child(8) { color: #102026; background: #c8ff5f; }
+    .cover-snake { background: #0e2c28; }
+    .cover-snake::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200, 255, 95, .12), transparent 52%), repeating-linear-gradient(0deg, rgba(88, 213, 232, .06) 0 1px, transparent 1px 21px), repeating-linear-gradient(90deg, rgba(88, 213, 232, .06) 0 1px, transparent 1px 21px); }
+    .cover-snake-track { position: relative; width: 178px; height: 132px; border: 2px solid rgba(200, 255, 95, .7); border-radius: 42% 18% 36% 19%; transform: rotate(-7deg); box-shadow: 0 0 34px rgba(200, 255, 95, .22); }
+    .cover-snake-track::before { content: ""; position: absolute; left: 32px; bottom: -2px; width: 95px; height: 68px; border: 16px solid #58d5e8; border-top: 0; border-left-color: transparent; border-radius: 0 0 60px 0; }
+    .cover-snake-track::after { content: ""; position: absolute; right: 24px; top: 23px; width: 18px; height: 18px; border-radius: 50%; background: #ff8072; box-shadow: 0 0 20px rgba(255, 128, 114, .8); }
+    .cover-breakout { background: #22162b; }
+    .cover-breakout::before { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255, 128, 114, .16), transparent 48%), repeating-linear-gradient(90deg, rgba(244, 243, 238, .06) 0 1px, transparent 1px 24px); }
+    .cover-bricks { position: relative; display: grid; grid-template-columns: repeat(5, 31px); gap: 7px; transform: skewY(-5deg); }
+    .cover-bricks span { height: 18px; border-radius: 3px; background: #ff8072; box-shadow: 0 0 12px rgba(255, 128, 114, .34); }
+    .cover-bricks span:nth-child(2n) { background: #c8ff5f; box-shadow: 0 0 12px rgba(200, 255, 95, .28); }
+    .cover-bricks span:nth-child(3n) { background: #58d5e8; box-shadow: 0 0 12px rgba(88, 213, 232, .3); }
+    .cover-paddle { position: absolute; left: 50%; bottom: 36px; width: 84px; height: 9px; border-radius: 99px; background: #f4f3ee; transform: translateX(-50%); box-shadow: 0 0 14px rgba(244, 243, 238, .6); }
+    .cover-ball { position: absolute; left: 52%; bottom: 58px; width: 12px; height: 12px; border-radius: 50%; background: #ffc763; box-shadow: 0 0 16px rgba(255, 199, 99, .8); }
+    .art-cover .cover-scan { background: linear-gradient(180deg, rgba(12, 16, 21, 0), rgba(12, 16, 21, .34)); }
     .game-content { display: flex; min-height: 164px; flex: 1; flex-direction: column; padding: 18px; }
     .game-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font: 600 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
     .game-name { margin: 18px 0 8px; font-size: 21px; line-height: 1.05; }
@@ -196,7 +219,7 @@
     <section class="library" aria-labelledby="single-title">
       <div class="section-head">
         <h2 id="single-title">单人游戏</h2>
-        <span class="section-count">01 / 01</span>
+        <span class="section-count">04 / 04</span>
       </div>
 
       <div class="game-grid">
@@ -209,6 +232,47 @@
             <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
             <h3 class="game-name">俄罗斯方块</h3>
             <p class="game-description">带有连击、暂存和节奏反馈的现代俄罗斯方块。</p>
+            <span class="play-link">开始游戏</span>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/2048/" aria-label="开始游玩2048">
+          <div class="game-cover art-cover cover-2048" aria-hidden="true">
+            <div class="cover-grid-2048"><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span><span>64</span><span>128</span><span>256</span><span>512</span><span>1024</span><span>·</span><span>2048</span></div>
+            <div class="cover-scan"></div>
+          </div>
+          <div class="game-content">
+            <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
+            <h3 class="game-name">2048</h3>
+            <p class="game-description">滑动数字方块，合成更大的数字并冲击 2048。</p>
+            <span class="play-link">开始游戏</span>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/snake/" aria-label="开始游玩贪吃蛇">
+          <div class="game-cover art-cover cover-snake" aria-hidden="true">
+            <div class="cover-snake-track"></div>
+            <div class="cover-scan"></div>
+          </div>
+          <div class="game-content">
+            <div class="game-meta"><span>ARCADE / 003</span><span>2026</span></div>
+            <h3 class="game-name">贪吃蛇</h3>
+            <p class="game-description">吃掉能量点，保持移动，创造你的最长记录。</p>
+            <span class="play-link">开始游戏</span>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/breakout/" aria-label="开始游玩打砖块">
+          <div class="game-cover art-cover cover-breakout" aria-hidden="true">
+            <div class="cover-bricks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="cover-paddle"></div>
+            <div class="cover-ball"></div>
+            <div class="cover-scan"></div>
+          </div>
+          <div class="game-content">
+            <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
+            <h3 class="game-name">打砖块</h3>
+            <p class="game-description">控制挡板反弹能量球，清空砖块并刷新最高分。</p>
             <span class="play-link">开始游戏</span>
           </div>
         </a>
