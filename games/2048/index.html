@@ -207,10 +207,11 @@
     </main>
   </div>
 
-  <footer><div class="app footer-inner"><span>ARCADE / 002</span><span>BUILT FOR PLAY</span></div></footer>
+  <footer><div class="app footer-inner"><span>ARCADE / 002</span><span>made by 不会文科的小旺柴</span></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-progress.js"></script>
   <script src="../../assets/game-leaderboard.js"></script>
   <script>
     (() => {
@@ -380,6 +381,7 @@
         ui.primary.textContent = "再来一局";
         ui.overlay.hidden = false;
         void syncScoreToLeaderboard(score);
+        void window.gameProgress?.recordCompletion("2048");
       }
 
       function tileClass(value) {

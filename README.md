@@ -40,11 +40,11 @@
 
 项目使用 Supabase Auth 和数据库保存账号与最高分。玩家只填写用户名和密码：页面会在后台将用户名映射为内部登录标识，邮箱不会显示、收集或用于登录。首次配置时，在 Supabase SQL Editor 运行根目录的 `supabase-setup.sql`，然后在 Authentication 设置中将站点地址配置为 GitHub Pages 地址。
 
-在 Supabase Dashboard 依次打开 `Authentication`、`Providers`、`Email`，关闭 `Confirm email`。这是用户名登录正常创建会话所必需的设置；不关闭时，Supabase 会等待无法接收的邮箱确认。
+在 Supabase Dashboard 依次打开 `Authentication`、`Providers`、`Email`，关闭 `Confirm email` 和 `Secure email change`。前者让用户名注册后可立即登录，后者让改用户名时不需要确认内部邮箱。
 
 俄罗斯方块使用 `tetris` 作为 `game_slug`。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。
 
-反应速度测试也使用同一套 Supabase 排行榜，并在浏览器本机保留最近成绩。首页总积分榜仅统计俄罗斯方块、2048、贪吃蛇和打砖块的标准难度成绩：每项当前第一名为 100 分，其余玩家按自己的分数与第一名分数的比例换算并累计；反应速度不参与总积分。
+反应速度测试在浏览器本机保留最近成绩；只有完成一组五次平均才会进入其排行榜。首页总积分榜统计俄罗斯方块、2048、打砖块的标准难度与贪吃蛇高速成绩：每项当前第一名为 100 分，其余玩家按自己的分数与第一名分数的比例换算并累计；反应速度不参与总积分。已登录玩家每完成一局游戏，主页的累计完成局数会加一。
 
 ## 版本规则
 

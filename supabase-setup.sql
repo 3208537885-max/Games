@@ -98,7 +98,7 @@ as $$
 declare
   v_user_id uuid := auth.uid();
   v_result public.game_scores;
-  v_is_reaction boolean := p_game_slug = 'reaction';
+  v_is_reaction boolean := p_game_slug in ('reaction', 'reaction-average');
 begin
   if v_user_id is null then
     raise exception 'not authenticated';
@@ -156,9 +156,11 @@ as $$
   with eligible_scores as (
     select user_id, game_slug, high_score
     from public.game_scores
-    where difficulty = 'normal'
-      and high_score > 0
-      and game_slug in ('tetris', '2048', 'snake', 'breakout')
+    where high_score > 0
+      and (
+        (game_slug = 'snake' and difficulty = 'high')
+        or (game_slug in ('tetris', '2048', 'breakout') and difficulty = 'normal')
+      )
   ),
   game_leaders as (
     select
@@ -199,6 +201,51 @@ $$;
 
 revoke execute on function public.get_overall_leaderboard() from public;
 grant execute on function public.get_overall_leaderboard() to anon, authenticated;
+
+create table if not exists public.game_completions (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users(id) on delete set null,
+  game_slug text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.game_completions enable row level security;
+
+create or replace function public.record_game_completion(p_game_slug text)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_total bigint;
+begin
+  if p_game_slug is null or p_game_slug !~ '^[a-z0-9-]{1,40}$' then
+    raise exception 'invalid game slug';
+  end if;
+  if auth.uid() is null then
+    raise exception 'not authenticated';
+  end if;
+  insert into public.game_completions (user_id, game_slug) values (auth.uid(), p_game_slug);
+  select count(*) into v_total from public.game_completions;
+  return v_total;
+end;
+$$;
+
+create or replace function public.get_total_play_count()
+returns bigint
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select count(*) from public.game_completions;
+$$;
+
+revoke execute on function public.record_game_completion(text) from public;
+grant execute on function public.record_game_completion(text) to authenticated;
+revoke execute on function public.get_total_play_count() from public;
+grant execute on function public.get_total_play_count() to anon, authenticated;
 
 grant select on public.player_profiles to anon, authenticated;
 grant select on public.game_scores to anon, authenticated;

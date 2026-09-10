@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.4</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.5</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,11 +131,25 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.4">
+          <article class="release current" data-version="0.1.5">
+            <div class="release-card">
+              <header class="release-head">
+                <div><h2 class="release-version">0.1.5</h2><p class="release-date">2026.09.10</p></div>
+                <span class="release-tag">CURRENT</span>
+              </header>
+              <h3>账号与完成记录</h3>
+              <ul class="changes">
+                <li>已登录玩家可以修改用户名或密码；主页新增所有已登录玩家累计完成的游戏局数。</li>
+                <li>反应速度新增单次练习和五次平均模式，五次有效成绩会生成折线图并以平均值进入排行榜；全部成绩统一校正 30 ms。</li>
+                <li>总积分榜的贪吃蛇仅统计高速成绩；更新日志时间线修复最旧版本附近的拖动定位。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.4">
             <div class="release-card">
               <header class="release-head">
                 <div><h2 class="release-version">0.1.4</h2><p class="release-date">2026.09.10</p></div>
-                <span class="release-tag">CURRENT</span>
               </header>
               <h3>无限砖块与比例积分</h3>
               <ul class="changes">
@@ -206,7 +220,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 05 · v0.1.4</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 06 · v0.1.5</span>
       </div>
     </section>
 
@@ -216,7 +230,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.4</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.5</span></div></footer>
 
   <script>
     (() => {
@@ -250,9 +264,15 @@
         status.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(releases.length).padStart(2, "0")} · v${releases[activeIndex].dataset.version}`;
       }
 
-      function goTo(index) {
+      function releaseScrollLeft(index) {
+        const target = releases[index];
+        const maxScroll = timeline.scrollWidth - timeline.clientWidth;
+        return Math.max(0, Math.min(maxScroll, target.offsetLeft + target.offsetWidth / 2 - timeline.clientWidth / 2));
+      }
+
+      function goTo(index, behavior = "smooth") {
         const targetIndex = Math.max(0, Math.min(releases.length - 1, index));
-        releases[targetIndex].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+        timeline.scrollTo({ left: releaseScrollLeft(targetIndex), behavior });
       }
 
       previousButton.addEventListener("click", () => goTo(activeIndex - 1));

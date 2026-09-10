@@ -51,9 +51,13 @@
     .intro-copy { margin: 0 0 3px; color: var(--muted); font-size: 14px; line-height: 1.65; }
 
     .test-panel { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-    .test-panel-head { display: flex; align-items: center; justify-content: space-between; min-height: 54px; padding: 0 18px; border-bottom: 1px solid var(--line); }
+    .test-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 54px; padding: 0 18px; border-bottom: 1px solid var(--line); }
     .panel-title { font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; }
     .panel-id { color: var(--muted); font: 600 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .mode-picker { display: flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+    .mode-button { min-height: 28px; padding: 0 9px; border: 0; border-right: 1px solid var(--line); color: var(--muted); background: transparent; font: 700 10px ui-monospace, SFMono-Regular, Consolas, monospace; cursor: pointer; }
+    .mode-button:last-child { border-right: 0; }
+    .mode-button.active { color: #071315; background: var(--lime); }
     .reaction-stage {
       position: relative;
       display: grid;
@@ -94,6 +98,11 @@
     .history-card h2 { margin: 0 0 7px; font-size: 16px; }
     .history-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
     .history-card strong { color: var(--cyan); }
+    .average-panel { margin-top: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: rgba(20, 28, 37, .72); }
+    .average-panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+    .average-panel h2 { margin: 0; font-size: 16px; }
+    .round-average { color: var(--lime); font: 800 19px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .average-chart { display: block; width: 100%; height: 170px; margin-top: 14px; }
     footer { border-top: 1px solid var(--line); }
     .footer-inner { display: flex; justify-content: space-between; gap: 16px; padding: 23px 0 32px; color: var(--muted); font-size: 12px; }
 
@@ -120,6 +129,7 @@
       .stat { min-height: 70px; border-right: 0; border-bottom: 1px solid var(--line); }
       .stat:last-child { border-bottom: 0; }
       .history { grid-template-columns: 1fr; }
+      .test-panel-head { flex-wrap: wrap; padding: 12px 14px; }
       .footer-inner { flex-direction: column; gap: 7px; }
     }
   </style>
@@ -149,7 +159,10 @@
       <section class="test-panel" aria-labelledby="test-title">
         <div class="test-panel-head">
           <span class="panel-title" id="test-title">Reaction time</span>
-          <span class="panel-id">TEST / 001</span>
+          <div class="mode-picker" aria-label="测试模式">
+            <button class="mode-button active" data-reaction-mode="single" type="button">单次练习</button>
+            <button class="mode-button" data-reaction-mode="five" type="button">五次平均</button>
+          </div>
         </div>
         <button class="reaction-stage" id="reactionStage" data-state="idle" type="button" aria-label="开始反应速度测试">
           <span class="stage-content">
@@ -163,6 +176,11 @@
           <div class="stat"><span class="stat-label">Last / 最近</span><strong class="stat-value" id="lastValue">--</strong></div>
           <div class="stat"><span class="stat-label">Attempts / 次数</span><strong class="stat-value" id="attemptValue">0</strong></div>
         </div>
+      </section>
+
+      <section class="average-panel" id="averagePanel" hidden aria-labelledby="averagePanelTitle">
+        <div class="average-panel-head"><h2 id="averagePanelTitle">五次平均结果</h2><strong class="round-average" id="roundAverage">--</strong></div>
+        <canvas class="average-chart" id="averageChart" width="620" height="170" aria-label="五次反应时间折线图"></canvas>
       </section>
 
       <section class="history" aria-label="测试记录摘要">
@@ -181,12 +199,13 @@
   <footer>
     <div class="app footer-inner">
       <span>HUMAN BENCHMARK / 001</span>
-      <span>BUILT FOR PLAY</span>
+      <span>made by 不会文科的小旺柴</span>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-progress.js"></script>
   <script>
     (() => {
       "use strict";
@@ -201,12 +220,17 @@
         best: document.getElementById("bestValue"),
         last: document.getElementById("lastValue"),
         attempts: document.getElementById("attemptValue"),
-        average: document.getElementById("averageText")
+        average: document.getElementById("averageText"),
+        averagePanel: document.getElementById("averagePanel"),
+        roundAverage: document.getElementById("roundAverage"),
+        chart: document.getElementById("averageChart")
       };
       let phase = "idle";
       let timer = null;
       let readyAt = 0;
       let history = readHistory();
+      let selectedMode = "single";
+      let roundResults = [];
 
       function readHistory() {
         try {
@@ -230,7 +254,7 @@
         const { data: sessionData } = await authClient.auth.getSession();
         if (!sessionData.session) return;
         const { error } = await authClient.rpc("submit_score", {
-          p_game_slug: "reaction",
+          p_game_slug: "reaction-average",
           p_difficulty: "normal",
           p_score: Math.round(value)
         });
@@ -259,7 +283,8 @@
           waiting: ["WAIT FOR GREEN", "等待变绿...", "现在不要点击。"],
           ready: ["CLICK NOW", "现在点击！", "抓住这一刻。"],
           early: ["TOO SOON", "太早了", "你提前点击了，再来一次。"],
-          result: ["RESULT", formatMs(history[history.length - 1]), "点击这里开始下一次测试。"]
+          result: ["RESULT", formatMs(history[history.length - 1]), selectedMode === "five" ? `已完成 ${roundResults.length} / 5 次，点击继续。` : "点击这里开始下一次测试。"],
+          "five-result": ["FIVE-RUN COMPLETE", formatMs(roundAverage()), "本组成绩已保存到五次平均排行榜。点击开始下一组。"]
         }[phase];
         ui.kicker.textContent = copy[0];
         ui.title.textContent = copy[1];
@@ -289,19 +314,72 @@
       }
 
       function finishResult(event) {
-        const result = Math.max(0, eventTime(event) - readyAt);
-        history.push(Math.round(result));
+        const result = Math.max(1, Math.round(eventTime(event) - readyAt - 30));
+        history.push(result);
         history = history.slice(-20);
         saveHistory();
         renderStats(result);
-        void syncScoreToLeaderboard(result);
+        if (selectedMode === "five") {
+          roundResults.push(result);
+          if (roundResults.length === 5) {
+            const average = roundAverage();
+            ui.roundAverage.textContent = formatMs(average);
+            ui.averagePanel.hidden = false;
+            renderChart();
+            void syncScoreToLeaderboard(average);
+            void window.gameProgress?.recordCompletion("reaction");
+            setPhase("five-result");
+            return;
+          }
+        }
         setPhase("result");
+      }
+
+      function roundAverage() {
+        return roundResults.length ? Math.round(roundResults.reduce((sum, value) => sum + value, 0) / roundResults.length) : 0;
+      }
+
+      function renderChart() {
+        const canvas = ui.chart;
+        const ctx = canvas.getContext("2d");
+        const ratio = Math.max(1, window.devicePixelRatio || 1);
+        const width = Math.max(280, canvas.clientWidth || 620);
+        const height = 170;
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        const padding = { top: 18, right: 22, bottom: 28, left: 42 };
+        const values = roundResults;
+        const min = Math.max(0, Math.min(...values) - 20);
+        const max = Math.max(...values) + 20;
+        const scaleX = index => padding.left + index * (width - padding.left - padding.right) / 4;
+        const scaleY = value => padding.top + (max - value) * (height - padding.top - padding.bottom) / Math.max(1, max - min);
+        ctx.strokeStyle = "rgba(244,243,238,.14)";
+        ctx.lineWidth = 1;
+        [0, .5, 1].forEach(step => { const y = padding.top + step * (height - padding.top - padding.bottom); ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(width - padding.right, y); ctx.stroke(); });
+        ctx.strokeStyle = "#58d5e8";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath(); values.forEach((value, index) => { const x = scaleX(index); const y = scaleY(value); if (index) ctx.lineTo(x, y); else ctx.moveTo(x, y); }); ctx.stroke();
+        values.forEach((value, index) => { const x = scaleX(index); const y = scaleY(value); ctx.fillStyle = "#c8ff5f"; ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#a9b0bc"; ctx.font = "11px ui-monospace, monospace"; ctx.textAlign = "center"; ctx.fillText(`${value}ms`, x, Math.max(12, y - 10)); ctx.fillText(`${index + 1}`, x, height - 8); });
+      }
+
+      function setMode(mode) {
+        selectedMode = mode;
+        roundResults = [];
+        ui.averagePanel.hidden = true;
+        document.querySelectorAll("[data-reaction-mode]").forEach(button => button.classList.toggle("active", button.dataset.reactionMode === mode));
+        window.clearTimeout(timer);
+        setPhase("idle");
       }
 
       function handleStageInput(event) {
         if (phase === "waiting") finishEarly();
         else if (phase === "ready") finishResult(event);
-        else startTest();
+        else {
+          if (phase === "five-result") roundResults = [];
+          startTest();
+        }
       }
 
       let lastPointerInputAt = 0;
@@ -314,6 +392,7 @@
         if (performance.now() - lastPointerInputAt < 500) return;
         handleStageInput(event);
       });
+      document.querySelectorAll("[data-reaction-mode]").forEach(button => button.addEventListener("click", () => setMode(button.dataset.reactionMode)));
 
       window.addEventListener("beforeunload", () => window.clearTimeout(timer));
       renderStats();

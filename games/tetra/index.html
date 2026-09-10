@@ -961,6 +961,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-progress.js"></script>
   <script src="../../assets/game-leaderboard.js"></script>
   <script>
     (() => {
@@ -1419,6 +1420,7 @@
         playSound("gameover");
         updateUI();
         void syncScoreToLeaderboard(score);
+        void window.gameProgress?.recordCompletion("tetris");
       }
 
       function showOverlay(eyebrow, title, text, buttonText) {

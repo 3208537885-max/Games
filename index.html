@@ -81,6 +81,8 @@
     .eyebrow { margin: 0 0 16px; color: var(--lime); font-size: 12px; font-weight: 800; }
     h1 { max-width: 760px; margin: 0; font-size: 34px; line-height: 1.08; font-weight: 820; }
     .intro-copy { max-width: 315px; margin: 0 0 5px; color: var(--muted); font-size: 15px; line-height: 1.65; }
+    .play-count { display: block; margin-top: 12px; color: var(--muted); font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .play-count strong { color: var(--lime); font-size: 14px; }
 
     .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
     h2 { margin: 0; font-size: 18px; line-height: 1.25; }
@@ -247,9 +249,10 @@
       小游戏大合集
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.4"><span class="version-label">更新日志</span><span>v0.1.4</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.5"><span class="version-label">更新日志</span><span>v0.1.5</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
+      <button class="account-button secondary" id="authSettingsButton" type="button" hidden>账号设置</button>
       <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>
     </div>
   </header>
@@ -260,7 +263,7 @@
         <p class="eyebrow">SELECT A GAME</p>
         <h1 id="page-title">小游戏大合集</h1>
       </div>
-      <p class="intro-copy">每个游戏都有自己的一扇入口。选择一个，直接开始。</p>
+      <div><p class="intro-copy">每个游戏都有自己的一扇入口。选择一个，直接开始。</p><span class="play-count">累计完成 <strong id="totalPlayCount">--</strong> 局</span></div>
     </section>
 
     <div class="home-content">
@@ -392,8 +395,8 @@
               <span class="play-link">开始测试</span>
             </div>
           </a>
-          <aside class="mini-leaderboard" data-leaderboard="reaction" data-difficulty="normal">
-            <div class="mini-head"><span class="mini-title">反应速度榜</span><span class="mini-scope">越低越好</span></div>
+          <aside class="mini-leaderboard" data-leaderboard="reaction-average" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">五次平均榜</span><span class="mini-scope">越低越好</span></div>
             <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
             <span class="mini-status">正在读取</span>
           </aside>
@@ -412,7 +415,7 @@
 
     <aside class="overall-leaderboard" aria-labelledby="overallTitle">
       <div class="overall-head"><h2 class="overall-title" id="overallTitle">总积分榜</h2><span class="overall-scope">四个单人游戏</span></div>
-      <p class="overall-rule">每项最高 100 分，按与当前第一成绩的比例换算。</p>
+      <p class="overall-rule">每项最高 100 分，按与当前第一成绩的比例换算。贪吃蛇仅统计高速成绩。</p>
       <ol class="overall-list" id="overallList"><li class="overall-empty">正在读取...</li></ol>
       <span class="overall-status" id="overallStatus">正在读取</span>
     </aside>
@@ -428,7 +431,7 @@
       <p class="auth-dialog-copy" id="authDescription">登录后可以保存你的最高分，并出现在排行榜中。</p>
       <form class="auth-form" id="authForm">
         <label>用户名<input id="authUsername" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required placeholder="3-24 位字母、数字或下划线"></label>
-        <label>密码<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="至少 6 位"></label>
+        <label id="authPasswordLabel">密码<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="至少 6 位"></label>
         <label id="authNicknameField">昵称（可选）<input id="authNickname" type="text" autocomplete="nickname" maxlength="24" placeholder="不填写时默认使用用户名"></label>
         <button class="auth-submit" id="authSubmit" type="submit">登录</button>
       </form>
@@ -440,7 +443,7 @@
   <footer>
     <div class="shell footer-inner">
       <span>小游戏大合集</span>
-      <span>BUILT FOR PLAY</span>
+      <span>made by 不会文科的小旺柴</span>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -454,6 +457,7 @@
       const ui = {
         state: document.getElementById("authState"),
         open: document.getElementById("authOpenButton"),
+        settings: document.getElementById("authSettingsButton"),
         logout: document.getElementById("authLogoutButton"),
         modal: document.getElementById("authModal"),
         close: document.getElementById("authCloseButton"),
@@ -462,13 +466,14 @@
         form: document.getElementById("authForm"),
         username: document.getElementById("authUsername"),
         password: document.getElementById("authPassword"),
+        passwordLabel: document.getElementById("authPasswordLabel"),
         nicknameField: document.getElementById("authNicknameField"),
         nickname: document.getElementById("authNickname"),
         submit: document.getElementById("authSubmit"),
         mode: document.getElementById("authModeButton"),
         message: document.getElementById("authMessage")
       };
-      let signUpMode = false;
+      let authMode = "login";
       let currentUser = null;
       let currentProfile = null;
       const leaderboardNodes = [...document.querySelectorAll("[data-leaderboard]")];
@@ -476,6 +481,7 @@
         list: document.getElementById("overallList"),
         status: document.getElementById("overallStatus")
       };
+      const totalPlayCount = document.getElementById("totalPlayCount");
       // Supabase Auth requires an email identifier; .example is an IANA-reserved domain.
       const INTERNAL_AUTH_DOMAIN = "players.arcadearchive.example.com";
 
@@ -485,10 +491,10 @@
 
       async function describeAuthError(error, username) {
         const message = String(error && error.message || "").toLowerCase();
-        if (signUpMode && (message.includes("already registered") || message.includes("already exists"))) {
+        if (authMode === "signup" && (message.includes("already registered") || message.includes("already exists"))) {
           return "该用户名已注册，请直接登录或换一个用户名。";
         }
-        if (!signUpMode && message.includes("invalid login credentials")) {
+        if (authMode === "login" && message.includes("invalid login credentials")) {
           const { data, error: profileError } = await client
             .from("player_profiles")
             .select("user_id")
@@ -500,7 +506,7 @@
         if (message.includes("email not confirmed")) {
           return "该账号尚未启用。请在 Supabase 后台关闭 Confirm email 后重新注册。";
         }
-        return signUpMode ? "注册暂时失败，请稍后重试。" : "登录暂时失败，请稍后重试。";
+        return authMode === "signup" ? "注册暂时失败，请稍后重试。" : "登录暂时失败，请稍后重试。";
       }
 
       function setMessage(text, isError = false) {
@@ -513,6 +519,17 @@
           ui.state.textContent = "登录服务未加载";
           return;
         }
+        setAuthMode("login");
+        ui.modal.hidden = false;
+        window.setTimeout(() => ui.username.focus(), 0);
+      }
+
+      function openSettings() {
+        if (!client || !currentUser) return;
+        setAuthMode("settings");
+        const username = currentProfile && currentProfile.username || currentUser.user_metadata && currentUser.user_metadata.username || "";
+        ui.username.value = username;
+        ui.password.value = "";
         ui.modal.hidden = false;
         window.setTimeout(() => ui.username.focus(), 0);
       }
@@ -522,13 +539,22 @@
         setMessage("");
       }
 
-      function setSignUpMode(nextMode) {
-        signUpMode = nextMode;
-        ui.title.textContent = signUpMode ? "创建游戏厅账号" : "登录游戏厅";
-        ui.description.textContent = signUpMode ? "只需用户名和密码，昵称可以不填。注册后即可保存最高分。" : "使用用户名和密码登录，最高分会同步到对应游戏的排行榜。";
-        ui.submit.textContent = signUpMode ? "注册" : "登录";
+      function setAuthMode(nextMode) {
+        authMode = nextMode;
+        const signUpMode = authMode === "signup";
+        const settingsMode = authMode === "settings";
+        ui.title.textContent = settingsMode ? "账号设置" : signUpMode ? "创建游戏厅账号" : "登录游戏厅";
+        ui.description.textContent = settingsMode
+          ? "可以修改用户名或密码。没有要修改的内容可以直接关闭。"
+          : signUpMode ? "只需用户名和密码，昵称可以不填。注册后即可保存最高分。"
+          : "使用用户名和密码登录，最高分会同步到对应游戏的排行榜。";
+        ui.submit.textContent = settingsMode ? "保存修改" : signUpMode ? "注册" : "登录";
+        ui.mode.hidden = settingsMode;
         ui.mode.textContent = signUpMode ? "已有账号？登录" : "还没有账号？注册";
-        ui.password.autocomplete = signUpMode ? "new-password" : "current-password";
+        ui.password.autocomplete = settingsMode || signUpMode ? "new-password" : "current-password";
+        ui.password.required = !settingsMode;
+        ui.password.placeholder = settingsMode ? "不修改请留空，至少 6 位" : "至少 6 位";
+        ui.passwordLabel.firstChild.textContent = settingsMode ? "新密码（可选）" : "密码";
         ui.nicknameField.hidden = !signUpMode;
         ui.nickname.required = false;
         setMessage("");
@@ -542,10 +568,12 @@
             : currentUser.user_metadata && (currentUser.user_metadata.nickname || currentUser.user_metadata.username);
           ui.state.textContent = `已登录 ${name || "玩家"}`;
           ui.open.hidden = true;
+          ui.settings.hidden = false;
           ui.logout.hidden = false;
         } else {
           ui.state.textContent = "未登录";
           ui.open.hidden = false;
+          ui.settings.hidden = true;
           ui.logout.hidden = true;
         }
       }
@@ -580,7 +608,7 @@
             score.className = "mini-score";
             rank.textContent = String(index + 1).padStart(2, "0");
             player.textContent = currentUser && row.user_id === currentUser.id ? "你" : (profile && (profile.nickname || profile.username)) || `玩家 ${row.user_id.slice(0, 6)}`;
-            score.textContent = node.dataset.leaderboard === "reaction"
+            score.textContent = (node.dataset.leaderboard === "reaction" || node.dataset.leaderboard === "reaction-average")
               ? `${Number(row.high_score || 0)} ms`
               : Number(row.high_score || 0).toLocaleString("zh-CN");
             item.append(rank, player, score);
@@ -597,7 +625,7 @@
         }
         const game = node.dataset.leaderboard;
         const difficulty = node.dataset.difficulty || "normal";
-        const ascending = game === "reaction";
+        const ascending = game === "reaction" || game === "reaction-average";
         const { data, error } = await client
           .from("game_scores")
           .select("user_id, high_score, updated_at")
@@ -672,9 +700,16 @@
         renderOverall(data || []);
       }
 
+      async function loadTotalPlayCount() {
+        if (!client) return;
+        const { data, error } = await client.rpc("get_total_play_count");
+        if (!error && totalPlayCount) totalPlayCount.textContent = Number(data || 0).toLocaleString("zh-CN");
+      }
+
       function loadLeaderboards() {
         leaderboardNodes.forEach(node => void loadLeaderboard(node));
         void loadOverallLeaderboard();
+        void loadTotalPlayCount();
       }
 
       leaderboardNodes.forEach(node => {
@@ -689,9 +724,67 @@
         });
       });
 
+      async function updateAccount(username, password) {
+        if (!currentUser) {
+          setMessage("请先登录后再修改账号。", true);
+          return false;
+        }
+        const previousUsername = currentProfile && currentProfile.username || currentUser.user_metadata && currentUser.user_metadata.username || "";
+        const previousNickname = currentProfile && currentProfile.nickname || previousUsername;
+        const usernameChanged = username !== previousUsername;
+        const passwordChanged = Boolean(password);
+        if (!usernameChanged && !passwordChanged) {
+          setMessage("没有需要保存的修改。", true);
+          return false;
+        }
+
+        if (usernameChanged) {
+          const { data: existingProfile, error: existingProfileError } = await client
+            .from("player_profiles")
+            .select("user_id")
+            .eq("username", username)
+            .maybeSingle();
+          if (existingProfileError) {
+            setMessage("暂时无法检查用户名，请稍后重试。", true);
+            return false;
+          }
+          if (existingProfile && existingProfile.user_id !== currentUser.id) {
+            setMessage("该用户名已被注册，请换一个用户名。", true);
+            return false;
+          }
+        }
+
+        const profileUpdate = { username };
+        if (previousNickname === previousUsername) profileUpdate.nickname = username;
+        if (usernameChanged) {
+          const { error } = await client.from("player_profiles").update(profileUpdate).eq("user_id", currentUser.id);
+          if (error) {
+            setMessage("用户名保存失败，请确认已运行最新版 Supabase SQL。", true);
+            return false;
+          }
+        }
+
+        const authUpdate = {};
+        if (usernameChanged) authUpdate.email = usernameToAuthEmail(username);
+        if (passwordChanged) authUpdate.password = password;
+        const { data, error } = await client.auth.updateUser(authUpdate);
+        if (error) {
+          if (usernameChanged) {
+            await client.from("player_profiles").update({ username: previousUsername, nickname: previousNickname }).eq("user_id", currentUser.id);
+          }
+          setMessage(usernameChanged ? "用户名更新失败。请在 Supabase 的 Email 设置中关闭 Secure email change 后重试。" : "密码更新失败，请稍后重试。", true);
+          return false;
+        }
+
+        await refreshProfile({ user: data.user || currentUser });
+        closeAuth();
+        return true;
+      }
+
       ui.open.addEventListener("click", openAuth);
+      ui.settings.addEventListener("click", openSettings);
       ui.close.addEventListener("click", closeAuth);
-      ui.mode.addEventListener("click", () => setSignUpMode(!signUpMode));
+      ui.mode.addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
       ui.modal.addEventListener("click", event => {
         if (event.target === ui.modal) closeAuth();
       });
@@ -703,7 +796,7 @@
         event.preventDefault();
         if (!client) return;
         ui.submit.disabled = true;
-        setMessage(signUpMode ? "正在创建账号..." : "正在登录...");
+        setMessage(authMode === "settings" ? "正在保存修改..." : authMode === "signup" ? "正在创建账号..." : "正在登录...");
         const username = ui.username.value.trim().toLowerCase();
         const password = ui.password.value;
         const nickname = ui.nickname.value.trim() || username;
@@ -712,8 +805,13 @@
           setMessage("用户名需要是 3-24 位字母、数字或下划线。", true);
           return;
         }
+        if (authMode === "settings") {
+          const updated = await updateAccount(username, password);
+          ui.submit.disabled = false;
+          return updated;
+        }
         const email = usernameToAuthEmail(username);
-        const result = signUpMode
+        const result = authMode === "signup"
           ? await client.auth.signUp({ email, password, options: { data: { username, nickname } } })
           : await client.auth.signInWithPassword({ email, password });
         ui.submit.disabled = false;
@@ -721,14 +819,14 @@
           setMessage(await describeAuthError(result.error, username), true);
           return;
         }
-        if (signUpMode && !result.data.session) {
+        if (authMode === "signup" && !result.data.session) {
           setMessage("账号已创建，但当前项目仍开启了邮箱确认。用户名登录不使用邮箱，请在 Supabase 的 Authentication > Providers > Email 中关闭 Confirm email。", true);
           return;
         }
         closeAuth();
       });
 
-      setSignUpMode(false);
+      setAuthMode("login");
 
       async function refreshProfile(session) {
         currentProfile = null;

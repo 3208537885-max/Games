@@ -54,7 +54,7 @@
     const view = views.get(node);
     const game = node.dataset.gameLeaderboard;
     const difficulty = node.dataset.gameDifficulty || "normal";
-    const reaction = game === "reaction";
+    const reaction = game === "reaction" || game === "reaction-average";
     view.scope.textContent = reaction ? "越低越快" : difficultyName[difficulty] || "普通";
 
     if (!client) {
