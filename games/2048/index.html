@@ -201,6 +201,8 @@
 
   <footer><div class="app footer-inner"><span>ARCADE / 002</span><span>BUILT FOR PLAY</span></div></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
   <script>
     (() => {
       "use strict";
@@ -224,6 +226,7 @@
       let won = false;
       let swipeStart = null;
       let moveAnimationTimer = null;
+      const authClient = window.gameAuth && window.gameAuth.client;
 
       function readBest() {
         try { return Math.max(0, Number(window.localStorage.getItem(STORAGE_KEY)) || 0); } catch (_error) { return 0; }
@@ -231,6 +234,18 @@
 
       function saveBest() {
         try { window.localStorage.setItem(STORAGE_KEY, String(best)); } catch (_error) { /* local record is optional */ }
+      }
+
+      async function syncScoreToLeaderboard(value) {
+        if (!authClient || value <= 0) return;
+        const { data: sessionData } = await authClient.auth.getSession();
+        if (!sessionData.session) return;
+        const { error } = await authClient.rpc("submit_score", {
+          p_game_slug: "2048",
+          p_difficulty: "normal",
+          p_score: Math.floor(value)
+        });
+        if (error) console.warn("Leaderboard sync failed:", error.message);
       }
 
       function emptyBoard() { return Array.from({ length: SIZE }, () => Array(SIZE).fill(0)); }
@@ -327,6 +342,7 @@
         ui.copy.textContent = `本局得分 ${score.toLocaleString("zh-CN")}，再试一次看看能否走得更远。`;
         ui.primary.textContent = "再来一局";
         ui.overlay.hidden = false;
+        void syncScoreToLeaderboard(score);
       }
 
       function tileClass(value) {

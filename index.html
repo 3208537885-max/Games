@@ -83,7 +83,23 @@
     h2 { margin: 0; font-size: 18px; line-height: 1.25; }
     .count, .section-count { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
     .library { padding-bottom: 58px; }
-    .game-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .game-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .game-entry { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr) 138px; gap: 10px; align-items: stretch; }
+    .mini-leaderboard { min-height: 410px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .mini-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .mini-title { font-size: 12px; font-weight: 800; }
+    .mini-scope { color: var(--muted); font: 600 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .mini-difficulty { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 12px 0 10px; }
+    .mini-difficulty[hidden] { display: none; }
+    .mini-difficulty button { min-width: 0; min-height: 26px; padding: 0 3px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); background: transparent; font-size: 10px; cursor: pointer; }
+    .mini-difficulty button.active { border-color: rgba(200, 255, 95, .62); color: #10160e; background: var(--lime); font-weight: 800; }
+    .mini-list { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .mini-row { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 5px; align-items: center; min-width: 0; }
+    .mini-rank { color: var(--lime); font: 700 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .mini-player { min-width: 0; overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .mini-score { grid-column: 2; color: var(--ink); font: 800 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .mini-empty { margin-top: 14px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .mini-status { display: block; min-height: 16px; margin-top: 12px; color: var(--muted); font-size: 10px; line-height: 1.45; }
     .empty-section { display: flex; min-height: 156px; flex-direction: column; justify-content: center; gap: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .empty-section-label { color: var(--cyan); font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; }
     .empty-section h3 { margin: 0; font-size: 21px; }
@@ -110,6 +126,7 @@
     .auth-dialog-copy { margin: 9px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.55; }
     .auth-form { display: grid; gap: 13px; }
     .auth-form label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; }
+    .auth-form label[hidden] { display: none; }
     .auth-form input { width: 100%; height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; outline: 0; color: var(--ink); background: var(--canvas); font: inherit; }
     .auth-form input:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgba(200, 255, 95, .12); }
     .auth-submit { height: 42px; margin-top: 3px; border: 0; border-radius: 5px; color: #10160e; background: var(--lime); font: inherit; font-weight: 800; cursor: pointer; }
@@ -181,6 +198,7 @@
       .intro { grid-template-columns: 1fr; padding: 54px 0 38px; }
       .intro-copy { max-width: 480px; }
       .game-grid { grid-template-columns: 1fr; }
+      .game-entry { grid-template-columns: minmax(0, 1fr) 150px; }
       .game-card { min-height: 370px; }
       .game-cover { min-height: 235px; }
     }
@@ -191,6 +209,10 @@
       h1 { font-size: 26px; }
       .intro { padding-top: 45px; }
       .game-card { min-height: 355px; }
+      .game-entry { display: block; }
+      .mini-leaderboard { min-height: 0; margin-top: 10px; padding: 13px; }
+      .mini-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .mini-row { grid-template-columns: 18px minmax(0, 1fr); }
     }
   </style>
 </head>
@@ -223,59 +245,92 @@
       </div>
 
       <div class="game-grid">
-        <a class="game-card" href="games/tetra/" aria-label="开始游玩俄罗斯方块">
-          <div class="game-cover" aria-hidden="true">
-            <img src="assets/tetra-cover.png" alt="" width="1280" height="720">
-            <div class="cover-scan"></div>
-          </div>
-          <div class="game-content">
-            <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
-            <h3 class="game-name">俄罗斯方块</h3>
-            <p class="game-description">带有连击、暂存和节奏反馈的现代俄罗斯方块。</p>
-            <span class="play-link">开始游戏</span>
-          </div>
-        </a>
+        <div class="game-entry">
+          <a class="game-card" href="games/tetra/" aria-label="开始游玩俄罗斯方块">
+            <div class="game-cover" aria-hidden="true">
+              <img src="assets/tetra-cover.png" alt="" width="1280" height="720">
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
+              <h3 class="game-name">俄罗斯方块</h3>
+              <p class="game-description">带有连击、暂存和节奏反馈的现代俄罗斯方块。</p>
+              <span class="play-link">开始游戏</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="tetris" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">俄罗斯方块榜</span><span class="mini-scope">普通</span></div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
 
-        <a class="game-card" href="games/2048/" aria-label="开始游玩2048">
-          <div class="game-cover art-cover cover-2048" aria-hidden="true">
-            <div class="cover-grid-2048"><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span><span>64</span><span>128</span><span>256</span><span>512</span><span>1024</span><span>·</span><span>2048</span></div>
-            <div class="cover-scan"></div>
-          </div>
-          <div class="game-content">
-            <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
-            <h3 class="game-name">2048</h3>
-            <p class="game-description">滑动数字方块，合成更大的数字并冲击 2048。</p>
-            <span class="play-link">开始游戏</span>
-          </div>
-        </a>
+        <div class="game-entry">
+          <a class="game-card" href="games/2048/" aria-label="开始游玩2048">
+            <div class="game-cover art-cover cover-2048" aria-hidden="true">
+              <div class="cover-grid-2048"><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span><span>64</span><span>128</span><span>256</span><span>512</span><span>1024</span><span>·</span><span>2048</span></div>
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
+              <h3 class="game-name">2048</h3>
+              <p class="game-description">滑动数字方块，合成更大的数字并冲击 2048。</p>
+              <span class="play-link">开始游戏</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="2048" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">2048 榜</span><span class="mini-scope">普通</span></div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
 
-        <a class="game-card" href="games/snake/" aria-label="开始游玩贪吃蛇">
-          <div class="game-cover art-cover cover-snake" aria-hidden="true">
-            <div class="cover-snake-track"></div>
-            <div class="cover-scan"></div>
-          </div>
-          <div class="game-content">
-            <div class="game-meta"><span>ARCADE / 003</span><span>2026</span></div>
-            <h3 class="game-name">贪吃蛇</h3>
-            <p class="game-description">吃掉能量点，保持移动，创造你的最长记录。</p>
-            <span class="play-link">开始游戏</span>
-          </div>
-        </a>
+        <div class="game-entry">
+          <a class="game-card" href="games/snake/" aria-label="开始游玩贪吃蛇">
+            <div class="game-cover art-cover cover-snake" aria-hidden="true">
+              <div class="cover-snake-track"></div>
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>ARCADE / 003</span><span>2026</span></div>
+              <h3 class="game-name">贪吃蛇</h3>
+              <p class="game-description">低、中、高三档速度，穿过边界继续前进。</p>
+              <span class="play-link">开始游戏</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="snake" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">贪吃蛇榜</span><span class="mini-scope">中</span></div>
+            <div class="mini-difficulty" role="group" aria-label="贪吃蛇排行榜难度">
+              <button type="button" data-mini-difficulty="low">低</button>
+              <button type="button" data-mini-difficulty="normal" class="active">中</button>
+              <button type="button" data-mini-difficulty="high">高</button>
+            </div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
 
-        <a class="game-card" href="games/breakout/" aria-label="开始游玩打砖块">
-          <div class="game-cover art-cover cover-breakout" aria-hidden="true">
-            <div class="cover-bricks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-            <div class="cover-paddle"></div>
-            <div class="cover-ball"></div>
-            <div class="cover-scan"></div>
-          </div>
-          <div class="game-content">
-            <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
-            <h3 class="game-name">打砖块</h3>
-            <p class="game-description">控制挡板反弹能量球，清空砖块并刷新最高分。</p>
-            <span class="play-link">开始游戏</span>
-          </div>
-        </a>
+        <div class="game-entry">
+          <a class="game-card" href="games/breakout/" aria-label="开始游玩打砖块">
+            <div class="game-cover art-cover cover-breakout" aria-hidden="true">
+              <div class="cover-bricks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="cover-paddle"></div>
+              <div class="cover-ball"></div>
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
+              <h3 class="game-name">打砖块</h3>
+              <p class="game-description">砖块逐行出现，清空当前行后解锁下一行。</p>
+              <span class="play-link">开始游戏</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="breakout" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">打砖块榜</span><span class="mini-scope">普通</span></div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -297,18 +352,25 @@
         <span class="section-count">01 / 02</span>
       </div>
       <div class="game-grid">
-        <a class="game-card" href="games/reaction/" aria-label="开始反应速度测试">
-          <div class="game-cover" aria-hidden="true">
-            <img src="assets/reaction-cover.png" alt="" width="1280" height="720">
-            <div class="cover-scan"></div>
-          </div>
-          <div class="game-content">
-            <div class="game-meta"><span>TEST / 001</span><span>2026</span></div>
-            <h3 class="game-name">反应速度</h3>
-            <p class="game-description">Human Benchmark 风格的即时反应挑战。</p>
-            <span class="play-link">开始测试</span>
-          </div>
-        </a>
+        <div class="game-entry">
+          <a class="game-card" href="games/reaction/" aria-label="开始反应速度测试">
+            <div class="game-cover" aria-hidden="true">
+              <img src="assets/reaction-cover.png" alt="" width="1280" height="720">
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>TEST / 001</span><span>2026</span></div>
+              <h3 class="game-name">反应速度</h3>
+              <p class="game-description">Human Benchmark 风格的即时反应挑战，时间越低越好。</p>
+              <span class="play-link">开始测试</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="reaction" data-difficulty="normal">
+            <div class="mini-head"><span class="mini-title">反应速度榜</span><span class="mini-scope">越低越好</span></div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
 
         <article class="game-card placeholder" aria-label="即将加入的新测试">
           <div>
@@ -320,22 +382,6 @@
       </div>
     </section>
 
-    <section class="leaderboard" aria-labelledby="leaderboard-title">
-      <div class="section-head">
-        <h2 id="leaderboard-title">最高分榜</h2>
-        <span class="leaderboard-note" id="leaderboardStatus">正在读取</span>
-      </div>
-      <div class="table-wrap">
-        <table class="leaderboard-table">
-          <thead>
-            <tr><th>排名</th><th>玩家</th><th>最高分</th></tr>
-          </thead>
-          <tbody id="leaderboardBody">
-            <tr><td class="leaderboard-empty" colspan="3">正在读取排行榜...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
   </main>
 
   <div class="auth-modal" id="authModal" hidden>
@@ -345,8 +391,9 @@
       <h2 id="authTitle">登录游戏厅</h2>
       <p class="auth-dialog-copy" id="authDescription">登录后可以保存你的最高分，并出现在排行榜中。</p>
       <form class="auth-form" id="authForm">
-        <label>邮箱<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>用户名<input id="authUsername" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required placeholder="3-24 位字母、数字或下划线"></label>
         <label>密码<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="至少 6 位"></label>
+        <label id="authNicknameField">昵称（可选）<input id="authNickname" type="text" autocomplete="nickname" maxlength="24" placeholder="不填写时默认使用用户名"></label>
         <button class="auth-submit" id="authSubmit" type="submit">登录</button>
       </form>
       <button class="auth-switch" id="authModeButton" type="button">还没有账号？注册</button>
@@ -377,16 +424,18 @@
         title: document.getElementById("authTitle"),
         description: document.getElementById("authDescription"),
         form: document.getElementById("authForm"),
-        email: document.getElementById("authEmail"),
+        username: document.getElementById("authUsername"),
         password: document.getElementById("authPassword"),
+        nicknameField: document.getElementById("authNicknameField"),
+        nickname: document.getElementById("authNickname"),
         submit: document.getElementById("authSubmit"),
         mode: document.getElementById("authModeButton"),
-        message: document.getElementById("authMessage"),
-        leaderboard: document.getElementById("leaderboardBody"),
-        leaderboardStatus: document.getElementById("leaderboardStatus")
+        message: document.getElementById("authMessage")
       };
       let signUpMode = false;
       let currentUser = null;
+      let currentProfile = null;
+      const leaderboardNodes = [...document.querySelectorAll("[data-leaderboard]")];
 
       function setMessage(text, isError = false) {
         ui.message.textContent = text;
@@ -399,7 +448,7 @@
           return;
         }
         ui.modal.hidden = false;
-        window.setTimeout(() => ui.email.focus(), 0);
+        window.setTimeout(() => ui.username.focus(), 0);
       }
 
       function closeAuth() {
@@ -410,18 +459,22 @@
       function setSignUpMode(nextMode) {
         signUpMode = nextMode;
         ui.title.textContent = signUpMode ? "创建游戏厅账号" : "登录游戏厅";
-        ui.description.textContent = signUpMode ? "注册后即可保存最高分，并出现在排行榜中。" : "登录后可以保存你的最高分，并出现在排行榜中。";
+        ui.description.textContent = signUpMode ? "只需用户名和密码，昵称可以不填。注册后即可保存最高分。" : "使用用户名和密码登录，最高分会同步到对应游戏的排行榜。";
         ui.submit.textContent = signUpMode ? "注册" : "登录";
         ui.mode.textContent = signUpMode ? "已有账号？登录" : "还没有账号？注册";
         ui.password.autocomplete = signUpMode ? "new-password" : "current-password";
+        ui.nicknameField.hidden = !signUpMode;
+        ui.nickname.required = false;
         setMessage("");
       }
 
       function renderAuth(session) {
         currentUser = session && session.user ? session.user : null;
         if (currentUser) {
-          const emailName = (currentUser.email || "玩家").split("@")[0];
-          ui.state.textContent = `已登录 ${emailName}`;
+          const name = currentProfile && currentProfile.nickname
+            ? currentProfile.nickname
+            : currentUser.user_metadata && (currentUser.user_metadata.nickname || currentUser.user_metadata.username);
+          ui.state.textContent = `已登录 ${name || "玩家"}`;
           ui.open.hidden = true;
           ui.logout.hidden = false;
         } else {
@@ -431,46 +484,91 @@
         }
       }
 
-      function renderLeaderboard(rows) {
-        ui.leaderboard.replaceChildren();
-        if (!rows.length) {
-          ui.leaderboard.innerHTML = '<tr><td class="leaderboard-empty" colspan="3">还没有分数，成为第一个上榜的人吧。</td></tr>';
+      function renderMini(node, rows, message = "") {
+        const list = node.querySelector(".mini-list");
+        const status = node.querySelector(".mini-status");
+        list.replaceChildren();
+        if (message) {
+          const empty = document.createElement("li");
+          empty.className = "mini-empty";
+          empty.textContent = message;
+          list.append(empty);
+          status.textContent = "待完成配置";
           return;
         }
-        rows.forEach((row, index) => {
-          const tr = document.createElement("tr");
-          const rank = document.createElement("td");
-          const player = document.createElement("td");
-          const score = document.createElement("td");
-          rank.textContent = String(index + 1).padStart(2, "0");
-          player.textContent = currentUser && row.user_id === currentUser.id ? "你" : `玩家 ${row.user_id.slice(0, 6)}`;
-          score.textContent = Number(row.high_score || 0).toLocaleString("zh-CN");
-          tr.append(rank, player, score);
-          ui.leaderboard.append(tr);
-        });
+        if (!rows.length) {
+          const empty = document.createElement("li");
+          empty.className = "mini-empty";
+          empty.textContent = "还没有分数";
+          list.append(empty);
+        } else {
+          rows.forEach((row, index) => {
+            const item = document.createElement("li");
+            item.className = "mini-row";
+            const rank = document.createElement("span");
+            const player = document.createElement("span");
+            const score = document.createElement("span");
+            const profile = Array.isArray(row.player_profiles) ? row.player_profiles[0] : row.player_profiles;
+            rank.className = "mini-rank";
+            player.className = "mini-player";
+            score.className = "mini-score";
+            rank.textContent = String(index + 1).padStart(2, "0");
+            player.textContent = currentUser && row.user_id === currentUser.id ? "你" : (profile && (profile.nickname || profile.username)) || `玩家 ${row.user_id.slice(0, 6)}`;
+            score.textContent = node.dataset.leaderboard === "reaction"
+              ? `${Number(row.high_score || 0)} ms`
+              : Number(row.high_score || 0).toLocaleString("zh-CN");
+            item.append(rank, player, score);
+            list.append(item);
+          });
+        }
+        status.textContent = `${rows.length} 位玩家`;
       }
 
-      async function loadLeaderboard() {
+      async function loadLeaderboard(node) {
         if (!client) {
-          ui.leaderboardStatus.textContent = "服务未加载";
-          renderLeaderboard([]);
+          renderMini(node, [], "登录服务未加载");
           return;
         }
+        const game = node.dataset.leaderboard;
+        const difficulty = node.dataset.difficulty || "normal";
+        const ascending = game === "reaction";
         const { data, error } = await client
           .from("game_scores")
           .select("user_id, high_score, updated_at")
-          .eq("game_slug", "tetris")
-          .order("high_score", { ascending: false })
+          .eq("game_slug", game)
+          .eq("difficulty", difficulty)
+          .order("high_score", { ascending })
           .order("updated_at", { ascending: true })
-          .limit(10);
+          .limit(5);
         if (error) {
-          ui.leaderboardStatus.textContent = "待完成数据库配置";
-          ui.leaderboard.innerHTML = '<tr><td class="leaderboard-empty" colspan="3">请先在 Supabase SQL Editor 运行 supabase-setup.sql。</td></tr>';
+          renderMini(node, [], "请先在 Supabase SQL Editor 运行 supabase-setup.sql");
           return;
         }
-        ui.leaderboardStatus.textContent = `${data.length} 位玩家`;
-        renderLeaderboard(data);
+        const rows = data || [];
+        const ids = rows.map(row => row.user_id);
+        if (ids.length) {
+          const { data: profiles } = await client.from("player_profiles").select("user_id, nickname, username").in("user_id", ids);
+          const profileMap = new Map((profiles || []).map(profile => [profile.user_id, profile]));
+          rows.forEach(row => { row.player_profiles = profileMap.get(row.user_id) || null; });
+        }
+        renderMini(node, rows);
       }
+
+      function loadLeaderboards() {
+        leaderboardNodes.forEach(node => void loadLeaderboard(node));
+      }
+
+      leaderboardNodes.forEach(node => {
+        node.querySelectorAll("[data-mini-difficulty]").forEach(button => {
+          button.addEventListener("click", () => {
+            const difficulty = button.dataset.miniDifficulty;
+            node.dataset.difficulty = difficulty;
+            node.querySelector(".mini-scope").textContent = difficulty === "low" ? "低" : difficulty === "high" ? "高" : "中";
+            node.querySelectorAll("[data-mini-difficulty]").forEach(item => item.classList.toggle("active", item === button));
+            void loadLeaderboard(node);
+          });
+        });
+      });
 
       ui.open.addEventListener("click", openAuth);
       ui.close.addEventListener("click", closeAuth);
@@ -487,10 +585,17 @@
         if (!client) return;
         ui.submit.disabled = true;
         setMessage(signUpMode ? "正在创建账号..." : "正在登录...");
-        const email = ui.email.value.trim();
+        const username = ui.username.value.trim().toLowerCase();
         const password = ui.password.value;
+        const nickname = ui.nickname.value.trim() || username;
+        if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+          ui.submit.disabled = false;
+          setMessage("用户名需要是 3-24 位字母、数字或下划线。", true);
+          return;
+        }
+        const email = `${username}@arcade.local`;
         const result = signUpMode
-          ? await client.auth.signUp({ email, password })
+          ? await client.auth.signUp({ email, password, options: { data: { username, nickname } } })
           : await client.auth.signInWithPassword({ email, password });
         ui.submit.disabled = false;
         if (result.error) {
@@ -498,24 +603,35 @@
           return;
         }
         if (signUpMode && !result.data.session) {
-          setMessage("注册成功，请先检查邮箱并完成验证。", false);
+          setMessage("账号已创建，但当前 Supabase 仍开启了邮箱确认。请在 Authentication > Providers > Email 中关闭 Confirm email。", true);
           return;
         }
         closeAuth();
       });
 
+      setSignUpMode(false);
+
+      async function refreshProfile(session) {
+        currentProfile = null;
+        renderAuth(session);
+        if (client && session && session.user) {
+          const { data } = await client.from("player_profiles").select("username, nickname").eq("user_id", session.user.id).maybeSingle();
+          currentProfile = data || null;
+          renderAuth(session);
+        }
+        loadLeaderboards();
+      }
+
       if (client) {
         client.auth.getSession().then(({ data }) => {
-          renderAuth(data.session);
-          loadLeaderboard();
+          void refreshProfile(data.session);
         });
         client.auth.onAuthStateChange((_event, session) => {
-          renderAuth(session);
-          loadLeaderboard();
+          void refreshProfile(session);
         });
       } else {
         renderAuth(null);
-        loadLeaderboard();
+        loadLeaderboards();
       }
     })();
   </script>

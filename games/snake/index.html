@@ -72,6 +72,9 @@
     .info-card { padding: 18px; }
     .info-card h2 { margin: 0 0 10px; font-size: 16px; }
     .info-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .difficulty-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 15px; }
+    .difficulty-button { min-height: 34px; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); background: transparent; font-size: 12px; cursor: pointer; }
+    .difficulty-button.active { border-color: rgba(200, 255, 95, .62); color: #10160e; background: var(--lime); font-weight: 800; }
     .control-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
     .direction-button { min-height: 42px; border: 1px solid rgba(200, 255, 95, .35); border-radius: 5px; color: var(--ink); background: transparent; font-size: 18px; }
     .direction-button[data-direction="up"] { grid-column: 2; }
@@ -134,7 +137,7 @@
             <div class="board-overlay" id="boardOverlay">
               <div class="overlay-card">
                 <h2 id="overlayTitle">贪吃蛇</h2>
-                <p id="overlayCopy">吃掉能量点，避开边界和自己的身体。</p>
+                <p id="overlayCopy">吃掉能量点，穿过边界继续前进，同时避开自己的身体。</p>
                 <button class="primary-button" id="primaryButton" type="button">开始游戏</button>
               </div>
             </div>
@@ -148,7 +151,12 @@
           </section>
           <section class="info-card">
             <h2>方向控制</h2>
-            <p>电脑使用方向键或 WASD，手机可以在棋盘上滑动，也可以点击按钮。</p>
+            <p>电脑使用方向键或 WASD，手机可以在棋盘上滑动，也可以点击按钮。穿过任意边界后，会从另一侧出现。</p>
+            <div class="difficulty-picker" role="group" aria-label="贪吃蛇难度">
+              <button class="difficulty-button" type="button" data-difficulty="low">低速</button>
+              <button class="difficulty-button active" type="button" data-difficulty="normal">中速</button>
+              <button class="difficulty-button" type="button" data-difficulty="high">高速</button>
+            </div>
             <div class="control-grid" aria-label="方向控制">
               <button class="direction-button" type="button" data-direction="up" aria-label="向上">↑</button>
               <button class="direction-button" type="button" data-direction="left" aria-label="向左">←</button>
@@ -164,13 +172,16 @@
 
   <footer><div class="app footer-inner"><span>ARCADE / 003</span><span>BUILT FOR PLAY</span></div></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
   <script>
     (() => {
       "use strict";
 
       const SIZE = 20;
       const CELL = 20;
-      const STORAGE_KEY = "snake-best";
+      const STORAGE_PREFIX = "snake-best-";
+      const SPEEDS = { low: 170, normal: 120, high: 78 };
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
       const ui = {
@@ -194,17 +205,33 @@
       let nextDirection = directions.right;
       let food = { x: 14, y: 10 };
       let score = 0;
+      let difficulty = "normal";
       let best = readBest();
       let timer = null;
       let playing = false;
       let swipeStart = null;
 
+      function bestKey() { return `${STORAGE_PREFIX}${difficulty}`; }
+
       function readBest() {
-        try { return Math.max(0, Number(window.localStorage.getItem(STORAGE_KEY)) || 0); } catch (_error) { return 0; }
+        try { return Math.max(0, Number(window.localStorage.getItem(bestKey())) || 0); } catch (_error) { return 0; }
       }
 
       function saveBest() {
-        try { window.localStorage.setItem(STORAGE_KEY, String(best)); } catch (_error) { /* local record is optional */ }
+        try { window.localStorage.setItem(bestKey(), String(best)); } catch (_error) { /* local record is optional */ }
+      }
+
+      async function syncScoreToLeaderboard(value) {
+        const authClient = window.gameAuth && window.gameAuth.client;
+        if (!authClient || value <= 0) return;
+        const { data: sessionData } = await authClient.auth.getSession();
+        if (!sessionData.session) return;
+        const { error } = await authClient.rpc("submit_score", {
+          p_game_slug: "snake",
+          p_difficulty: difficulty,
+          p_score: Math.floor(value)
+        });
+        if (error) console.warn("Leaderboard sync failed:", error.message);
       }
 
       function startGame() {
@@ -218,7 +245,7 @@
         ui.state.textContent = "进行中";
         spawnFood();
         render();
-        timer = window.setInterval(tick, 120);
+        timer = window.setInterval(tick, SPEEDS[difficulty]);
       }
 
       function spawnFood() {
@@ -240,9 +267,13 @@
       function tick() {
         direction = nextDirection;
         const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+        if (head.x < 0) head.x = SIZE - 1;
+        if (head.x >= SIZE) head.x = 0;
+        if (head.y < 0) head.y = SIZE - 1;
+        if (head.y >= SIZE) head.y = 0;
         const ate = head.x === food.x && head.y === food.y;
         const hitsSelf = snake.some((part, index) => part.x === head.x && part.y === head.y && (ate || index < snake.length - 1));
-        if (head.x < 0 || head.x >= SIZE || head.y < 0 || head.y >= SIZE || hitsSelf) {
+        if (hitsSelf) {
           endGame();
           return;
         }
@@ -253,7 +284,7 @@
           saveBest();
           spawnFood();
           window.clearInterval(timer);
-          timer = window.setInterval(tick, Math.max(68, 120 - Math.floor(score / 3) * 5));
+          timer = window.setInterval(tick, SPEEDS[difficulty]);
         } else {
           snake.pop();
         }
@@ -268,6 +299,7 @@
         ui.copy.textContent = `本局吃到 ${score} 个能量点，继续挑战你的记录。`;
         ui.primary.textContent = "再来一局";
         ui.overlay.hidden = false;
+        void syncScoreToLeaderboard(score);
         render();
       }
 
@@ -322,6 +354,12 @@
 
       document.addEventListener("keydown", handleKey, { passive: false });
       document.querySelectorAll("[data-direction]").forEach(button => button.addEventListener("click", () => setDirection(button.dataset.direction)));
+      document.querySelectorAll("[data-difficulty]").forEach(button => button.addEventListener("click", () => {
+        difficulty = button.dataset.difficulty;
+        best = readBest();
+        document.querySelectorAll("[data-difficulty]").forEach(item => item.classList.toggle("active", item === button));
+        startGame();
+      }));
       ui.primary.addEventListener("click", startGame);
       document.getElementById("resetButton").addEventListener("click", startGame);
       ui.wrap.addEventListener("pointerdown", event => {

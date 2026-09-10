@@ -185,11 +185,14 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
   <script>
     (() => {
       "use strict";
 
       const STORAGE_KEY = "reaction-history";
+      const authClient = window.gameAuth && window.gameAuth.client;
       const stage = document.getElementById("reactionStage");
       const ui = {
         kicker: document.getElementById("stageKicker"),
@@ -220,6 +223,18 @@
         } catch (_error) {
           // The test still works when storage is unavailable.
         }
+      }
+
+      async function syncScoreToLeaderboard(value) {
+        if (!authClient || value <= 0) return;
+        const { data: sessionData } = await authClient.auth.getSession();
+        if (!sessionData.session) return;
+        const { error } = await authClient.rpc("submit_score", {
+          p_game_slug: "reaction",
+          p_difficulty: "normal",
+          p_score: Math.round(value)
+        });
+        if (error) console.warn("Leaderboard sync failed:", error.message);
       }
 
       function formatMs(value) {
@@ -279,6 +294,7 @@
         history = history.slice(-20);
         saveHistory();
         renderStats(result);
+        void syncScoreToLeaderboard(result);
         setPhase("result");
       }
 

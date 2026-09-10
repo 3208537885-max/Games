@@ -1090,6 +1090,7 @@
         setScoreSyncState("正在同步到最高分榜...");
         const { error } = await authClient.rpc("submit_score", {
           p_game_slug: "tetris",
+          p_difficulty: "normal",
           p_score: Math.floor(value)
         });
         if (error) {

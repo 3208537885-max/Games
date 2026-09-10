@@ -130,7 +130,7 @@
             <div class="board-overlay" id="boardOverlay">
               <div class="overlay-card">
                 <h2 id="overlayTitle">打砖块</h2>
-                <p id="overlayCopy">移动挡板接住能量球，把屏幕上的砖块全部清除。</p>
+            <p id="overlayCopy">砖块按行出现。清空当前行后，下一行会加入场内；清空全部 6 行即可通关。</p>
                 <button class="primary-button" id="primaryButton" type="button">开始游戏</button>
               </div>
             </div>
@@ -144,7 +144,7 @@
           </section>
           <section class="info-card">
             <h2>挡板控制</h2>
-            <p>电脑使用 ← → 或 A / D。手机可以直接在画布上拖动挡板，也可以按住方向按钮。</p>
+            <p>电脑使用 ← → 或 A / D。手机可以直接在画布上拖动挡板，也可以按住方向按钮。砖块按行推进：当前行全部击碎后，下一行才会出现；完成第 6 行即可通关。</p>
             <div class="control-grid" aria-label="挡板控制">
               <button class="control-button" type="button" data-direction="left" aria-label="挡板向左">←</button>
               <button class="control-button" type="button" data-direction="right" aria-label="挡板向右">→</button>
@@ -158,12 +158,15 @@
 
   <footer><div class="app footer-inner"><span>ARCADE / 004</span><span>BUILT FOR PLAY</span></div></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
   <script>
     (() => {
       "use strict";
 
       const WIDTH = 720;
       const HEIGHT = 460;
+      const TOTAL_ROWS = 6;
       const STORAGE_KEY = "breakout-best";
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
@@ -188,6 +191,7 @@
       let lastTime = 0;
       let animationFrame = 0;
       let buttonDirection = null;
+      let currentRow = 0;
 
       function readBest() {
         try { return Math.max(0, Number(window.localStorage.getItem(STORAGE_KEY)) || 0); } catch (_error) { return 0; }
@@ -195,6 +199,19 @@
 
       function saveBest() {
         try { window.localStorage.setItem(STORAGE_KEY, String(best)); } catch (_error) { /* local record is optional */ }
+      }
+
+      async function syncScoreToLeaderboard(value) {
+        const authClient = window.gameAuth && window.gameAuth.client;
+        if (!authClient || value <= 0) return;
+        const { data: sessionData } = await authClient.auth.getSession();
+        if (!sessionData.session) return;
+        const { error } = await authClient.rpc("submit_score", {
+          p_game_slug: "breakout",
+          p_difficulty: "normal",
+          p_score: Math.floor(value)
+        });
+        if (error) console.warn("Leaderboard sync failed:", error.message);
       }
 
       function createBricks() {
@@ -207,7 +224,7 @@
         const left = (WIDTH - (columns * width + (columns - 1) * gap)) / 2;
         for (let row = 0; row < rows; row += 1) {
           for (let col = 0; col < columns; col += 1) {
-            next.push({ x: left + col * (width + gap), y: 48 + row * (height + gap), width, height, color: palette[row], alive: true });
+            next.push({ x: left + col * (width + gap), y: 48 + row * (height + gap), width, height, color: palette[row], row, alive: row === 0 });
           }
         }
         return next;
@@ -215,12 +232,13 @@
 
       function startGame() {
         score = 0;
+        currentRow = 0;
         state = "playing";
         lastTime = 0;
         paddle = { x: WIDTH / 2 - 58, y: HEIGHT - 38, width: 116, height: 12, speed: 8 };
         ball = { x: WIDTH / 2, y: HEIGHT - 60, radius: 8, vx: 4, vy: -4 };
         bricks = createBricks();
-        ui.state.textContent = "进行中";
+        ui.state.textContent = `第 1 / ${TOTAL_ROWS} 行`;
         ui.overlay.hidden = true;
         render();
       }
@@ -234,6 +252,7 @@
         ui.copy.textContent = cleared ? `本局得分 ${score.toLocaleString("zh-CN")}，所有砖块都已清除。` : `本局得分 ${score.toLocaleString("zh-CN")}，再来一次继续保持节奏。`;
         ui.primary.textContent = "再来一局";
         ui.overlay.hidden = false;
+        void syncScoreToLeaderboard(score);
       }
 
       function movePaddle(step) {
@@ -285,7 +304,16 @@
           const overlapBottom = Math.abs(brick.y + brick.height - (ball.y - ball.radius));
           if (Math.min(overlapLeft, overlapRight) < Math.min(overlapTop, overlapBottom)) ball.vx *= -1;
           else ball.vy *= -1;
-          if (bricks.every(item => !item.alive)) endGame(true);
+          const rowCleared = bricks.filter(item => item.row === currentRow).every(item => !item.alive);
+          if (rowCleared) {
+            if (currentRow === TOTAL_ROWS - 1) {
+              endGame(true);
+            } else {
+              currentRow += 1;
+              bricks.filter(item => item.row === currentRow).forEach(item => { item.alive = true; });
+              ui.state.textContent = `第 ${currentRow + 1} / ${TOTAL_ROWS} 行`;
+            }
+          }
         }
       }
 
