@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.7</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.8</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,9 +131,21 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.7">
+          <article class="release current" data-version="0.1.8">
             <div class="release-card">
-              <header class="release-head"><div><h2 class="release-version">0.1.7</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <header class="release-head"><div><h2 class="release-version">0.1.8</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <h3>联机结算与对局记录</h3>
+              <ul class="changes">
+                <li>联机房间增加轮询兜底，实时订阅临时延迟时，副机仍能及时收到开局状态并生成初始方块。</li>
+                <li>倒计时结束改为服务端统一结算，双方将获得胜利、惜败或平局结果；棋盘提前结束会等待本场结束。</li>
+                <li>新增对局记录页，保存每场双人 2048 的双方名称、最终得分、胜负结果和完成时间。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.7">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.7</h2><p class="release-date">2026.09.11</p></div></header>
               <h3>双人棋盘重制</h3>
               <ul class="changes">
                 <li>2048 对战改为顶部固定的倒计时与双方分数栏，下方左右等宽展示我的棋盘和对手棋盘。</li>
@@ -243,7 +255,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 08 · v0.1.7</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 09 · v0.1.8</span>
       </div>
     </section>
 
@@ -253,7 +265,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.7</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.8</span></div></footer>
 
   <script>
     (() => {

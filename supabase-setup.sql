@@ -362,5 +362,63 @@ grant execute on function public.start_multiplayer_room(uuid) to authenticated;
 revoke execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean) from public;
 grant execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean) to anon, authenticated;
 
+create table if not exists public.multiplayer_match_results (
+  room_id uuid not null references public.multiplayer_rooms(id) on delete cascade,
+  player_token uuid not null,
+  user_id uuid references auth.users(id) on delete set null,
+  display_name text not null,
+  score integer not null,
+  outcome text not null check (outcome in ('win', 'loss', 'draw')),
+  finished_at timestamptz not null default now(),
+  primary key (room_id, player_token)
+);
+
+alter table public.multiplayer_match_results enable row level security;
+drop policy if exists "联机对局记录允许读取" on public.multiplayer_match_results;
+create policy "联机对局记录允许读取"
+on public.multiplayer_match_results for select to anon, authenticated using (true);
+
+create or replace function public.finish_multiplayer_room(p_room_id uuid, p_player_token uuid)
+returns table (player_token uuid, display_name text, score integer, outcome text)
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_room public.multiplayer_rooms;
+  v_has_player boolean;
+begin
+  select * into v_room from public.multiplayer_rooms where id = p_room_id for update;
+  if v_room.id is null then raise exception 'room unavailable'; end if;
+  select exists(select 1 from public.multiplayer_players where room_id = p_room_id and player_token = p_player_token) into v_has_player;
+  if not v_has_player then raise exception 'not a room player'; end if;
+  if v_room.status = 'live' and now() >= v_room.ends_at then
+    update public.multiplayer_rooms set status = 'finished' where id = p_room_id;
+    insert into public.multiplayer_match_results (room_id, player_token, user_id, display_name, score, outcome)
+    select
+      p.room_id,
+      p.player_token,
+      p.user_id,
+      p.display_name,
+      p.score,
+      case
+        when max(p.score) over () = min(p.score) over () then 'draw'
+        when p.score = max(p.score) over () then 'win'
+        else 'loss'
+      end
+    from public.multiplayer_players p
+    where p.room_id = p_room_id
+    on conflict (room_id, player_token) do nothing;
+  end if;
+  return query
+  select r.player_token, r.display_name, r.score, r.outcome
+  from public.multiplayer_match_results r
+  where r.room_id = p_room_id
+  order by r.score desc, r.display_name asc;
+end;
+$$;
+
+revoke execute on function public.finish_multiplayer_room(uuid, uuid) from public;
+grant execute on function public.finish_multiplayer_room(uuid, uuid) to anon, authenticated;
+
+grant select on public.multiplayer_rooms, public.multiplayer_players, public.multiplayer_match_results to anon, authenticated;
 grant select on public.player_profiles to anon, authenticated;
 grant select on public.game_scores to anon, authenticated;
