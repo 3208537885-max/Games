@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0c1015">
   <meta name="description" content="一个持续扩展的独立游戏库。">
-  <title>Arcade Archive | 游戏目录</title>
+  <title>不会文科的小旺柴的游戏厅</title>
   <style>
     :root {
       --ink: #f4f3ee;
@@ -83,8 +83,9 @@
     .game-card:hover, .game-card:focus-within { transform: translateY(-4px); border-color: rgba(200, 255, 95, .75); background: var(--surface-raised); }
     .game-card:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
     .game-cover { position: relative; min-height: 244px; overflow: hidden; background: #071310; }
-    .game-cover iframe { width: 141%; height: 350px; border: 0; transform: scale(.71); transform-origin: top left; pointer-events: none; }
-    .cover-scan { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 55%, rgba(12, 16, 21, .88)); }
+    .game-cover img { display: block; width: 100%; height: 100%; min-height: 244px; object-fit: cover; object-position: center 43%; transform: scale(1.46); transition: transform .35s ease; }
+    .game-card:hover .game-cover img, .game-card:focus-within .game-cover img { transform: scale(1.53); }
+    .cover-scan { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(7, 19, 16, .02), rgba(12, 16, 21, .55)); }
     .game-content { display: flex; min-height: 164px; flex: 1; flex-direction: column; padding: 18px; }
     .game-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font: 600 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
     .game-name { margin: 18px 0 8px; font-size: 21px; line-height: 1.05; }
@@ -123,9 +124,9 @@
 </head>
 <body>
   <header class="shell topbar">
-    <a class="brand" href="./" aria-label="Arcade Archive 首页">
+    <a class="brand" href="./" aria-label="不会文科的小旺柴的游戏厅首页">
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      ARCADE ARCHIVE
+      不会文科的小旺柴的游戏厅
     </a>
     <span class="collection-note">PERSONAL GAME COLLECTION</span>
   </header>
@@ -148,7 +149,7 @@
       <div class="game-grid">
         <a class="game-card" href="games/tetra/" aria-label="开始游玩光谱方块">
           <div class="game-cover" aria-hidden="true">
-            <iframe src="games/tetra/" title="光谱方块游戏预览" tabindex="-1" scrolling="no"></iframe>
+            <img src="assets/tetra-cover.png" alt="" width="1280" height="720">
             <div class="cover-scan"></div>
           </div>
           <div class="game-content">
@@ -180,7 +181,7 @@
 
   <footer>
     <div class="shell footer-inner">
-      <span>ARCADE ARCHIVE</span>
+      <span>不会文科的小旺柴的游戏厅</span>
       <span>BUILT FOR PLAY</span>
     </div>
   </footer>
