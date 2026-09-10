@@ -38,7 +38,9 @@
 
 ## 登录和排行榜
 
-项目使用 Supabase Auth 和数据库保存账号与最高分。首次配置时，在 Supabase SQL Editor 运行根目录的 `supabase-setup.sql`，然后在 Authentication 设置中将站点地址配置为 GitHub Pages 地址。
+项目使用 Supabase Auth 和数据库保存账号与最高分。玩家只填写用户名和密码：页面会在后台将用户名映射为内部登录标识，邮箱不会显示、收集或用于登录。首次配置时，在 Supabase SQL Editor 运行根目录的 `supabase-setup.sql`，然后在 Authentication 设置中将站点地址配置为 GitHub Pages 地址。
+
+在 Supabase Dashboard 依次打开 `Authentication`、`Providers`、`Email`，关闭 `Confirm email`。这是用户名登录正常创建会话所必需的设置；不关闭时，Supabase 会等待无法接收的邮箱确认。
 
 俄罗斯方块使用 `tetris` 作为 `game_slug`。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。
 

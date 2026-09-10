@@ -230,7 +230,7 @@
       ARCADE ARCHIVE
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.1"><span class="version-label">更新日志</span><span>v0.1.1</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.2"><span class="version-label">更新日志</span><span>v0.1.2</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
       <button class="account-button secondary" id="authLogoutButton" type="button" hidden>退出</button>
@@ -444,6 +444,12 @@
       let currentUser = null;
       let currentProfile = null;
       const leaderboardNodes = [...document.querySelectorAll("[data-leaderboard]")];
+      // Supabase Auth requires an email identifier; .example is an IANA-reserved domain.
+      const INTERNAL_AUTH_DOMAIN = "players.arcadearchive.example.com";
+
+      function usernameToAuthEmail(username) {
+        return `${username}@${INTERNAL_AUTH_DOMAIN}`;
+      }
 
       function setMessage(text, isError = false) {
         ui.message.textContent = text;
@@ -601,7 +607,7 @@
           setMessage("用户名需要是 3-24 位字母、数字或下划线。", true);
           return;
         }
-        const email = `${username}@arcade.local`;
+        const email = usernameToAuthEmail(username);
         const result = signUpMode
           ? await client.auth.signUp({ email, password, options: { data: { username, nickname } } })
           : await client.auth.signInWithPassword({ email, password });
@@ -611,7 +617,7 @@
           return;
         }
         if (signUpMode && !result.data.session) {
-          setMessage("账号已创建，但当前 Supabase 仍开启了邮箱确认。请在 Authentication > Providers > Email 中关闭 Confirm email。", true);
+          setMessage("账号已创建，但当前项目仍开启了邮箱确认。用户名登录不使用邮箱，请在 Supabase 的 Authentication > Providers > Email 中关闭 Confirm email。", true);
           return;
         }
         closeAuth();

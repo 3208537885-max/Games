@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.1</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.2</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -130,7 +130,22 @@
 
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
-          <article class="release current" data-version="0.1.1">
+          <article class="release current" data-version="0.1.2">
+            <div class="release-card">
+              <header class="release-head">
+                <div><h2 class="release-version">0.1.2</h2><p class="release-date">2026.09.10</p></div>
+                <span class="release-tag">CURRENT</span>
+              </header>
+              <h3>纯用户名登录</h3>
+              <ul class="changes">
+                <li>注册和登录只需要用户名与密码，不再要求玩家填写邮箱地址。</li>
+                <li>用户名会转换成不可见的内部认证标识，密码与会话继续由 Supabase Auth 安全管理。</li>
+                <li>补充邮箱确认开关的配置说明，避免注册后无法立即登录。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.1">
             <div class="release-card">
               <header class="release-head">
                 <div><h2 class="release-version">0.1.1</h2><p class="release-date">2026.09.10</p></div>
@@ -163,7 +178,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 02 · v0.1.1</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 03 · v0.1.2</span>
       </div>
     </section>
 
@@ -173,7 +188,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.1</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.2</span></div></footer>
 
   <script>
     (() => {
