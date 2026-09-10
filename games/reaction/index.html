@@ -266,8 +266,15 @@
         setPhase("early");
       }
 
-      function finishResult() {
-        const result = performance.now() - readyAt;
+      function eventTime(event) {
+        const stamp = Number(event && event.timeStamp);
+        const origin = Number(performance.timeOrigin);
+        if (!Number.isFinite(stamp)) return performance.now();
+        return stamp > 1e12 && Number.isFinite(origin) ? stamp - origin : stamp;
+      }
+
+      function finishResult(event) {
+        const result = Math.max(0, eventTime(event) - readyAt);
         history.push(Math.round(result));
         history = history.slice(-20);
         saveHistory();
@@ -275,10 +282,21 @@
         setPhase("result");
       }
 
-      stage.addEventListener("click", () => {
+      function handleStageInput(event) {
         if (phase === "waiting") finishEarly();
-        else if (phase === "ready") finishResult();
+        else if (phase === "ready") finishResult(event);
         else startTest();
+      }
+
+      let lastPointerInputAt = 0;
+      stage.addEventListener("pointerdown", event => {
+        if (!event.isPrimary) return;
+        lastPointerInputAt = performance.now();
+        handleStageInput(event);
+      });
+      stage.addEventListener("click", event => {
+        if (performance.now() - lastPointerInputAt < 500) return;
+        handleStageInput(event);
       });
 
       window.addEventListener("beforeunload", () => window.clearTimeout(timer));

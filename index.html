@@ -81,9 +81,13 @@
 
     .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
     h2 { margin: 0; font-size: 18px; line-height: 1.25; }
-    .count { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
-    .library { padding-bottom: 76px; }
+    .count, .section-count { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .library { padding-bottom: 58px; }
     .game-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .empty-section { display: flex; min-height: 156px; flex-direction: column; justify-content: center; gap: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .empty-section-label { color: var(--cyan); font: 700 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; }
+    .empty-section h3 { margin: 0; font-size: 21px; }
+    .empty-section p { max-width: 480px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
 
     .leaderboard { padding: 0 0 76px; }
     .leaderboard-note { color: var(--muted); font-size: 12px; }
@@ -189,10 +193,10 @@
       <p class="intro-copy">每个游戏都有自己的一扇入口。选择一个，直接开始。</p>
     </section>
 
-    <section class="library" aria-labelledby="library-title">
+    <section class="library" aria-labelledby="single-title">
       <div class="section-head">
-        <h2 id="library-title">游戏库</h2>
-        <span class="count">02 / 03</span>
+        <h2 id="single-title">单人游戏</h2>
+        <span class="section-count">01 / 01</span>
       </div>
 
       <div class="game-grid">
@@ -208,26 +212,46 @@
             <span class="play-link">开始游戏</span>
           </div>
         </a>
+      </div>
+    </section>
 
+    <section class="library" aria-labelledby="multi-title">
+      <div class="section-head">
+        <h2 id="multi-title">多人游戏</h2>
+        <span class="section-count">00 / 00</span>
+      </div>
+      <div class="empty-section">
+        <span class="empty-section-label">MULTIPLAYER / INCOMING</span>
+        <h3>多人游戏即将上线</h3>
+        <p>先把座位留在这里，之后可以继续加入联机和本地多人作品。</p>
+      </div>
+    </section>
+
+    <section class="library" aria-labelledby="tests-title">
+      <div class="section-head">
+        <h2 id="tests-title">有趣的测试</h2>
+        <span class="section-count">01 / 02</span>
+      </div>
+      <div class="game-grid">
         <a class="game-card" href="games/reaction/" aria-label="开始反应速度测试">
           <div class="game-cover" aria-hidden="true">
             <img src="assets/reaction-cover.png" alt="" width="1280" height="720">
             <div class="cover-scan"></div>
           </div>
           <div class="game-content">
-            <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
+            <div class="game-meta"><span>TEST / 001</span><span>2026</span></div>
             <h3 class="game-name">反应速度</h3>
             <p class="game-description">Human Benchmark 风格的即时反应挑战。</p>
             <span class="play-link">开始测试</span>
           </div>
         </a>
 
-        <article class="game-card placeholder" aria-label="即将加入的新游戏">
+        <article class="game-card placeholder" aria-label="即将加入的新测试">
           <div>
             <div class="placeholder-art" aria-hidden="true"></div>
-            <p class="placeholder-label">NEXT SLOT / 003</p>
+            <p class="placeholder-label">NEXT TEST / 002</p>
           </div>
-          <h3>新的游戏正在归档</h3>
+          <h3>下一个有趣测试正在归档</h3>
         </article>
       </div>
     </section>
