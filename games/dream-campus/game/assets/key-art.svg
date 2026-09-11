@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="760" viewBox="0 0 800 760">
+<defs><linearGradient id="platform" x2="0" y2="1"><stop stop-color="#b7caa3"/><stop offset="1" stop-color="#8faa83"/></linearGradient><linearGradient id="water" x2="1" y2="1"><stop stop-color="#c0e4cc"/><stop offset="1" stop-color="#6bb19b"/></linearGradient><radialGradient id="glow"><stop stop-color="#dce8c8" stop-opacity=".9"/><stop offset="1" stop-color="#dce8c8" stop-opacity="0"/></radialGradient><pattern id="tiles" width="66" height="66" patternUnits="userSpaceOnUse"><rect width="66" height="66" fill="#d6dfbc"/><path d="M0 0H66V66" fill="none" stroke="#b8caa1" stroke-width="1.5"/></pattern><filter id="blur"><feGaussianBlur stdDeviation="16"/></filter></defs>
+<ellipse cx="417" cy="644" rx="230" ry="39" fill="#8fa382" opacity=".15" filter="url(#blur)"/>
+<circle cx="400" cy="352" r="259" fill="url(#glow)"/>
+<g stroke="#4c7054" stroke-linejoin="round" stroke-linecap="round">
+<path d="M126 452 432 311 709 453 405 621Z" fill="#bdd0a5" stroke-width="3"/>
+<path d="M126 452v43l279 168v-42Z" fill="#98b28c" stroke-width="3"/><path d="m405 621 304-168v45L405 663Z" fill="#769b79" stroke-width="3"/>
+<path d="m141 448 286-127 264 133-286 154Z" fill="url(#tiles)" stroke-width="2"/>
+<path d="M142 448V239l284-136v219Z" fill="#b1c69d" stroke-width="3"/>
+<path d="m426 103 271 148v205L426 322Z" fill="#d2dbb5" stroke-width="3"/>
+<path d="m126 240 300-147 286 151-15 10L426 111 141 255Z" fill="#e0e5c8" stroke-width="3"/>
+<path d="M141 250v198l14 6V254Zm271-133v210l15-7V110Z" fill="#8dac87" stroke-width="2"/>
+<path d="m185 262 180-86v114l-180 86Z" fill="#365e48" stroke-width="6"/>
+<path d="m201 272 117-56m-117 81 140-67m-140 94 66-32" fill="none" stroke="#aac99c" stroke-width="3"/>
+<path d="m281 266 26 13 30-47" fill="none" stroke="#e0ddac" stroke-width="4"/>
+<path d="m469 165 163 85v124l-163-80Z" fill="#ebedcc" stroke-width="5"/>
+<path d="m479 181 143 75v50l-143-72Z" fill="#bbd6b9" stroke="none"/>
+<path d="m479 233 143 73v51l-143-70Z" fill="#d8e8c8" stroke="none"/>
+<path d="M550 205v129m-80-108 163 83" fill="none" stroke="#96b48d" stroke-width="5"/>
+<path d="m487 221 28-13 25 41m20 0 19-7 27 41" fill="none" stroke="#91b190" stroke-width="2"/>
+<path d="m626 379 36 18v47l-36-18Z" fill="#b79d6e" stroke-width="2"/>
+<path d="M645 391v-75m0 26-24-24m24 38 19-25" fill="none" stroke="#5f8a60" stroke-width="5"/>
+<ellipse cx="622" cy="322" rx="13" ry="27" transform="rotate(-33 622 322)" fill="#9ab87a" stroke-width="2"/><ellipse cx="659" cy="337" rx="13" ry="28" transform="rotate(33 659 337)" fill="#7eaa7a" stroke-width="2"/>
+<path d="m199 431 102-49 74 36-102 53Z" fill="#c9b17b" stroke-width="3"/><path d="m199 431 74 40v16l-74-38Zm74 40 102-53v17l-102 52Z" fill="#ae9b6d" stroke-width="2"/><path d="M213 451v49m65-15v48m82-94v49" stroke="#7f8a5e" stroke-width="9"/>
+<path d="m226 421 40-18 31 15-39 20Z" fill="#f0e8be" stroke-width="2"/><path d="m235 420 25-11m-19 17 25-11" stroke="#b4b387" stroke-width="2"/>
+<path d="m518 480 91-43 58 31-91 46Z" fill="#c9b17b" stroke-width="3"/><path d="m518 480 58 34v13l-58-32Zm58 34 91-46v14l-91 45Z" fill="#ae9b6d" stroke-width="2"/><path d="M530 499v38m50-12v34m74-69v38" stroke="#7f8a5e" stroke-width="8"/>
+</g>
+<!-- The student: original chibi explorer, with a geology field helmet. -->
+<g transform="translate(414 456)" stroke="#32563d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<ellipse cx="0" cy="29" rx="58" ry="23" fill="#6d987442" stroke="none"/>
+<path d="m-35-38-19 12 8 55 23-7Z" fill="#c5a26e"/>
+<path d="M-27-42Q1-55 32-41L39 20Q0 45-32 20Z" fill="#78ac8d"/>
+<path d="m-20 20-3 24 18 4 7-24m10 0 5 25 19-7-5-24" fill="#486e54"/>
+<path d="m-24 42-10 11q10 10 29 2V46Zm40 3 2 10q19 3 30-5l-17-9" fill="#ece5bd"/>
+<path d="M-34-94Q-34-116 0-116T36-94v37q0 24-35 26-36-1-37-25Z" fill="#e2bc91"/>
+<path d="M-35-76v-23q4-23 34-24 34 1 39 26v21L22-83 8-93-5-79-18-89Z" fill="#426045"/>
+<ellipse cx="-10" cy="-66" rx="3.6" ry="5" fill="#35503a" stroke="none"/><ellipse cx="16" cy="-66" rx="3.6" ry="5" fill="#35503a" stroke="none"/>
+<path d="M-2-51q9 7 17-1" fill="none" stroke="#a17155" stroke-width="2.5"/>
+<path d="M-41-108q0-33 43-34t43 36Z" fill="#d3b272"/>
+<path d="M-47-109q47-13 96-1v13q-48 8-96-1Z" fill="#e9d29b"/>
+<path d="M1-142v29" stroke="#f0dfb5" stroke-width="7"/>
+<path d="m-27-22-13 12q-9 12 6 21L-5 2m34-27 20 21-8 13-19-16" fill="#dfb68a"/>
+<path d="M-4-30 39-43v61L-4 31Z" fill="#9abfa2"/><path d="m39-43 30 16v56L39 18Z" fill="#e8e4bf"/>
+<path d="M10-13 27-18m-16 17 16-5M47-23l14 7m-14 8 14 7m-14 7 11 6" stroke="#597e59" stroke-width="2"/>
+<path d="M-22-37v21m17-27v20" stroke="#d7e4bc" stroke-width="3"/>
+</g>
+<!-- Waterbook plume, physical book enemies and floating campus loot. -->
+<g stroke="#659c84" stroke-width="2.5" stroke-linejoin="round">
+<path d="M482 446q67-41 50-93t42-65q-13 16 9 52 17 28-2 66 36-17 39-49 33 56-26 92-51 30-112-3Z" fill="url(#water)" opacity=".86"/>
+<path d="M510 428q58-27 42-73m-16 85q51-6 59-33" fill="none" stroke="#e2f0d5" stroke-width="6"/>
+<path d="M567 260q24 20 15 30t-15-30Zm54 61q21 14 14 24t-14-24Z" fill="#a8d4ba"/>
+</g>
+<g transform="translate(554 572) rotate(15)" stroke="#536d45" stroke-width="3"><ellipse cy="37" rx="42" ry="11" fill="#89a46d33" stroke="none"/><path d="M-30-37h58v67h-58Z" fill="#e7dfb0"/><path d="M9-37v20h19" fill="#c4c897"/><path d="M-14-14h8m12 0h9" stroke="#56623c" stroke-width="6"/><path d="M-12 5h27m-27 9h18" stroke="#a8aa7b" stroke-width="3"/><path d="m-17 31-7 11m40-11 10 10" stroke-width="5"/></g>
+<g transform="translate(247 539) rotate(-10)" stroke="#536d45" stroke-width="2.5"><ellipse cy="35" rx="31" ry="8" fill="#89a46d33" stroke="none"/><path d="M-28 22q-2-66 29-59 35 4 31 61Z" fill="#9cbe86"/><path d="m-15-6 7 1m13-1 7-1" stroke="#4e6540" stroke-width="5"/><path d="M-5 12h12"/><ellipse cx="-9" cy="-23" rx="6" ry="4" fill="#d9e4a5" stroke="none"/></g>
+<g transform="translate(678 324) rotate(16)" stroke="#4a6d50" stroke-width="3" stroke-linejoin="round"><ellipse cy="65" rx="30" ry="9" fill="#738a6830" stroke="none"/><path d="m-9 43 14-6 8-63-14-1Z" fill="#b4996c"/><path d="m-30-35 10-16 53 6 3 23-36-5-12 9Z" fill="#86a89b"/><path d="m-4 14 16-4" fill="none"/></g>
+<g transform="translate(177 187) rotate(-16)" stroke="#638058" stroke-width="2.5" stroke-linejoin="round"><rect x="-40" y="-20" width="81" height="55" rx="7" fill="#d8c789"/><path d="M-40-3h80"/><circle cx="-20" cy="13" r="8" fill="#f4e7b6"/><path d="M-3 10h28M-3 21h18"/><path d="m-52-8-13 2m80-31 5-13" stroke="#91a775"/></g>
+<g transform="translate(542 146) rotate(16)" stroke="#5d7e58" stroke-width="2.5"><rect x="-36" y="-25" width="72" height="50" rx="4" fill="#94bfa4"/><rect x="-29" y="-18" width="58" height="33" fill="#385f48"/><path d="m-36 25-9 15h89l-8-15Z" fill="#c3d3ad"/><path d="m-8-7-8 8 8 7m13-15 8 8-8 7" stroke="#c9e5b4" fill="none"/></g>
+<g fill="#cfb17a"><path d="m141 345 4 13 13 4-13 4-4 13-4-13-13-4 13-4Zm458-143 3 9 9 3-9 3-3 9-3-9-9-3 9-3Zm-84 408 4 12 12 4-12 4-4 12-4-12-12-4 12-4Z"/><circle cx="216" cy="352" r="3"/><circle cx="612" cy="551" r="4"/><circle cx="372" cy="185" r="4"/></g>
+</svg>

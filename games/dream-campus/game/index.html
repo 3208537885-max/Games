@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183c31">
+  <meta name="description" content="水课梦魇：一场发生在早八课堂里的校园梦境冒险。48 件校园武器，随机房间，三章首领，无需登录即可游玩。">
+  <title>水课梦魇 · DREAM CAMPUS</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="config.js"></script>
+  <script defer src="src/data.js"></script>
+  <script defer src="src/core.js"></script>
+  <script defer src="src/game.js"></script>
+  <script defer src="src/art.js"></script>
+  <script defer src="src/renderer.js"></script>
+  <script defer src="src/audio.js"></script>
+  <script defer src="src/ui.js"></script>
+  <script defer src="src/main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <main id="viewHome" class="home" aria-label="游戏主菜单">
+      <header class="home-header"><a class="brand" href="#" aria-label="水课梦魇首页"><span class="brand-mark">梦</span><span>DREAM CAMPUS <small>课间梦境事务所</small></span></a><div class="header-actions"><span class="offline-pill"><i></i>离线也能做梦</span><button class="icon-button" data-action="settings" aria-label="设置">设置</button></div></header>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="small-line"></span> 一场早八引发的校园奇幻冒险</div>
+          <h1>水课<span class="outline-word">梦魇<span class="title-star">✦</span></span></h1>
+          <p class="hero-tagline">上课，睡着。<br>醒来，<strong>把整个梦打通。</strong></p>
+          <p class="hero-description">课本开始喷水，作业长出了腿。带上你那台满血游戏本，穿过随机生成的校园，找回最后一个学分。</p>
+          <div class="hero-pills"><span>48 件脑洞武器</span><span>3 章完整梦境</span><span>每次入梦都不同</span></div>
+        </div>
+        <div class="hero-art"><div class="art-halo"></div><img src="assets/key-art.svg" alt="原创插画：抱着水课课本的大学生站在漂浮教室上，身边是喷水书本、地质锤和学分怪物" width="800" height="760"><span class="art-sticker top-sticker">08:01 AM<br><b>STILL DREAMING</b></span><span class="art-sticker bottom-sticker">“老师，这道题<br>我在梦里做过。”</span></div>
+      </section>
+      <section class="enroll-card" aria-label="角色与难度选择">
+        <div class="enroll-heading"><div><span class="eyebrow">CHOOSE YOUR SURVIVOR</span><h2>今天，替谁醒来？</h2></div><span class="minor-text" id="bestLabel">你的冒险，从第一节水课开始。</span></div>
+        <div id="characterCards" class="character-cards"></div>
+        <div class="start-row">
+          <div class="run-options"><label class="field-label" for="difficulty">本次课业强度</label><select id="difficulty" aria-label="选择游戏难度"><option value="chill">轻松旁听</option><option value="normal" selected>正常修读</option><option value="nightmare">期末噩梦</option></select><label class="field-label seed-label" for="seed">梦境种子</label><input id="seed" maxlength="40" placeholder="留空随机，可输入相同种子复玩" autocomplete="off" spellcheck="false"></div>
+          <div class="start-buttons"><button id="continueBtn" class="button secondary" data-action="load" hidden>继续上次的梦</button><button class="button primary" id="startBtn" data-action="start">进入梦境 <span aria-hidden="true">↗</span></button></div>
+        </div>
+        <div class="enroll-bottom"><span id="difficultyDesc">标准数值；注意预警、灵活换武器即可。</span><label id="graduateChoice" hidden><input type="checkbox" id="graduate"> 携带通关奖励「毕业证发射器」</label></div>
+      </section>
+      <footer class="home-footer"><div class="footer-links"><button data-action="guide">新生指南</button><button data-action="catalog">武器图鉴</button><button data-action="meta">梦醒之后 · 成长与记录</button></div><span>原创校园梦境 · 单人冒险 · v1.0.0</span></footer>
+    </main>
+    <main id="viewPlay" class="play" hidden aria-label="水课梦魇游戏界面">
+      <header class="play-header"><button class="brand small" data-action="pause" aria-label="暂停游戏"><span class="brand-mark">梦</span><span>水课梦魇 <small id="chapterLabel">教学楼 · 01</small></span></button><div class="run-label"><span id="roomLabel">起点</span><b id="coinsLabel">15</b><span class="coin-unit">学分币</span></div><div class="play-actions"><button class="icon-button" data-action="map" aria-label="查看地图 M">地图 <kbd>M</kbd></button><button class="icon-button" data-action="inventory" aria-label="查看背包 Tab">背包 <kbd>Tab</kbd></button><button class="icon-button" data-action="pause" aria-label="暂停 Escape">暂停 <kbd>Esc</kbd></button></div></header>
+      <div class="hud-top"><div class="vital"><span class="vital-label">生命 <b id="hpText"></b></span><div class="meter hp"><i id="hpFill"></i></div></div><div class="vital"><span class="vital-label">护盾 <b id="shieldText"></b></span><div class="meter shield"><i id="shieldFill"></i></div></div><div class="vital"><span class="vital-label">专注 <b id="energyText"></b></span><div class="meter energy"><i id="energyFill"></i></div></div><div class="goal-label" id="goalLabel">清理房间，寻找首领</div></div>
+      <div class="stage-wrap"><div class="arena" id="arena"><canvas id="surface" width="1152" height="720" tabindex="0" role="img" aria-label="游戏战场。WASD移动，鼠标瞄准射击，空格闪避，E交互。">浏览器不支持 Canvas，暂时无法运行此游戏。</canvas><div id="banner" class="banner" aria-live="polite" hidden></div><button id="miniMap" class="mini-map" data-action="map" aria-label="打开本层地图"></button><div id="touchControls" class="touch-controls" hidden><div id="moveStick" class="joystick move-stick" aria-label="左侧移动摇杆"><i></i><span>移动</span></div><div id="aimStick" class="joystick aim-stick" aria-label="右侧射击摇杆"><i></i><span>瞄准 / 射击</span></div><div class="touch-buttons"><button data-touch="dash" aria-label="闪避">闪避</button><button data-touch="skill" aria-label="拒绝内卷技能">技能</button><button data-touch="interact" aria-label="交互">交互</button><button data-touch="swap" aria-label="切换武器">换枪</button><button data-touch="drink" aria-label="喝水回复专注">喝水</button></div></div></div></div>
+      <div class="hud-bottom"><div class="weapon-slots" id="weaponSlots"></div><div class="ability-panel"><span id="dashStatus">空格 · 闪避</span><span id="skillStatus">Q · 拒绝内卷</span><span id="drinkStatus">R · 喝水</span></div><div class="session-info"><span id="synergyLabel">尝试搭配两种武器</span><small id="timeLabel">00:00</small></div></div>
+      <div class="control-strip">WASD 移动 <span>·</span> 鼠标瞄准 / 按住左键射击 <span>·</span> 1 / 2 换武器 <span>·</span> E 交互 <span>·</span> F 自动射击</div>
+    </main>
+    <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="游戏对话框" hidden><div class="modal" id="modal"></div></div>
+    <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+    <div id="fatal" class="fatal" hidden></div>
+    <noscript><div class="fatal">本游戏需要启用 JavaScript。请在浏览器中启用后重新打开。</div></noscript>
+  </div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18231c">
+  <link rel="icon" href="game/assets/favicon.svg" type="image/svg+xml">
+  <title>水课梦魇 · 小游戏大合集</title>
+  <style>
+    :root { --ink:#f4f3ee; --muted:#a9b0bc; --canvas:#0c1015; --surface:#131922; --line:rgba(244,243,238,.13); --lime:#c8ff5f; --cyan:#58d5e8; --amber:#ffc763; --radius:8px; }
+    * { box-sizing:border-box; }
+    html, body { min-width:320px; min-height:100%; margin:0; color:var(--ink); background:var(--canvas); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Microsoft YaHei",sans-serif; }
+    body { min-height:100vh; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; cursor:pointer; }
+    .app { width:min(1240px,calc(100% - 40px)); margin:0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; min-height:76px; border-bottom:1px solid var(--line); }
+    .brand { display:inline-flex; align-items:center; gap:10px; font-size:15px; font-weight:850; }
+    .mark { display:grid; grid-template-columns:repeat(2,8px); gap:2px; width:18px; height:18px; }
+    .mark i { background:var(--lime); }
+    .mark i:nth-child(2), .mark i:nth-child(3) { background:var(--cyan); }
+    .top-actions { display:flex; gap:16px; color:var(--muted); font-size:12px; }
+    main { padding:48px 0 72px; }
+    .intro { display:flex; align-items:end; justify-content:space-between; gap:28px; margin-bottom:25px; }
+    .eyebrow { margin:0 0 12px; color:var(--lime); font:700 11px ui-monospace,Consolas,monospace; letter-spacing:.1em; }
+    h1 { margin:0; font-size:40px; line-height:1; }
+    .intro-copy { max-width:390px; margin:0; color:var(--muted); font-size:13px; line-height:1.65; }
+    .game-layout { display:grid; grid-template-columns:minmax(0,1fr) 260px; gap:18px; align-items:start; }
+    .game-frame, .rank-panel { border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+    .game-frame { overflow:hidden; padding:8px; }
+    iframe { display:block; width:100%; height:760px; min-height:620px; border:0; border-radius:5px; background:#f4f0e2; }
+    .rank-panel { padding:16px; }
+    .rank-panel h2 { margin:0; font-size:16px; }
+    .rank-panel p { margin:9px 0 18px; color:var(--muted); font-size:11px; line-height:1.55; }
+    .rank-list { display:grid; gap:14px; }
+    .desktop-game-leaderboard { margin-top:0; }
+    .game-status { min-height:20px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; line-height:1.5; }
+    .game-status.success { color:var(--lime); }
+    footer { border-top:1px solid var(--line); }
+    .footer-inner { display:flex; justify-content:space-between; gap:16px; padding:23px 0 32px; color:var(--muted); font-size:12px; }
+    @media (max-width:900px) {
+      .app { width:min(100% - 28px,720px); }
+      .intro { display:block; }
+      .intro-copy { margin-top:15px; }
+      .game-layout { grid-template-columns:1fr; }
+      iframe { height:calc(100dvh - 86px); min-height:620px; }
+      .rank-panel { display:none; }
+    }
+    @media (max-width:480px) {
+      .app { width:min(100% - 20px,420px); }
+      .topbar { min-height:62px; }
+      .top-actions { gap:9px; font-size:11px; }
+      h1 { font-size:31px; }
+      main { padding-top:35px; }
+      .game-frame { padding:4px; }
+      iframe { height:calc(100dvh - 70px); min-height:560px; }
+      .footer-inner { flex-direction:column; gap:8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app topbar">
+    <a class="brand" href="../../" aria-label="返回小游戏大合集"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>小游戏大合集</a>
+    <nav class="top-actions" aria-label="页面导航"><a href="../../changelog/">更新日志</a><a href="../../">返回游戏厅</a></nav>
+  </header>
+
+  <main class="app">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">SINGLE PLAYER / 005</p><h1 id="page-title">水课梦魇</h1></div>
+      <p class="intro-copy">上课，睡着。醒来，把整个梦打通。穿过校园梦境，击败梦境校长，结束一局后成绩会自动进入对应难度排行榜。</p>
+    </section>
+
+    <section class="game-layout" aria-label="水课梦魇游戏与排行榜">
+      <section class="game-frame"><iframe id="gameFrame" src="game/" title="水课梦魇：校园梦境冒险" allow="autoplay"></iframe></section>
+      <aside class="rank-panel">
+        <h2>水课梦魇排行榜</h2>
+        <p>只记录已登录玩家的最高分。游戏结束后，成绩会按难度分别保存。</p>
+        <div class="rank-list">
+          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="轻松旁听" data-game-difficulty="low" aria-label="水课梦魇轻松旁听排行榜"></section>
+          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="正常修读" data-game-difficulty="normal" aria-label="水课梦魇正常修读排行榜"></section>
+          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="期末噩梦" data-game-difficulty="high" aria-label="水课梦魇期末噩梦排行榜"></section>
+        </div>
+        <p class="game-status" id="gameStatus" aria-live="polite">完成一局后，这里会显示本次成绩。</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer><div class="app footer-inner"><span>ARCADE / 005</span><span>made by 不会文科的小旺柴</span></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/supabase-client.js"></script>
+  <script src="../../assets/game-progress.js"></script>
+  <script src="../../assets/game-leaderboard.js"></script>
+  <script>
+    (() => {
+      "use strict";
+      const frame = document.getElementById("gameFrame");
+      const status = document.getElementById("gameStatus");
+      const client = window.gameAuth && window.gameAuth.client;
+      const difficultyName = { low: "轻松旁听", normal: "正常修读", high: "期末噩梦" };
+      const difficultyKey = { chill: "low", normal: "normal", nightmare: "high" };
+
+      function setStatus(text, success = false) {
+        status.textContent = text;
+        status.classList.toggle("success", success);
+      }
+
+      async function saveResult(payload) {
+        const score = Number(payload && payload.score);
+        const difficulty = difficultyKey[payload && payload.difficulty] || "normal";
+        if (!Number.isFinite(score) || score < 0) return;
+        if (!client) {
+          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；排行榜服务未加载。`);
+          return;
+        }
+        const { data } = await client.auth.getSession();
+        if (!data.session) {
+          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；登录后才能进入排行榜。`);
+          return;
+        }
+        const { error } = await client.rpc("submit_score", {
+          p_game_slug: "dream-campus",
+          p_difficulty: difficulty,
+          p_score: Math.floor(score)
+        });
+        if (error) {
+          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；排行榜同步失败，请稍后重试。`);
+          console.warn("Dream Campus leaderboard sync failed:", error.message);
+          return;
+        }
+        await window.gameProgress?.recordCompletion("dream-campus");
+        setStatus(`本局 ${score.toLocaleString("zh-CN")} 分 · ${difficultyName[difficulty]} · 已同步到排行榜。`, true);
+        window.gameLeaderboard?.refresh();
+      }
+
+      window.addEventListener("message", event => {
+        if (event.source !== frame.contentWindow || event.origin !== window.location.origin) return;
+        const message = event.data;
+        if (!message || message.game !== "dream-campus" || message.event !== "run:end") return;
+        void saveResult(message.payload);
+      });
+    })();
+  </script>
+</body>
+</html>
