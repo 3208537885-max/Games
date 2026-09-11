@@ -273,6 +273,7 @@ create table if not exists public.multiplayer_players (
 
 alter table public.multiplayer_players add column if not exists board_state jsonb not null default '[]'::jsonb;
 alter table public.multiplayer_players add column if not exists animation_state jsonb not null default '{}'::jsonb;
+alter table public.multiplayer_players add column if not exists state_version bigint not null default 0;
 
 alter table public.multiplayer_rooms enable row level security;
 alter table public.multiplayer_players enable row level security;
@@ -333,6 +334,7 @@ $$;
 
 drop function if exists public.report_multiplayer_score(uuid, uuid, integer, boolean);
 drop function if exists public.report_multiplayer_score(uuid, uuid, integer, jsonb, boolean);
+drop function if exists public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean, bigint);
 create or replace function public.report_multiplayer_score(p_room_id uuid, p_player_token uuid, p_score integer, p_board_state jsonb, p_animation_state jsonb, p_finished boolean default false)
 returns public.multiplayer_players
 language plpgsql security definer set search_path = public
@@ -341,6 +343,28 @@ declare v_player public.multiplayer_players;
 begin
   if p_score < 0 or p_score > 100000000 then raise exception 'invalid score'; end if;
   update public.multiplayer_players set score = greatest(score, p_score), board_state = p_board_state, animation_state = p_animation_state, finished = finished or p_finished, updated_at = now()
+  where room_id = p_room_id and player_token = p_player_token
+    and exists (select 1 from public.multiplayer_rooms where id = p_room_id and status = 'live' and now() <= ends_at)
+  returning * into v_player;
+  if v_player.room_id is null then raise exception 'room is not live'; end if;
+  return v_player;
+end;
+$$;
+
+create or replace function public.report_multiplayer_score(p_room_id uuid, p_player_token uuid, p_score integer, p_board_state jsonb, p_animation_state jsonb, p_finished boolean, p_state_version bigint)
+returns public.multiplayer_players
+language plpgsql security definer set search_path = public
+as $$
+declare v_player public.multiplayer_players;
+begin
+  if p_score < 0 or p_score > 100000000 or p_state_version < 0 then raise exception 'invalid score state'; end if;
+  update public.multiplayer_players set
+    score = greatest(score, p_score),
+    board_state = case when p_state_version >= state_version then p_board_state else board_state end,
+    animation_state = case when p_state_version >= state_version then p_animation_state else animation_state end,
+    state_version = greatest(state_version, p_state_version),
+    finished = finished or p_finished,
+    updated_at = now()
   where room_id = p_room_id and player_token = p_player_token
     and exists (select 1 from public.multiplayer_rooms where id = p_room_id and status = 'live' and now() <= ends_at)
   returning * into v_player;
@@ -362,6 +386,8 @@ revoke execute on function public.start_multiplayer_room(uuid) from public;
 grant execute on function public.start_multiplayer_room(uuid) to authenticated;
 revoke execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean) from public;
 grant execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean) to anon, authenticated;
+revoke execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean, bigint) from public;
+grant execute on function public.report_multiplayer_score(uuid, uuid, integer, jsonb, jsonb, boolean, bigint) to anon, authenticated;
 
 create table if not exists public.multiplayer_match_results (
   room_id uuid not null references public.multiplayer_rooms(id) on delete cascade,
