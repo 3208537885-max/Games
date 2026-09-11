@@ -24,6 +24,7 @@
         case 'explode':case 'impact':this.tone(94,.32,'triangle',.3,27);this.tone(157,.14,'sawtooth',.06,45);break;
         case 'hurt':this.tone(210,.15,'square',.13,78);break;
         case 'dash':this.tone(750,.15,'sine',.1,140);break;
+        case 'reflect':this.tone(920,.09,'triangle',.11,1540);this.tone(460,.16,'sine',.07,230,.025);break;
         case 'coin':this.tone(1047,.08,'sine',.08,1319);break;
         case 'drink':this.tone(420,.2,'sine',.1,720);break;
         case 'swap':this.tone(330,.05,'triangle',.08,550);break;

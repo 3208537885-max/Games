@@ -216,7 +216,7 @@
         }
         case 'orbit':{
           this.orbits=this.orbits.filter(v=>v.weapon!==w.id);
-          for(let i=0;i<w.count;i++)this.orbits.push({weapon:w.id,w:{...w,damage:w.damage*(1+(this.stats.summon||0))},phase:TAU*i/w.count,life:w.duration,hits:{},color,x:p.x,y:p.y});
+          for(let i=0;i<w.count;i++)this.orbits.push({weapon:w.id,w:{...w,damage:w.damage*(1+(this.stats.summon||0))},phase:TAU*i/w.count,life:w.duration,hits:{},shotCd:.9+i*.42,blockRadius:w.blockRadius||18,color,x:p.x,y:p.y});
           if(this.orbits.length>7)this.orbits.splice(0,this.orbits.length-7);break;
         }
         case 'turret':{
@@ -394,6 +394,22 @@
         }
         const nx=b.x+b.vx*dt,ny=b.y+b.vy*dt,end=D.lineEnd(b.x,b.y,nx,ny,this.obstacles,b.r*.55);
         b.x=end.x;b.y=end.y;
+        if(!b.friendly){
+          // Orbit weapons act as moving shields: intercept the segment, then reflect
+          // the projectile along the circular normal and turn it into friendly fire.
+          const guard=this.orbits.find(o=>D.segmentCircle(oldX,oldY,b.x,b.y,o.x,o.y,b.r+o.blockRadius));
+          if(guard){
+            let dx=b.x-guard.x,dy=b.y-guard.y,n=Math.hypot(dx,dy);
+            if(n<.001){dx=-b.vx;dy=-b.vy;n=Math.hypot(dx,dy)||1;}
+            dx/=n;dy/=n;
+            const dot=b.vx*dx+b.vy*dy;
+            b.vx-=2*dot*dx;b.vy-=2*dot*dy;b.a=Math.atan2(b.vy,b.vx);
+            b.x=guard.x+dx*(b.r+guard.blockRadius+2);b.y=guard.y+dy*(b.r+guard.blockRadius+2);
+            b.friendly=true;b.reflected=true;b.w={type:'shot',bulletStyle:'orbit',damage:Math.max(guard.w.damage*.72,b.damage*.7),pierce:1,size:b.r,life:2.4,tag:guard.w.tag||'tech'};
+            b.damage=b.w.damage;b.color=guard.color;b.hits=new Set();b.pierce=1;b.life=Math.min(2.4,b.life+.55);b.maxLife=Math.max(b.maxLife,b.life);
+            this.fx('orbitReflect',{x:guard.x,y:guard.y,r:guard.blockRadius,color:guard.color,a:Math.atan2(dy,dx)},.32);this.particle(guard.x,guard.y,guard.color,8,150);this.sound.play('reflect');
+          }
+        }
         if(b.friendly){
           const hits=this.enemies.filter(e=>!e.dead&&e.spawnTime<=0&&!b.hits.has(e.id)&&D.segmentActor(oldX,oldY,b.x,b.y,e,b.r)).sort((a,c)=>Math.hypot(a.x-oldX,a.y-oldY)-Math.hypot(c.x-oldX,c.y-oldY));
           for(const e of hits){
@@ -417,8 +433,9 @@
           if(e){t.a=Math.atan2(e.y-t.y,e.x-t.x);const count=t.w.pellets||1;for(let i=0;i<count;i++)this.createBullet({...t.w,type:t.w.homing?'homing':'shot',turn:4,speed:490,life:1.4,size:4,pierce:0},t,t.a+(i-(count-1)/2)*.14);t.cooldown=t.w.rate;this.sound.play('turret');}else t.cooldown=.12;
         }
       }this.turrets=this.turrets.filter(t=>t.life>0);
-      for(const o of this.orbits){o.life-=dt;const angle=this.time*2.8+o.phase;o.x=this.player.x+Math.cos(angle)*o.w.range;o.y=this.player.y+Math.sin(angle)*o.w.range;
+      for(const o of this.orbits){o.life-=dt;o.shotCd-=dt;const angle=this.time*2.8+o.phase;o.x=this.player.x+Math.cos(angle)*o.w.range;o.y=this.player.y+Math.sin(angle)*o.w.range;
         for(const e of this.enemies)if(!e.dead&&dist(o,e)<e.r+13&&(o.hits[e.id]||0)<this.time&&D.los(this.player,e,this.obstacles)){o.hits[e.id]=this.time+.55;this.hitEnemy(e,o.w.damage,o.w,this.player);}
+        if(o.shotCd<=0){const e=this.enemies.filter(e=>!e.dead&&e.spawnTime<=0&&dist(o,e)<540&&D.los(o,e,this.obstacles)).sort((a,b)=>dist(o,a)-dist(o,b))[0];if(e){const a=Math.atan2(e.y-o.y,e.x-o.x);this.createBullet({...o.w,type:'homing',bulletStyle:'orbit',damage:o.w.damage*.78,speed:430,turn:5,life:1.8,size:4,pierce:0},o,a);this.fx('muzzle',{x:o.x,y:o.y,a,color:o.color},.09);o.shotCd=2.25;this.sound.play('shoot',2);}else o.shotCd=.25;}
       }this.orbits=this.orbits.filter(o=>o.life>0);
       for(const m of this.mines){m.life-=dt;m.age+=dt;if(m.age>m.w.arm&&(m.life<=0||this.enemies.some(e=>!e.dead&&dist(m,e)<55+e.r))){this.explode(m.x,m.y,m.w);m.dead=true;}}
       this.mines=this.mines.filter(m=>!m.dead);

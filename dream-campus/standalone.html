@@ -17,6 +17,13 @@
 @media(max-height:570px) and (orientation:landscape){.play{padding:3px 10px}.play-header{height:34px}.hud-top{height:24px;margin:0 auto 4px;max-width:840px}.play-header{max-width:930px}.hud-bottom{height:41px;margin-top:4px;max-width:890px}.weapon-slot{min-width:148px;padding:2px 7px 2px 3px}.weapon-slot .weapon-icon{height:31px;width:33px}.weapon-slot .weapon-icon svg{width:30px;height:30px}.weapon-slot h4{font-size:9px;margin-bottom:2px}.weapon-slot p{font-size:8px}.control-strip{display:none}.ability-panel{font-size:8px}.mini-map{width:82px;top:6px;right:7px}.joystick{width:83px;height:83px;bottom:14px}.joystick i{width:33px;height:33px;top:23px;left:23px}.joystick span{font-size:7px;bottom:6px}.move-stick{left:18px}.aim-stick{right:18px}.touch-buttons{bottom:12px;gap:6px}.touch-buttons button{width:36px;height:36px;font-size:9px}.banner{top:25%;padding:10px 20px}.banner strong{font-size:17px}.banner small{font-size:9px}.modal{max-height:calc(100dvh - 24px)}.overlay{padding:12px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.confetti-field{display:none}}
 
+/* v0.1.20: touch controls are landscape-only and mirror the player's roles. */
+html[data-control-mode="touch"] .touch-play .aim-stick{left:25px;right:auto}
+html[data-control-mode="touch"] .touch-play .move-stick{right:25px;left:auto}
+html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::before{content:"请将手机横屏后开始游戏";position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:#10281fee;color:#e8edcf;font-size:18px;font-weight:800;text-align:center;letter-spacing:.04em;pointer-events:auto}
+html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::after{content:"旋转设备后即可开始";position:absolute;inset:54% 0 auto;text-align:center;z-index:31;color:#abc09c;font-size:11px;pointer-events:none}
+@media (pointer:coarse) and (orientation:landscape){html[data-control-mode="touch"] .touch-play .aim-stick{left:18px;right:auto}html[data-control-mode="touch"] .touch-play .move-stick{right:18px;left:auto}}
+
 html[data-embedded="true"] .home-header{height:70px}html[data-embedded="true"] .home-footer>span{display:none}
 
 /* 操作模式由设备类型决定，而不是单看 pointer:coarse，避免桌面触摸屏显示手机 UI。 */
@@ -75,12 +82,12 @@ html[data-control-mode="touch"] .control-strip{display:none!important}
         </div>
         <div class="enroll-bottom"><span id="difficultyDesc">标准数值；注意预警、灵活换武器即可。</span><label id="graduateChoice" hidden><input type="checkbox" id="graduate"> 携带通关奖励「毕业证发射器」</label></div>
       </section>
-      <footer class="home-footer"><div class="footer-links"><button data-action="guide">新生指南</button><button data-action="catalog">武器图鉴</button><button data-action="meta">梦醒之后 · 成长与记录</button></div><span>原创校园梦境 · 单人冒险 · v0.1.19</span></footer>
+      <footer class="home-footer"><div class="footer-links"><button data-action="guide">新生指南</button><button data-action="catalog">武器图鉴</button><button data-action="meta">梦醒之后 · 成长与记录</button></div><span>原创校园梦境 · 单人冒险 · v0.1.20</span></footer>
     </main>
     <main id="viewPlay" class="play" hidden aria-label="水课梦魇游戏界面">
       <header class="play-header"><button class="brand small" data-action="pause" aria-label="暂停游戏"><span class="brand-mark">梦</span><span>水课梦魇 <small id="chapterLabel">教学楼 · 01</small></span></button><div class="run-label"><span id="roomLabel">起点</span><b id="coinsLabel">15</b><span class="coin-unit">学分币</span></div><div class="play-actions"><button class="icon-button" data-action="map" aria-label="查看地图 M">地图 <kbd>M</kbd></button><button class="icon-button" data-action="inventory" aria-label="查看背包 Tab">背包 <kbd>Tab</kbd></button><button class="icon-button" data-action="pause" aria-label="暂停 Escape">暂停 <kbd>Esc</kbd></button></div></header>
       <div class="hud-top"><div class="vital"><span class="vital-label">生命 <b id="hpText"></b></span><div class="meter hp"><i id="hpFill"></i></div></div><div class="vital"><span class="vital-label">护盾 <b id="shieldText"></b></span><div class="meter shield"><i id="shieldFill"></i></div></div><div class="vital"><span class="vital-label">专注 <b id="energyText"></b></span><div class="meter energy"><i id="energyFill"></i></div></div><div class="goal-label" id="goalLabel">清理房间，寻找首领</div></div>
-      <div class="stage-wrap"><div class="arena" id="arena"><canvas id="surface" width="1152" height="720" tabindex="0" role="img" aria-label="游戏战场。WASD移动，鼠标瞄准射击，空格闪避，E交互。">浏览器不支持 Canvas，暂时无法运行此游戏。</canvas><div id="banner" class="banner" aria-live="polite" hidden></div><button id="miniMap" class="mini-map" data-action="map" aria-label="打开本层地图"></button><div id="touchControls" class="touch-controls" hidden><div id="moveStick" class="joystick move-stick" aria-label="左侧移动摇杆"><i></i><span>移动</span></div><div id="aimStick" class="joystick aim-stick" aria-label="右侧射击摇杆"><i></i><span>瞄准 / 射击</span></div><div class="touch-buttons"><button data-touch="dash" aria-label="闪避">闪避</button><button data-touch="skill" aria-label="拒绝内卷技能">技能</button><button data-touch="interact" aria-label="交互">交互</button><button data-touch="swap" aria-label="切换武器">换枪</button><button data-touch="drink" aria-label="喝水回复专注">喝水</button></div></div></div></div>
+      <div class="stage-wrap"><div class="arena" id="arena"><canvas id="surface" width="1152" height="720" tabindex="0" role="img" aria-label="游戏战场。左侧射击摇杆，右侧移动摇杆，冲刺按钮闪避。">浏览器不支持 Canvas，暂时无法运行此游戏。</canvas><div id="banner" class="banner" aria-live="polite" hidden></div><button id="miniMap" class="mini-map" data-action="map" aria-label="打开本层地图"></button><div id="touchControls" class="touch-controls" hidden><div id="aimStick" class="joystick aim-stick" aria-label="左侧射击摇杆"><i></i><span>射击</span></div><div id="moveStick" class="joystick move-stick" aria-label="右侧移动摇杆"><i></i><span>移动</span></div><div class="touch-buttons"><button data-touch="dash" aria-label="冲刺">冲刺</button></div></div></div></div>
       <div class="hud-bottom"><div class="weapon-slots" id="weaponSlots"></div><div class="ability-panel"><span id="dashStatus">空格 · 闪避</span><span id="skillStatus">Q · 拒绝内卷</span><span id="drinkStatus">R · 喝水</span></div><div class="session-info"><span id="synergyLabel">尝试搭配两种武器</span><small id="timeLabel">00:00</small></div></div>
       <div class="control-strip">WASD 移动 <span>·</span> 鼠标瞄准 / 按住左键射击 <span>·</span> 1 / 2 换武器 <span>·</span> E 交互 <span>·</span> F 自动射击</div>
     </main>
@@ -112,7 +119,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.19';
+  DC.VERSION = '0.1.20';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -148,7 +155,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     ['laptop','满血游戏本',2,'spread',7,0.31,5,610,'tech','laptop','风扇起飞，RGB 弹幕启动。近战全中很强，远射会散。',{pellets:5,spread:0.34,burn:0.8,life:0.85}],
     ['powerbank','共享充电宝',2,'chain',25,0.62,6,0,'electric','battery','押金退不了，电可以放。连锁电弧跳跃三次。',{range:430,jumps:3,jumpRange:145}],
     ['express','最后一公里快递',2,'homing',31,0.62,5,330,'daily','parcel','您的快递已到达怪物脸上。追踪命中小范围爆炸。',{turn:3.8,life:1.8,radius:48}],
-    ['compass','地质罗盘',2,'orbit',14,1.65,10,0,'geo','compass','三枚磁针绕身守护，近身的烦恼都有方向。',{count:3,duration:6,range:94}],
+    ['compass','地质罗盘',2,'orbit',14,1.65,10,0,'geo','compass','三枚磁针绕身守护，可挡下并反弹弹幕，偶尔发射追踪磁针。',{count:3,duration:6,range:94,blockRadius:19}],
     ['rockcore','取芯钻头',2,'shot',31,0.55,4,520,'geo','core','从作业表层，一路钻到知识内核。',{pierce:5,life:1.25,size:7}],
     ['soda','摇过的汽水',2,'wave',28,0.58,4,440,'water','bottle','宽幅汽水浪，穿透敌人，沿途留下潮湿。',{pierce:5,wet:3,life:0.95,size:15}],
     ['canteenstew','食堂大锅菜',2,'wave',33,0.60,4,440,'food','pot','一勺浑厚汤汁横扫前方，留下短暂蒸汽并让敌人减速。',{size:22,pierce:7,slow:1.2,life:1.1,bulletStyle:'steam'}],
@@ -156,9 +163,9 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     ['wifi','满格校园网',2,'turret',12,3.0,13,0,'tech','router','部署路由炮台，自动向最近且可见的怪物发包。',{duration:11,rate:0.40,range:430}],
     ['mouse','电竞鼠标',2,'burst',12,0.43,4,780,'tech','mouse','三连点，物理级手速。',{burst:3,delay:0.055,spread:0.025,life:0.85}],
     ['broadcast','校园广播喇叭',2,'wave',34,0.64,4,485,'daily','alarm','下课通知形成宽幅声浪，穿透一排敌人并把它们向后推开。',{size:23,pierce:7,knock:175,life:1.1,bulletStyle:'sound'}],
-    ['seatHolder','图书馆占座伞',2,'orbit',16,1.85,9,0,'study','umbrella','三把占座伞绕身巡逻。部署后切走武器，防线仍会继续工作。',{count:3,duration:7.4,range:106,bulletStyle:'paper'}],
+    ['seatHolder','图书馆占座伞',2,'orbit',16,1.85,9,0,'study','umbrella','三把占座伞绕身巡逻，可挡下并反弹弹幕，部署后切走武器仍会工作。',{count:3,duration:7.4,range:106,blockRadius:20,bulletStyle:'paper'}],
     ['hotpot','宿舍违禁小火锅',3,'lob',59,0.90,8,390,'food','pot','不鼓励违纪，只鼓励把梦里的作业煮熟。',{radius:100,burn:3.8,life:0.85}],
-    ['ppt','八百页 PPT',3,'orbit',19,1.9,12,0,'study','slides','还没讲完，但已经把你围住了。四张幻灯片自动护体。',{count:4,duration:7,range:108}],
+    ['ppt','八百页 PPT',3,'orbit',19,1.9,12,0,'study','slides','还没讲完，但已经把你围住了。四张幻灯片可反弹弹幕并自动发射辅助弹。',{count:4,duration:7,range:108,blockRadius:19}],
     ['deadline','DDL 倒计时',3,'mine',70,1.35,8,0,'study','clock','在准星附近留下倒计时。靠近触发，逾期自动爆炸。',{radius:108,arm:0.65,duration:4,range:340}],
     ['scholarship','奖学金申请表',3,'beam',27,0.40,6,0,'study','certificate','审核过长，激光也很长。直线穿透整排敌人。',{range:940,width:7}],
     ['microscope','偏光显微镜',3,'beam',17,0.25,5,0,'geo','scope','交叉偏光锁定晶体弱点，额外提高暴击率。',{range:760,width:6,crit:0.18}],
@@ -171,7 +178,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     ['lint','滚筒洗衣机',3,'wave',39,0.58,7,460,'daily','washer','把知识拧干，洗涤波穿透并推开前方敌人。',{size:19,pierce:6,knock:180,wet:2,life:1.0}],
     ['mineral','矿物标本盒',3,'spread',15,0.78,7,540,'geo','mineral','石英、长石、云母齐射；每枚晶片可再穿一只。',{pellets:5,spread:0.46,pierce:1,life:0.9}],
     ['redPen','论文批注红笔',3,'burst',14,0.56,5,790,'study','pen','四连红字批注精准追责；最后一笔更容易打出暴击。',{burst:4,delay:0.055,spread:0.035,pierce:1,crit:0.12,life:0.92,bulletStyle:'ink'}],
-    ['centrifuge','实验室离心机',3,'orbit',22,2.05,13,0,'tech','washer','四枚高速样品管绕身离心，适合贴近敌群后切回主武器输出。',{count:4,duration:8.2,range:119,bulletStyle:'scan'}],
+    ['centrifuge','实验室离心机',3,'orbit',22,2.05,13,0,'tech','washer','四枚高速样品管可挡下并反弹弹幕，还会周期性发射高能扫描弹。',{count:4,duration:8.2,range:119,blockRadius:21,bulletStyle:'scan'}],
     ['quantum','量子游戏本',4,'burst',11,0.43,8,760,'tech','laptop','风扇变成涡轮。五发超频弹，强但吃专注值。',{burst:5,delay:0.045,pierce:1,life:1.0}],
     ['petrel','三维建模工作站',4,'turret',18,3.8,19,0,'geo','station','把敌人也纳入网格：双弹自动建模炮台。',{duration:13,rate:0.78,pellets:2,range:520}],
     ['steam','SAGD 蒸汽双井',4,'spread',15,0.47,7,480,'geo','pipe','双井并行，三束高温蒸汽同时开采梦境。',{pellets:3,spread:0.15,burn:2.2,wet:2,life:1.05,pierce:1}],
@@ -675,7 +682,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         }
         case 'orbit':{
           this.orbits=this.orbits.filter(v=>v.weapon!==w.id);
-          for(let i=0;i<w.count;i++)this.orbits.push({weapon:w.id,w:{...w,damage:w.damage*(1+(this.stats.summon||0))},phase:TAU*i/w.count,life:w.duration,hits:{},color,x:p.x,y:p.y});
+          for(let i=0;i<w.count;i++)this.orbits.push({weapon:w.id,w:{...w,damage:w.damage*(1+(this.stats.summon||0))},phase:TAU*i/w.count,life:w.duration,hits:{},shotCd:.9+i*.42,blockRadius:w.blockRadius||18,color,x:p.x,y:p.y});
           if(this.orbits.length>7)this.orbits.splice(0,this.orbits.length-7);break;
         }
         case 'turret':{
@@ -853,6 +860,22 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         }
         const nx=b.x+b.vx*dt,ny=b.y+b.vy*dt,end=D.lineEnd(b.x,b.y,nx,ny,this.obstacles,b.r*.55);
         b.x=end.x;b.y=end.y;
+        if(!b.friendly){
+          // Orbit weapons act as moving shields: intercept the segment, then reflect
+          // the projectile along the circular normal and turn it into friendly fire.
+          const guard=this.orbits.find(o=>D.segmentCircle(oldX,oldY,b.x,b.y,o.x,o.y,b.r+o.blockRadius));
+          if(guard){
+            let dx=b.x-guard.x,dy=b.y-guard.y,n=Math.hypot(dx,dy);
+            if(n<.001){dx=-b.vx;dy=-b.vy;n=Math.hypot(dx,dy)||1;}
+            dx/=n;dy/=n;
+            const dot=b.vx*dx+b.vy*dy;
+            b.vx-=2*dot*dx;b.vy-=2*dot*dy;b.a=Math.atan2(b.vy,b.vx);
+            b.x=guard.x+dx*(b.r+guard.blockRadius+2);b.y=guard.y+dy*(b.r+guard.blockRadius+2);
+            b.friendly=true;b.reflected=true;b.w={type:'shot',bulletStyle:'orbit',damage:Math.max(guard.w.damage*.72,b.damage*.7),pierce:1,size:b.r,life:2.4,tag:guard.w.tag||'tech'};
+            b.damage=b.w.damage;b.color=guard.color;b.hits=new Set();b.pierce=1;b.life=Math.min(2.4,b.life+.55);b.maxLife=Math.max(b.maxLife,b.life);
+            this.fx('orbitReflect',{x:guard.x,y:guard.y,r:guard.blockRadius,color:guard.color,a:Math.atan2(dy,dx)},.32);this.particle(guard.x,guard.y,guard.color,8,150);this.sound.play('reflect');
+          }
+        }
         if(b.friendly){
           const hits=this.enemies.filter(e=>!e.dead&&e.spawnTime<=0&&!b.hits.has(e.id)&&D.segmentActor(oldX,oldY,b.x,b.y,e,b.r)).sort((a,c)=>Math.hypot(a.x-oldX,a.y-oldY)-Math.hypot(c.x-oldX,c.y-oldY));
           for(const e of hits){
@@ -876,8 +899,9 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
           if(e){t.a=Math.atan2(e.y-t.y,e.x-t.x);const count=t.w.pellets||1;for(let i=0;i<count;i++)this.createBullet({...t.w,type:t.w.homing?'homing':'shot',turn:4,speed:490,life:1.4,size:4,pierce:0},t,t.a+(i-(count-1)/2)*.14);t.cooldown=t.w.rate;this.sound.play('turret');}else t.cooldown=.12;
         }
       }this.turrets=this.turrets.filter(t=>t.life>0);
-      for(const o of this.orbits){o.life-=dt;const angle=this.time*2.8+o.phase;o.x=this.player.x+Math.cos(angle)*o.w.range;o.y=this.player.y+Math.sin(angle)*o.w.range;
+      for(const o of this.orbits){o.life-=dt;o.shotCd-=dt;const angle=this.time*2.8+o.phase;o.x=this.player.x+Math.cos(angle)*o.w.range;o.y=this.player.y+Math.sin(angle)*o.w.range;
         for(const e of this.enemies)if(!e.dead&&dist(o,e)<e.r+13&&(o.hits[e.id]||0)<this.time&&D.los(this.player,e,this.obstacles)){o.hits[e.id]=this.time+.55;this.hitEnemy(e,o.w.damage,o.w,this.player);}
+        if(o.shotCd<=0){const e=this.enemies.filter(e=>!e.dead&&e.spawnTime<=0&&dist(o,e)<540&&D.los(o,e,this.obstacles)).sort((a,b)=>dist(o,a)-dist(o,b))[0];if(e){const a=Math.atan2(e.y-o.y,e.x-o.x);this.createBullet({...o.w,type:'homing',bulletStyle:'orbit',damage:o.w.damage*.78,speed:430,turn:5,life:1.8,size:4,pierce:0},o,a);this.fx('muzzle',{x:o.x,y:o.y,a,color:o.color},.09);o.shotCd=2.25;this.sound.play('shoot',2);}else o.shotCd=.25;}
       }this.orbits=this.orbits.filter(o=>o.life>0);
       for(const m of this.mines){m.life-=dt;m.age+=dt;if(m.age>m.w.arm&&(m.life<=0||this.enemies.some(e=>!e.dead&&dist(m,e)<55+e.r))){this.explode(m.x,m.y,m.w);m.dead=true;}}
       this.mines=this.mines.filter(m=>!m.dead);
@@ -1266,13 +1290,13 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       c.save();if(g.meta.settings.shake&&g.shake>0)c.translate(Math.sin(now*83)*g.shake*.45,Math.cos(now*69)*g.shake*.35);
       c.drawImage(this.floor(),0,0);this.drawDoors();this.drawRoomFurniture();this.drawHazards(false);
       for(const m of g.mines)this.drawMine(m);for(const t of g.turrets)this.drawTurret(t);
-      for(const e of g.effects)if(['warningLine','spawn','dash','afterimage','pulse','slash'].includes(e.type))this.drawEffect(e);
+      for(const e of g.effects)if(['warningLine','spawn','dash','afterimage','pulse','slash','orbitReflect'].includes(e.type))this.drawEffect(e);
       for(const e of g.enemies)if(e.spawnTime>0){c.save();c.globalAlpha=.4+Math.sin(now*8)*.15;c.strokeStyle=e.boss?'#d8b0a3':'#f4c88d';c.lineWidth=2;c.setLineDash([5,5]);c.beginPath();c.ellipse(e.x,e.y+5,e.r+16,(e.r+16)*.65,0,0,TAU);c.stroke();c.restore();}
       const things=g.obstacles.map(o=>({y:o.y+o.h,kind:'prop',o})).concat(g.enemies.map(e=>({y:e.y,kind:'enemy',e})),[{y:g.player.y,kind:'player'}]);things.sort((a,b)=>a.y-b.y);
       for(const item of things){if(item.kind==='prop')this.drawProp(item.o);else if(item.kind==='enemy'){if(!D.renderHooks?.enemy?.(c,item.e,g,now))A.enemy(c,item.e,now);}else this.drawPlayer();}
       for(const b of g.bullets)this.drawBullet(b);
-      for(const o of g.orbits){const w=D.WEAPONS[o.weapon],pulse=1+Math.sin(now*9+o.phase)*.08;c.save();c.translate(o.x,o.y-8);c.globalAlpha=Math.min(1,o.life);if(w.bulletStyle==='scan'){c.rotate(now*7+o.phase);c.strokeStyle='#c7b5ff';c.lineWidth=2;c.setLineDash([5,4]);c.beginPath();c.arc(0,0,22*pulse,0,TAU);c.stroke();c.setLineDash([]);}else if(w.bulletStyle==='paper'){c.rotate(Math.sin(now*5+o.phase)*.25);A.line(c,-20,13,20,13,'#f2e8bb55',3);}A.icon(c,w.icon,0,0,33*pulse,o.color);c.restore();}
-      for(const e of g.effects)if(!['warningLine','spawn','dash','afterimage','pulse','slash','victory'].includes(e.type))this.drawEffect(e);
+      for(const o of g.orbits){const w=D.WEAPONS[o.weapon],pulse=1+Math.sin(now*9+o.phase)*.08;c.save();c.translate(o.x,o.y-8);c.globalAlpha=Math.min(1,o.life);c.strokeStyle=o.color+'88';c.lineWidth=2;c.beginPath();c.arc(0,8,(o.blockRadius||18)+7*pulse,0,TAU);c.stroke();if(w.bulletStyle==='scan'){c.rotate(now*7+o.phase);c.strokeStyle='#c7b5ff';c.lineWidth=2;c.setLineDash([5,4]);c.beginPath();c.arc(0,0,22*pulse,0,TAU);c.stroke();c.setLineDash([]);}else if(w.bulletStyle==='paper'){c.rotate(Math.sin(now*5+o.phase)*.25);A.line(c,-20,13,20,13,'#f2e8bb55',3);}A.icon(c,w.icon,0,0,33*pulse,o.color);c.restore();}
+      for(const e of g.effects)if(!['warningLine','spawn','dash','afterimage','pulse','slash','orbitReflect','victory'].includes(e.type))this.drawEffect(e);
       this.drawHazards(true);
       for(const coin of g.pickups){c.save();c.translate(coin.x,coin.y-7+Math.sin(coin.age*6)*3);A.ellipse(c,0,9,7,3,'#16322877');A.ellipse(c,0,0,5,7,'#efca80');A.line(c,0,-4,0,4,'#fff0b1',2);c.restore();}
       this.drawLoot();this.drawEnemyBars();
@@ -1341,6 +1365,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       else if(b.w.bulletStyle==='sound'){c.rotate(-b.a);c.strokeStyle=b.color;c.lineWidth=3;for(let i=0;i<3;i++){c.globalAlpha=.75-i*.18;c.beginPath();c.arc(-8,0,b.r*(.75+i*.48),-1.05,1.05);c.stroke();}A.ellipse(c,-11,0,3,3,'#fff0b7');}
       else if(b.w.bulletStyle==='ink'){A.line(c,-b.r*3,0,-b.r*.7,0,'#e06e7588',3);c.fillStyle='#ed8f91';c.beginPath();c.moveTo(b.r*1.7,0);c.lineTo(-b.r,-b.r*.65);c.lineTo(-b.r,b.r*.65);c.closePath();c.fill();A.ellipse(c,-b.r*.5,0,2,2,'#fff0ce');}
       else if(b.w.bulletStyle==='scan'){c.rotate(this.now*11);c.strokeStyle=b.color;c.lineWidth=2;c.beginPath();c.arc(0,0,b.r*1.5,0,TAU);c.stroke();A.line(c,-b.r*2.6,0,-b.r*1.4,0,'#cbb7ff66',2);A.ellipse(c,0,0,b.r*.55,b.r*.55,'#f0ddff');}
+      else if(b.w.bulletStyle==='orbit'){c.rotate(this.now*12);c.strokeStyle=b.color;c.lineWidth=2;c.shadowBlur=8;c.shadowColor=b.color;c.beginPath();c.arc(0,0,b.r*1.7,0,TAU);c.stroke();c.shadowBlur=0;A.ellipse(c,0,0,b.r*.55,b.r*.55,'#fff4cf');A.line(c,-b.r*3,0,-b.r*1.5,0,b.color+'88',2);}
       else if(b.w.type==='lob'){c.rotate(-b.a);A.ellipse(c,0,7,9,4,'#0d231950');const z=Math.sin(Math.min(1,b.age/b.maxLife)*Math.PI)*44;A.icon(c,b.w.icon,0,-z,29,b.color);}
       else if(b.w.type==='boomerang'){c.rotate(this.now*12);A.icon(c,b.w.icon,0,0,29,b.color);}
       else if(b.w.type==='wave'){c.strokeStyle=b.color;c.lineWidth=5;c.beginPath();c.ellipse(-6,0,b.r*.7,b.r*1.45,0,-1.5,1.5);c.stroke();c.globalAlpha=.25;c.lineWidth=13;c.stroke();}
@@ -1369,6 +1394,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         case 'dash':case 'afterimage':c.globalAlpha=k*.25;A.ellipse(c,e.x,e.y-24,15,29,'#c7f0d6');break;
         case 'spawn':c.globalAlpha=k;c.strokeStyle=e.color;c.lineWidth=2;c.beginPath();c.arc(e.x,e.y,e.r,0,TAU);c.stroke();break;
         case 'warningLine':c.globalAlpha=k*.7;c.setLineDash([7,8]);A.line(c,e.x,e.y,e.x2,e.y2,'#f5b98d',3);break;
+        case 'orbitReflect':c.translate(e.x,e.y);c.globalAlpha=k;c.strokeStyle=e.color;c.lineWidth=3;c.beginPath();c.arc(0,0,e.r*(1.2+.8*(1-k)),e.a-1.15,e.a+1.15);c.stroke();c.globalAlpha=k*.55;c.beginPath();c.arc(0,0,e.r*(1.7+.6*(1-k)),e.a-.7,e.a+.7);c.stroke();break;
         case 'guard':c.globalAlpha=k;c.strokeStyle=e.color;c.lineWidth=4;c.beginPath();c.arc(e.x,e.y,e.r,e.a-1.0,e.a+1.0);c.stroke();break;
         case 'victory':{const r=60+(1-k)*e.r;c.globalAlpha=Math.sin((1-k)*Math.PI)*.75;c.fillStyle='#fff2ce';c.beginPath();c.arc(e.x,e.y,r,0,TAU);c.fill();break;}
       }
@@ -1405,6 +1431,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         case 'explode':case 'impact':this.tone(94,.32,'triangle',.3,27);this.tone(157,.14,'sawtooth',.06,45);break;
         case 'hurt':this.tone(210,.15,'square',.13,78);break;
         case 'dash':this.tone(750,.15,'sine',.1,140);break;
+        case 'reflect':this.tone(920,.09,'triangle',.11,1540);this.tone(460,.16,'sine',.07,230,.025);break;
         case 'coin':this.tone(1047,.08,'sine',.08,1319);break;
         case 'drink':this.tone(420,.2,'sine',.1,720);break;
         case 'swap':this.tone(330,.05,'triangle',.08,550);break;
@@ -1587,7 +1614,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
   // 只把真正的手机/平板当作触控端，避免带触摸屏的桌面电脑误显示手机控件。
   const mobileDevice=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||
     (window.matchMedia('(pointer: coarse)').matches&&navigator.maxTouchPoints>0&&Math.max(screen.width,screen.height)<=1024);
-  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';
+  function updateOrientation(){document.documentElement.dataset.orientation=window.matchMedia('(orientation: portrait)').matches?'portrait':'landscape';}
+  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';updateOrientation();
   const handlers=[];const listen=(target,name,fn,options)=>{target.addEventListener(name,fn,options);handlers.push(()=>target.removeEventListener(name,fn,options));};
   function resetInput(){keys.clear();mouseDown=false;input.fire=false;input.mx=0;input.my=0;input.dash=false;input.skill=false;input.drink=false;input.interact=false;input.swap=null;touch.move={x:0,y:0};touch.aim={x:0,y:0};touch.aiming=false;document.querySelectorAll('.joystick i').forEach(el=>el.style.transform='');}
   function coordinates(e){const rect=canvas.getBoundingClientRect();return {x:(e.clientX-rect.left)/rect.width*D.W,y:(e.clientY-rect.top)/rect.height*D.H};}
@@ -1622,16 +1650,17 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     const release=e=>{if(e.pointerId!==pointer)return;pointer=null;knob.style.transform='';if(kind==='move')touch.move={x:0,y:0};else{touch.aim={x:0,y:0};touch.aiming=false;}};
     listen(element,'pointerup',release);listen(element,'pointercancel',release);listen(element,'lostpointercapture',release);
   }
-  stick(document.getElementById('moveStick'),'move');stick(document.getElementById('aimStick'),'aim');
+  stick(document.getElementById('aimStick'),'aim');stick(document.getElementById('moveStick'),'move');
   document.querySelectorAll('[data-touch]').forEach(button=>listen(button,'pointerdown',e=>{if(!mobileDevice)return;e.preventDefault();audio.unlock();if(game.mode!=='playing')return;const action=button.dataset.touch;if(action==='swap')input.swap='next';else input[action]=true;}));
   function collectInput(){
     input.mx=mobileDevice?touch.move.x:((keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0));
     input.my=mobileDevice?touch.move.y:(keys.has('KeyS')||keys.has('ArrowDown')?1:0)-(keys.has('KeyW')||keys.has('ArrowUp')?1:0);
     input.fire=mobileDevice?touch.aiming:mouseDown;input.autoAim=false;
     if(mobileDevice&&touch.aiming&&game.player){input.aimX=game.player.x+touch.aim.x*460;input.aimY=game.player.y+touch.aim.y*460;}
+    if(mobileDevice&&game.mode==='playing'&&game.nearbyInteraction())input.interact=true;
   }
   function fitArena(){if(ui.play.hidden)return;const wrap=arena.parentElement,r=wrap.getBoundingClientRect();let w=Math.min(r.width,r.height*1.6);arena.style.width=`${Math.max(160,w)}px`;arena.style.height=`${Math.max(100,w/1.6)}px`;}
-  const ro=new ResizeObserver(()=>fitArena());ro.observe(arena.parentElement);listen(window,'resize',fitArena);
+  const ro=new ResizeObserver(()=>{fitArena();updateOrientation();});ro.observe(arena.parentElement);listen(window,'resize',()=>{fitArena();updateOrientation();});listen(window,'orientationchange',updateOrientation);
   const eventNames=['run:start','run:end','room:enter','room:clear','floor:enter','boss:defeated','weapon:equipped','relic:acquired','pause','menu'];
   for(const name of eventNames)game.on(name,payload=>{
     if(['pause','menu','room:enter','run:end'].includes(name))resetInput();

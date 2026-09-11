@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.19';
+  DC.VERSION = '0.1.20';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -38,7 +38,7 @@
     ['laptop','满血游戏本',2,'spread',7,0.31,5,610,'tech','laptop','风扇起飞，RGB 弹幕启动。近战全中很强，远射会散。',{pellets:5,spread:0.34,burn:0.8,life:0.85}],
     ['powerbank','共享充电宝',2,'chain',25,0.62,6,0,'electric','battery','押金退不了，电可以放。连锁电弧跳跃三次。',{range:430,jumps:3,jumpRange:145}],
     ['express','最后一公里快递',2,'homing',31,0.62,5,330,'daily','parcel','您的快递已到达怪物脸上。追踪命中小范围爆炸。',{turn:3.8,life:1.8,radius:48}],
-    ['compass','地质罗盘',2,'orbit',14,1.65,10,0,'geo','compass','三枚磁针绕身守护，近身的烦恼都有方向。',{count:3,duration:6,range:94}],
+    ['compass','地质罗盘',2,'orbit',14,1.65,10,0,'geo','compass','三枚磁针绕身守护，可挡下并反弹弹幕，偶尔发射追踪磁针。',{count:3,duration:6,range:94,blockRadius:19}],
     ['rockcore','取芯钻头',2,'shot',31,0.55,4,520,'geo','core','从作业表层，一路钻到知识内核。',{pierce:5,life:1.25,size:7}],
     ['soda','摇过的汽水',2,'wave',28,0.58,4,440,'water','bottle','宽幅汽水浪，穿透敌人，沿途留下潮湿。',{pierce:5,wet:3,life:0.95,size:15}],
     ['canteenstew','食堂大锅菜',2,'wave',33,0.60,4,440,'food','pot','一勺浑厚汤汁横扫前方，留下短暂蒸汽并让敌人减速。',{size:22,pierce:7,slow:1.2,life:1.1,bulletStyle:'steam'}],
@@ -46,9 +46,9 @@
     ['wifi','满格校园网',2,'turret',12,3.0,13,0,'tech','router','部署路由炮台，自动向最近且可见的怪物发包。',{duration:11,rate:0.40,range:430}],
     ['mouse','电竞鼠标',2,'burst',12,0.43,4,780,'tech','mouse','三连点，物理级手速。',{burst:3,delay:0.055,spread:0.025,life:0.85}],
     ['broadcast','校园广播喇叭',2,'wave',34,0.64,4,485,'daily','alarm','下课通知形成宽幅声浪，穿透一排敌人并把它们向后推开。',{size:23,pierce:7,knock:175,life:1.1,bulletStyle:'sound'}],
-    ['seatHolder','图书馆占座伞',2,'orbit',16,1.85,9,0,'study','umbrella','三把占座伞绕身巡逻。部署后切走武器，防线仍会继续工作。',{count:3,duration:7.4,range:106,bulletStyle:'paper'}],
+    ['seatHolder','图书馆占座伞',2,'orbit',16,1.85,9,0,'study','umbrella','三把占座伞绕身巡逻，可挡下并反弹弹幕，部署后切走武器仍会工作。',{count:3,duration:7.4,range:106,blockRadius:20,bulletStyle:'paper'}],
     ['hotpot','宿舍违禁小火锅',3,'lob',59,0.90,8,390,'food','pot','不鼓励违纪，只鼓励把梦里的作业煮熟。',{radius:100,burn:3.8,life:0.85}],
-    ['ppt','八百页 PPT',3,'orbit',19,1.9,12,0,'study','slides','还没讲完，但已经把你围住了。四张幻灯片自动护体。',{count:4,duration:7,range:108}],
+    ['ppt','八百页 PPT',3,'orbit',19,1.9,12,0,'study','slides','还没讲完，但已经把你围住了。四张幻灯片可反弹弹幕并自动发射辅助弹。',{count:4,duration:7,range:108,blockRadius:19}],
     ['deadline','DDL 倒计时',3,'mine',70,1.35,8,0,'study','clock','在准星附近留下倒计时。靠近触发，逾期自动爆炸。',{radius:108,arm:0.65,duration:4,range:340}],
     ['scholarship','奖学金申请表',3,'beam',27,0.40,6,0,'study','certificate','审核过长，激光也很长。直线穿透整排敌人。',{range:940,width:7}],
     ['microscope','偏光显微镜',3,'beam',17,0.25,5,0,'geo','scope','交叉偏光锁定晶体弱点，额外提高暴击率。',{range:760,width:6,crit:0.18}],
@@ -61,7 +61,7 @@
     ['lint','滚筒洗衣机',3,'wave',39,0.58,7,460,'daily','washer','把知识拧干，洗涤波穿透并推开前方敌人。',{size:19,pierce:6,knock:180,wet:2,life:1.0}],
     ['mineral','矿物标本盒',3,'spread',15,0.78,7,540,'geo','mineral','石英、长石、云母齐射；每枚晶片可再穿一只。',{pellets:5,spread:0.46,pierce:1,life:0.9}],
     ['redPen','论文批注红笔',3,'burst',14,0.56,5,790,'study','pen','四连红字批注精准追责；最后一笔更容易打出暴击。',{burst:4,delay:0.055,spread:0.035,pierce:1,crit:0.12,life:0.92,bulletStyle:'ink'}],
-    ['centrifuge','实验室离心机',3,'orbit',22,2.05,13,0,'tech','washer','四枚高速样品管绕身离心，适合贴近敌群后切回主武器输出。',{count:4,duration:8.2,range:119,bulletStyle:'scan'}],
+    ['centrifuge','实验室离心机',3,'orbit',22,2.05,13,0,'tech','washer','四枚高速样品管可挡下并反弹弹幕，还会周期性发射高能扫描弹。',{count:4,duration:8.2,range:119,blockRadius:21,bulletStyle:'scan'}],
     ['quantum','量子游戏本',4,'burst',11,0.43,8,760,'tech','laptop','风扇变成涡轮。五发超频弹，强但吃专注值。',{burst:5,delay:0.045,pierce:1,life:1.0}],
     ['petrel','三维建模工作站',4,'turret',18,3.8,19,0,'geo','station','把敌人也纳入网格：双弹自动建模炮台。',{duration:13,rate:0.78,pellets:2,range:520}],
     ['steam','SAGD 蒸汽双井',4,'spread',15,0.47,7,480,'geo','pipe','双井并行，三束高温蒸汽同时开采梦境。',{pellets:3,spread:0.15,burn:2.2,wet:2,life:1.05,pierce:1}],

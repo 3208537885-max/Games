@@ -11,7 +11,8 @@
   // 只把真正的手机/平板当作触控端，避免带触摸屏的桌面电脑误显示手机控件。
   const mobileDevice=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||
     (window.matchMedia('(pointer: coarse)').matches&&navigator.maxTouchPoints>0&&Math.max(screen.width,screen.height)<=1024);
-  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';
+  function updateOrientation(){document.documentElement.dataset.orientation=window.matchMedia('(orientation: portrait)').matches?'portrait':'landscape';}
+  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';updateOrientation();
   const handlers=[];const listen=(target,name,fn,options)=>{target.addEventListener(name,fn,options);handlers.push(()=>target.removeEventListener(name,fn,options));};
   function resetInput(){keys.clear();mouseDown=false;input.fire=false;input.mx=0;input.my=0;input.dash=false;input.skill=false;input.drink=false;input.interact=false;input.swap=null;touch.move={x:0,y:0};touch.aim={x:0,y:0};touch.aiming=false;document.querySelectorAll('.joystick i').forEach(el=>el.style.transform='');}
   function coordinates(e){const rect=canvas.getBoundingClientRect();return {x:(e.clientX-rect.left)/rect.width*D.W,y:(e.clientY-rect.top)/rect.height*D.H};}
@@ -46,16 +47,17 @@
     const release=e=>{if(e.pointerId!==pointer)return;pointer=null;knob.style.transform='';if(kind==='move')touch.move={x:0,y:0};else{touch.aim={x:0,y:0};touch.aiming=false;}};
     listen(element,'pointerup',release);listen(element,'pointercancel',release);listen(element,'lostpointercapture',release);
   }
-  stick(document.getElementById('moveStick'),'move');stick(document.getElementById('aimStick'),'aim');
+  stick(document.getElementById('aimStick'),'aim');stick(document.getElementById('moveStick'),'move');
   document.querySelectorAll('[data-touch]').forEach(button=>listen(button,'pointerdown',e=>{if(!mobileDevice)return;e.preventDefault();audio.unlock();if(game.mode!=='playing')return;const action=button.dataset.touch;if(action==='swap')input.swap='next';else input[action]=true;}));
   function collectInput(){
     input.mx=mobileDevice?touch.move.x:((keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0));
     input.my=mobileDevice?touch.move.y:(keys.has('KeyS')||keys.has('ArrowDown')?1:0)-(keys.has('KeyW')||keys.has('ArrowUp')?1:0);
     input.fire=mobileDevice?touch.aiming:mouseDown;input.autoAim=false;
     if(mobileDevice&&touch.aiming&&game.player){input.aimX=game.player.x+touch.aim.x*460;input.aimY=game.player.y+touch.aim.y*460;}
+    if(mobileDevice&&game.mode==='playing'&&game.nearbyInteraction())input.interact=true;
   }
   function fitArena(){if(ui.play.hidden)return;const wrap=arena.parentElement,r=wrap.getBoundingClientRect();let w=Math.min(r.width,r.height*1.6);arena.style.width=`${Math.max(160,w)}px`;arena.style.height=`${Math.max(100,w/1.6)}px`;}
-  const ro=new ResizeObserver(()=>fitArena());ro.observe(arena.parentElement);listen(window,'resize',fitArena);
+  const ro=new ResizeObserver(()=>{fitArena();updateOrientation();});ro.observe(arena.parentElement);listen(window,'resize',()=>{fitArena();updateOrientation();});listen(window,'orientationchange',updateOrientation);
   const eventNames=['run:start','run:end','room:enter','room:clear','floor:enter','boss:defeated','weapon:equipped','relic:acquired','pause','menu'];
   for(const name of eventNames)game.on(name,payload=>{
     if(['pause','menu','room:enter','run:end'].includes(name))resetInput();

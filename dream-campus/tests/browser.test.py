@@ -110,7 +110,9 @@ with sync_playwright() as p:
     for width,height,name in [(390,844,'mobile-portrait'),(844,390,'mobile-landscape')]:
         ctx,page=boot(browser,width,height,True);check_layout(page,name+' home overflow');screenshot(page,name+'-home.png')
         page.evaluate("DreamCampus.start({seed:'TOUCH',skipStory:true,character:'early'});__DC_DEBUG__.warp(0,1);__DC_DEBUG__.game.player.invuln=999")
-        page.wait_for_timeout(1500);record(name+' displays both touch joysticks',page.locator('#moveStick').is_visible() and page.locator('#aimStick').is_visible());check_layout(page,name+' arena overflow');screenshot(page,name+'.png')
+        page.wait_for_timeout(1500);record(name+' displays both touch joysticks',page.locator('#moveStick').is_visible() and page.locator('#aimStick').is_visible());record(name+' uses left aim and right move roles',page.locator('#aimStick').evaluate('(e)=>e.getBoundingClientRect().left < document.querySelector("#moveStick").getBoundingClientRect().left'));record(name+' keeps only the dash touch button',page.locator('[data-touch]').count()==1 and page.locator('[data-touch="dash"]').is_visible() and page.locator('[data-touch="skill"]').count()==0);record(name+' identifies touch controls and landscape orientation',page.evaluate("document.documentElement.dataset.controlMode==='touch'&&document.documentElement.dataset.orientation==='landscape'") if name.endswith('landscape') else page.evaluate("document.documentElement.dataset.controlMode==='touch'"));check_layout(page,name+' arena overflow');screenshot(page,name+'.png')
+        if name.endswith('portrait'):
+            record(name+' shows the landscape-required overlay',page.evaluate("getComputedStyle(document.querySelector('.touch-play'),'::before').content.includes('横屏')"));ctx.close();continue
         # Real browser pointer capture with an active touch pointer through CDP.
         cdp=ctx.new_cdp_session(page);r=page.locator('#moveStick').bounding_box();x=r['x']+r['width']/2;y=r['y']+r['height']/2
         before=page.evaluate('__DC_DEBUG__.game.player.x')
@@ -118,7 +120,7 @@ with sync_playwright() as p:
         cdp.send('Input.dispatchTouchEvent',{'type':'touchMove','touchPoints':[{'x':x+22,'y':y,'id':1}]});page.wait_for_timeout(250)
         cdp.send('Input.dispatchTouchEvent',{'type':'touchEnd','touchPoints':[]})
         record(name+' touch joystick changes player position',page.evaluate('__DC_DEBUG__.game.player.x')>before+5)
-        page.locator('[data-touch="skill"]').tap();page.wait_for_timeout(90);record(name+' touch skill button actually fires',page.evaluate('__DC_DEBUG__.game.player.skillCd')>0)
+        before_dash=page.evaluate('__DC_DEBUG__.game.player.dashCd');page.locator('[data-touch="dash"]').tap();page.wait_for_timeout(90);record(name+' touch dash button actually triggers dash',page.evaluate('__DC_DEBUG__.game.player.dashCd')>before_dash)
         page.evaluate("__DC_DEBUG__.game.offerRelics('触屏奖励测试')");screenshot(page,name+'-reward.png')
         record(name+' reward buttons remain reachable',all(v['width']>55 and v['height']>80 for v in page.locator('[data-action="relic"]').evaluate_all('(es)=>es.map(e=>({width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height}))')))
         ctx.close()

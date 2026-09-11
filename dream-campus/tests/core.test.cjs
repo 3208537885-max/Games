@@ -48,6 +48,15 @@ test('Focus recovery, drinking, dash immunity, and per-slot fire cooldowns',()=>
   g.player.invuln=0;g.update(1/60,{mx:1,my:0,dash:true});const hp=g.player.hp;check(!g.hitPlayer(100,{x:1,y:1}));check(g.player.hp===hp);
   g.player.cooldowns=[0,0];g.fire();const cd=g.player.cooldowns[0];g.swap(1);g.swap(0);g.fire();check(g.player.cooldowns[0]===cd);
 });
+test('Orbit weapons block and reflect enemy bullets, then fire auxiliary shots',()=>{
+  const g=game();g.run.inventory[0]={id:'compass',level:0};g.recompute();g.player.x=576;g.player.y=360;
+  g.executeWeapon({...D.WEAPONS.compass,damage:14},g.player,0,{x:900,y:360});g.updateSummons(0);
+  check(g.orbits.length===3&&g.orbits.every(o=>o.blockRadius>=18),'orbit guard field is deployed');
+  g.enemyBullet({x:760,y:360,r:12,damage:10,bulletStyle:'orb'},Math.PI,800);g.updateProjectiles(.10);
+  check(g.bullets.some(b=>b.friendly&&b.reflected&&b.w.bulletStyle==='orbit'),'enemy bullet is reflected into friendly orbit fire');
+  const target=dummy(g,730,360);g.updateSummons(1.1);
+  check(g.bullets.some(b=>b.friendly&&b.w.bulletStyle==='orbit'&&b.w.type==='homing'),'orbit emits a periodic auxiliary projectile');
+});
 test('All 62 weapons create real damage with their actual engine behavior',()=>{
   for(const w of Object.values(D.WEAPONS)){
     const g=game();g.run.inventory[0]={id:w.id,level:0};g.recompute();g.stats.crit=0;g.player.x=350;g.player.y=360;g.player.invuln=999;

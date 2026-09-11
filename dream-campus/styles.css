@@ -7,6 +7,13 @@
 @media(max-height:570px) and (orientation:landscape){.play{padding:3px 10px}.play-header{height:34px}.hud-top{height:24px;margin:0 auto 4px;max-width:840px}.play-header{max-width:930px}.hud-bottom{height:41px;margin-top:4px;max-width:890px}.weapon-slot{min-width:148px;padding:2px 7px 2px 3px}.weapon-slot .weapon-icon{height:31px;width:33px}.weapon-slot .weapon-icon svg{width:30px;height:30px}.weapon-slot h4{font-size:9px;margin-bottom:2px}.weapon-slot p{font-size:8px}.control-strip{display:none}.ability-panel{font-size:8px}.mini-map{width:82px;top:6px;right:7px}.joystick{width:83px;height:83px;bottom:14px}.joystick i{width:33px;height:33px;top:23px;left:23px}.joystick span{font-size:7px;bottom:6px}.move-stick{left:18px}.aim-stick{right:18px}.touch-buttons{bottom:12px;gap:6px}.touch-buttons button{width:36px;height:36px;font-size:9px}.banner{top:25%;padding:10px 20px}.banner strong{font-size:17px}.banner small{font-size:9px}.modal{max-height:calc(100dvh - 24px)}.overlay{padding:12px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.confetti-field{display:none}}
 
+/* v0.1.20: touch controls are landscape-only and mirror the player's roles. */
+html[data-control-mode="touch"] .touch-play .aim-stick{left:25px;right:auto}
+html[data-control-mode="touch"] .touch-play .move-stick{right:25px;left:auto}
+html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::before{content:"请将手机横屏后开始游戏";position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:#10281fee;color:#e8edcf;font-size:18px;font-weight:800;text-align:center;letter-spacing:.04em;pointer-events:auto}
+html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::after{content:"旋转设备后即可开始";position:absolute;inset:54% 0 auto;text-align:center;z-index:31;color:#abc09c;font-size:11px;pointer-events:none}
+@media (pointer:coarse) and (orientation:landscape){html[data-control-mode="touch"] .touch-play .aim-stick{left:18px;right:auto}html[data-control-mode="touch"] .touch-play .move-stick{right:18px;left:auto}}
+
 html[data-embedded="true"] .home-header{height:70px}html[data-embedded="true"] .home-footer>span{display:none}
 
 /* 操作模式由设备类型决定，而不是单看 pointer:coarse，避免桌面触摸屏显示手机 UI。 */
