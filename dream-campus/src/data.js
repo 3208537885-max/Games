@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.21';
+  DC.VERSION = '0.1.22';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -131,6 +131,15 @@
     {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:4620,mobs:['paper','slime','rollcall','charger','printer','elective']},
     {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:9265,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner','captcha']},
     {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb','queue']}
+  ];
+  // Infinite mode reuses the three boss bodies but gives each run a distinct identity and attack pool.
+  DC.INFINITE_BOSSES = [
+    {id:'巡回点名官',kind:'ta',name:'巡回点名官 · 走廊监察',quote:'“我点到谁，谁就别想下课。”',patterns:[0,1,2,4,5]},
+    {id:'答辩投影师',kind:'ta',name:'答辩投影师 · 第 99 页',quote:'“这张图很简单，我们再看三十分钟。”',patterns:[1,2,3,4,5]},
+    {id:'夜宵调度长',kind:'chef',name:'夜宵调度长 · 加餐警报',quote:'“再来一勺，看看你还能躲几次。”',patterns:[0,1,2,4,6]},
+    {id:'取餐码审判官',kind:'chef',name:'取餐码审判官 · 过号重排',quote:'“你的号码已经过期，攻击也一样。”',patterns:[1,2,3,4,5,6]},
+    {id:'教务终审官',kind:'principal',name:'教务终审官 · 红章无尽',quote:'“材料不全，重打；弹幕不够，再来。”',patterns:[0,1,2,4,5,7,8]},
+    {id:'毕业延期体',kind:'principal',name:'毕业延期体 · 无限补交',quote:'“最后一个学分，永远是下一个。”',patterns:[0,2,3,5,6,7,8]}
   ];
   DC.ENEMIES = {
     paper:{name:'会跑的作业',hp:38,speed:93,r:15,color:'#eee3b6',cost:1,behavior:'chase',damage:10},

@@ -71,7 +71,7 @@ create table if not exists public.game_scores (
 
 alter table public.game_scores add column if not exists difficulty text not null default 'normal';
 alter table public.game_scores drop constraint if exists game_scores_difficulty_check;
-alter table public.game_scores add constraint game_scores_difficulty_check check (difficulty in ('low', 'normal', 'high'));
+alter table public.game_scores add constraint game_scores_difficulty_check check (difficulty in ('low', 'normal', 'high', 'infinite'));
 alter table public.game_scores drop constraint if exists game_scores_pkey;
 alter table public.game_scores add constraint game_scores_pkey primary key (user_id, game_slug, difficulty);
 alter table public.game_scores enable row level security;
@@ -108,7 +108,7 @@ begin
     raise exception 'invalid game slug';
   end if;
 
-  if p_difficulty is null or p_difficulty not in ('low', 'normal', 'high') then
+  if p_difficulty is null or p_difficulty not in ('low', 'normal', 'high', 'infinite') then
     raise exception 'invalid difficulty';
   end if;
 
@@ -160,7 +160,7 @@ as $$
       and (
         (game_slug = 'snake' and difficulty = 'high')
         or (game_slug in ('tetris', '2048', 'breakout') and difficulty = 'normal')
-        or (game_slug = 'dream-campus' and difficulty = 'high')
+        or (game_slug = 'dream-campus' and difficulty = 'infinite')
       )
   ),
   game_leaders as (

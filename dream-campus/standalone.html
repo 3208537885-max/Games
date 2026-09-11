@@ -94,12 +94,12 @@ html[data-control-mode="touch"] .control-strip{display:none!important}
         <div class="enroll-heading"><div><span class="eyebrow">CHOOSE YOUR SURVIVOR</span><h2>今天，替谁醒来？</h2></div><span class="minor-text" id="bestLabel">你的冒险，从第一节水课开始。</span></div>
         <div id="characterCards" class="character-cards"></div>
         <div class="start-row">
-          <div class="run-options"><label class="field-label" for="difficulty">本次课业强度</label><select id="difficulty" aria-label="选择游戏难度"><option value="chill">轻松旁听</option><option value="normal" selected>正常修读</option><option value="nightmare">期末噩梦</option></select><label class="field-label seed-label" for="seed">梦境种子</label><input id="seed" maxlength="40" placeholder="留空随机，可输入相同种子复玩" autocomplete="off" spellcheck="false"></div>
+          <div class="run-options"><label class="field-label" for="gameMode">游戏模式</label><select id="gameMode" aria-label="选择游戏模式"><option value="story" selected>剧情模式</option><option value="infinite">无限模式 · 计分</option></select><label class="field-label" for="difficulty">本次课业强度</label><select id="difficulty" aria-label="选择游戏难度"><option value="chill">轻松旁听</option><option value="normal" selected>正常修读</option><option value="nightmare">期末噩梦</option></select><label class="field-label seed-label" for="seed">梦境种子</label><input id="seed" maxlength="40" placeholder="留空随机，可输入相同种子复玩" autocomplete="off" spellcheck="false"></div>
           <div class="start-buttons"><button id="continueBtn" class="button secondary" data-action="load" hidden>继续上次的梦</button><button class="button primary" id="startBtn" data-action="start">进入梦境 <span aria-hidden="true">↗</span></button></div>
         </div>
-        <div class="enroll-bottom"><span id="difficultyDesc">标准数值；注意预警、灵活换武器即可。</span><label id="graduateChoice" hidden><input type="checkbox" id="graduate"> 携带通关奖励「毕业证发射器」</label></div>
+        <div class="enroll-bottom"><span id="difficultyDesc">剧情三章；注意预警、灵活换武器即可。</span><label id="graduateChoice" hidden><input type="checkbox" id="graduate"> 携带通关奖励「毕业证发射器」</label></div>
       </section>
-      <footer class="home-footer"><div class="footer-links"><button data-action="guide">新生指南</button><button data-action="catalog">武器图鉴</button><button data-action="meta">梦醒之后 · 成长与记录</button></div><span>原创校园梦境 · 单人冒险 · v0.1.21</span></footer>
+      <footer class="home-footer"><div class="footer-links"><button data-action="guide">新生指南</button><button data-action="catalog">武器图鉴</button><button data-action="meta">梦醒之后 · 成长与记录</button></div><span>原创校园梦境 · 单人冒险 · v0.1.22</span></footer>
     </main>
     <main id="viewPlay" class="play" hidden aria-label="水课梦魇游戏界面">
       <header class="play-header"><button class="brand small" data-action="pause" aria-label="暂停游戏"><span class="brand-mark">梦</span><span>水课梦魇 <small id="chapterLabel">教学楼 · 01</small></span></button><div class="run-label"><span id="roomLabel">起点</span><b id="coinsLabel">15</b><span class="coin-unit">学分币</span></div><div class="play-actions"><button class="icon-button" data-action="map" aria-label="查看地图 M">地图 <kbd>M</kbd></button><button class="icon-button" data-action="inventory" aria-label="查看背包 Tab">背包 <kbd>Tab</kbd></button><button class="icon-button" data-action="pause" aria-label="暂停 Escape">暂停 <kbd>Esc</kbd></button></div></header>
@@ -136,7 +136,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.21';
+  DC.VERSION = '0.1.22';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -265,6 +265,15 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:4620,mobs:['paper','slime','rollcall','charger','printer','elective']},
     {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:9265,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner','captcha']},
     {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb','queue']}
+  ];
+  // Infinite mode reuses the three boss bodies but gives each run a distinct identity and attack pool.
+  DC.INFINITE_BOSSES = [
+    {id:'巡回点名官',kind:'ta',name:'巡回点名官 · 走廊监察',quote:'“我点到谁，谁就别想下课。”',patterns:[0,1,2,4,5]},
+    {id:'答辩投影师',kind:'ta',name:'答辩投影师 · 第 99 页',quote:'“这张图很简单，我们再看三十分钟。”',patterns:[1,2,3,4,5]},
+    {id:'夜宵调度长',kind:'chef',name:'夜宵调度长 · 加餐警报',quote:'“再来一勺，看看你还能躲几次。”',patterns:[0,1,2,4,6]},
+    {id:'取餐码审判官',kind:'chef',name:'取餐码审判官 · 过号重排',quote:'“你的号码已经过期，攻击也一样。”',patterns:[1,2,3,4,5,6]},
+    {id:'教务终审官',kind:'principal',name:'教务终审官 · 红章无尽',quote:'“材料不全，重打；弹幕不够，再来。”',patterns:[0,1,2,4,5,7,8]},
+    {id:'毕业延期体',kind:'principal',name:'毕业延期体 · 无限补交',quote:'“最后一个学分，永远是下一个。”',patterns:[0,2,3,5,6,7,8]}
   ];
   DC.ENEMIES = {
     paper:{name:'会跑的作业',hp:38,speed:93,r:15,color:'#eee3b6',cost:1,behavior:'chase',damage:10},
@@ -504,7 +513,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       const inventory=[{id:character.starter,level:0},{id:character.secondary,level:0}];
       if(options.graduate&&this.meta.wins>0)inventory[0]={id:'diploma',level:0};
       const stats=D.makeStats(character.id,[],inventory,this.meta.upgrades);
-      this.run={schema:1,version:D.VERSION,seed,character:character.id,difficulty,metaUpgrades:{...this.meta.upgrades},floor:0,roomId:0,floors:[0,1,2].map(f=>D.generateFloor(seed,f)),inventory,relics:[],selected:0,coins:15,score:0,kills:0,clears:0,bosses:0,elapsed:0,pending:null,usedRevive:false,ended:false,
+      const infinite=options.mode==='infinite';
+      this.run={schema:1,version:D.VERSION,seed,character:character.id,difficulty,mode:infinite?'infinite':'story',infiniteLayer:infinite?1:0,metaUpgrades:{...this.meta.upgrades},floor:0,roomId:0,floors:[0,1,2].map(f=>D.generateFloor(seed,f)),inventory,relics:[],selected:0,coins:15,score:0,kills:0,clears:0,bosses:0,elapsed:0,pending:null,usedRevive:false,ended:false,
         player:{x:W/2,y:H/2,r:16,hp:stats.maxHp,shield:stats.maxShield,energy:stats.maxEnergy,invuln:0,hitAgo:9,dashTime:0,dashCd:0,skillCd:0,drinkTime:0,drinkCd:0,cooldowns:[0,0],a:0,dx:0,dy:0}};
       this.stats=stats;this.rng=new RNG(seed+'/combat');this.visualRng=new RNG(seed+'/visual');this.mode='story';this.resetTransient();this.call('close');
       for(const w of inventory)this.discover(w.id);
@@ -513,11 +523,15 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       else this.call('story',D.STORY,()=>this.beginFloor());
       return this.snapshot();
     }
-    beginFloor(){this.mode='playing';this.enterRoom(0,null);const f=D.FLOORS[this.run.floor];this.call('banner',f.name,f.subtitle);this.emit('floor:enter',{floor:this.run.floor+1,name:f.short});}
+    beginFloor(){this.mode='playing';this.enterRoom(0,null);const f=D.FLOORS[this.run.floor];const layer=this.run.mode==='infinite'?` · 无限第 ${this.run.infiniteLayer} 层`:'';this.call('banner',f.name+layer,f.subtitle);this.emit('floor:enter',{floor:this.run.floor+1,name:f.short,mode:this.run.mode,layer:this.run.infiniteLayer||0});}
     get room(){return this.run?.floors[this.run.floor].rooms[this.run.roomId];}
     get player(){return this.run?.player;}
     get weapon(){return this.run?D.WEAPONS[this.run.inventory[this.run.selected].id]:D.WEAPONS.waterbook;}
     get difficulty(){return D.DIFFICULTIES[this.run?.difficulty||'normal'];}
+    infiniteScale(){
+      const steps=this.run?.mode==='infinite'?Math.max(0,(this.run.infiniteLayer||1)-1):0;
+      return {enemyHp:Math.pow(1.1,steps),enemyDamage:Math.pow(1.1,steps),enemyCount:Math.pow(1.1,steps),bossHp:Math.pow(1.2,steps),bullet:Math.pow(1.1,steps)};
+    }
     recompute(){if(!this.run)return;this.stats=D.makeStats(this.run.character,this.run.relics,this.run.inventory,this.run.metaUpgrades||{});const p=this.player;p.hp=Math.min(p.hp,this.stats.maxHp);p.shield=Math.min(p.shield,this.stats.maxShield);p.energy=Math.min(p.energy,this.stats.maxEnergy);}
     discover(id){if(!this.meta.discovered.includes(id)){this.meta.discovered.push(id);this.storage.write('meta',this.meta);}}
     save(){if(this.run&&!this.run.ended){this.run.checkpoint='room-boundary';return this.storage.write('run',this.run);}return false;}
@@ -525,7 +539,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     load(){
       const r=this.storage.read('run',null);
       try{
-        if(!r||r.schema!==1||r.ended||!Array.isArray(r.floors)||r.floors.length!==3||!D.CHARACTERS.some(c=>c.id===r.character)||!D.DIFFICULTIES[r.difficulty]||!Array.isArray(r.inventory)||r.inventory.length!==2||r.inventory.some(w=>!D.WEAPONS[w.id])||!r.player||!Number.isFinite(r.player.hp)||r.player.hp<=0||!r.floors[r.floor]?.rooms[r.roomId])throw Error('无效或不兼容的房间存档');
+        if(!r||r.schema!==1||r.ended||!Array.isArray(r.floors)||r.floors.length!==3||!D.CHARACTERS.some(c=>c.id===r.character)||!D.DIFFICULTIES[r.difficulty]||!['story','infinite'].includes(r.mode||'story')||!Number.isInteger(r.infiniteLayer||0)||r.infiniteLayer<0||!Array.isArray(r.inventory)||r.inventory.length!==2||r.inventory.some(w=>!D.WEAPONS[w.id])||!r.player||!Number.isFinite(r.player.hp)||r.player.hp<=0||!r.floors[r.floor]?.rooms[r.roomId])throw Error('无效或不兼容的房间存档');
         if(r.floors.some(f=>!Array.isArray(f.rooms)||f.rooms.some(x=>!x.doors)))throw Error('地图数据不完整');
         if(typeof r.seed!=='string'||r.seed.length>40||![0,1,2].includes(r.floor)||![0,1].includes(r.selected)||!Number.isInteger(r.roomId))throw Error('存档基本字段无效');
         for(const k of ['shield','energy','hitAgo','dashCd','skillCd','drinkCd'])if(!Number.isFinite(r.player[k])||r.player[k]<0)throw Error('角色状态无效');
@@ -559,7 +573,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         this.call('banner',r.type==='elite'?'选修挑战 · 精英房':'梦境封锁',r.type==='elite'?'危险更高，遗物与武器奖励也更好。':'清理敌人后，出口会重新开启。');
       }else if(r.type==='boss'){
         this.combatStarted=true;this.totalWaves=1;this.wave=1;
-        this.spawnBoss(D.FLOORS[this.run.floor].boss);
+        const config=this.run.mode==='infinite'?this.infiniteBossConfig():D.FLOORS[this.run.floor];
+        this.spawnBoss(config.boss||config.kind,config);
       }else r.cleared=true;
       this.mode='playing';
       if(!loading)this.save();
@@ -576,20 +591,25 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     }
     spawn(kind,x,y,extra={}){
       const def=D.ENEMIES[kind];if(!def||this.enemies.filter(e=>!e.dead).length>=26)return null;
-      const hp=def.hp*D.FLOORS[this.run.floor].baseHp*this.difficulty.enemyHp*(extra.elite?1.75:1);
+      const hp=def.hp*D.FLOORS[this.run.floor].baseHp*this.difficulty.enemyHp*this.infiniteScale().enemyHp*(extra.elite?1.75:1);
       const e={id:++this.uid,kind,...def,x,y,hp,maxHp:hp,a:0,age:0,spawnTime:.80,cooldown:this.rng.next()*1.0+1.5,stun:0,slow:0,wet:0,burn:0,burnDps:0,burnTick:0,flash:0,summons:0,bounty:true,windup:0,chargeTime:0,...extra};
       this.enemies.push(e);return e;
     }
     spawnWave(){
       this.wave++;const f=this.run.floor,r=this.room;
-      let budget=(3.3+f*2.0+r.depth*.35)*(r.type==='elite'?1.25:1);
-      let n=0;while(budget>.6&&n<8){const pool=D.FLOORS[f].mobs.filter(k=>D.ENEMIES[k].cost<=budget+.2);const kind=this.rng.pick(pool.length?pool:['paper']),pos=this.pointFarFromPlayer(D.ENEMIES[kind].r,260);const elite=r.type==='elite'&&n===0;this.spawn(kind,pos.x,pos.y,{elite});budget-=D.ENEMIES[kind].cost*(elite?1.5:1);n++;}
+      const scale=this.infiniteScale();let budget=(3.3+f*2.0+r.depth*.35)*(r.type==='elite'?1.25:1)*scale.enemyCount;
+      let n=0;const maxEnemies=Math.min(26,Math.ceil(8*scale.enemyCount));while(budget>.6&&n<maxEnemies){const pool=D.FLOORS[f].mobs.filter(k=>D.ENEMIES[k].cost<=budget+.2);const kind=this.rng.pick(pool.length?pool:['paper']),pos=this.pointFarFromPlayer(D.ENEMIES[kind].r,260);const elite=r.type==='elite'&&n===0;this.spawn(kind,pos.x,pos.y,{elite});budget-=D.ENEMIES[kind].cost*(elite?1.5:1);n++;}
       this.call('toast',`第 ${this.wave} / ${this.totalWaves} 波 · 先躲预警，再找输出机会`);this.sound.play('wave');
     }
-    spawnBoss(kind){
-      const baseHp=D.FLOORS[this.run.floor].bossHp*(this.difficulty.bossHp||1);
-      const hp=this.run.floor===2?Math.min(baseHp,this.difficulty.finalBossCap||Infinity):baseHp;
-      const e={id:++this.uid,kind,boss:true,x:W/2,y:280,r:kind==='principal'?37:34,hp,maxHp:hp,a:Math.PI/2,age:0,spawnTime:1,cooldown:2.2,stage:1,pattern:0,stun:0,slow:0,wet:0,burn:0,burnDps:0,burnTick:0,flash:0,windup:0,bounty:true,phasePause:0,damage:18,color:kind==='ta'?'#d1afdf':kind==='chef'?'#efc780':'#eb9db5'};
+    infiniteBossConfig(){
+      const pool=D.INFINITE_BOSSES,seed=`${this.run.seed}/boss/${this.run.infiniteLayer}`;
+      return new RNG(seed).pick(pool);
+    }
+    spawnBoss(kind,config=D.FLOORS[this.run.floor]){
+      const scale=this.infiniteScale(),baseHp=D.FLOORS[this.run.floor].bossHp*(this.difficulty.bossHp||1),rawHp=baseHp*(this.run.mode==='infinite'?scale.bossHp:1);
+      const hp=this.run.mode==='infinite'?rawHp:(this.run.floor===2?Math.min(rawHp,this.difficulty.finalBossCap||Infinity):rawHp);
+      const patterns=config.patterns||Array.from({length:kind==='ta'?6:kind==='chef'?7:9},(_,i)=>i);
+      const e={id:++this.uid,kind,boss:true,bossName:config.bossName||config.name,bossQuote:config.bossQuote||config.quote,x:W/2,y:280,r:kind==='principal'?37:34,hp,maxHp:hp,a:Math.PI/2,age:0,spawnTime:1,cooldown:2.2,stage:1,pattern:0,patternOrder:this.rng.shuffle(patterns.slice()),stun:0,slow:0,wet:0,burn:0,burnDps:0,burnTick:0,flash:0,windup:0,bounty:true,phasePause:0,damage:18,color:config.color|| (kind==='ta'?'#d1afdf':kind==='chef'?'#efc780':'#eb9db5')};
       this.enemies.push(e);this.boss=e;return e;
     }
     schedule(delay,fn,owner=null,friendly=false){this.jobs.push({t:delay,fn,owner,friendly});}
@@ -606,7 +626,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     }
     update(dt,input=this.input){
       dt=clamp(dt,0,1/30);this.clock+=dt;
-      if(this.mode==='winning'){this.updateEffects(dt);this.cinematicTime-=dt;if(this.cinematicTime<=0)this.finish(true);return;}
+      if(this.mode==='winning'){this.updateEffects(dt);this.cinematicTime-=dt;if(this.cinematicTime<=0){if(this.run?.mode==='infinite')this.advanceInfiniteLayer();else this.finish(true);}return;}
       if(this.mode!=='playing')return;
       this.input=input;this.time+=dt;this.run.elapsed+=dt;this.roomTime+=dt;this.transition=Math.max(0,this.transition-dt);this.updateEffects(dt);
       this.updatePlayer(dt,input);
@@ -725,10 +745,10 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     }
     enemyBullet(e,a,speed=185,props={}){
       if(this.bullets.filter(b=>!b.friendly).length>=240)return;
-      const v=speed*this.difficulty.bulletSpeed;
+      const scale=this.infiniteScale(),v=speed*this.difficulty.bulletSpeed*scale.bullet;
       const {__wave=false,...bulletProps}=props;
-      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,color:'#fa897f',bulletStyle:e.bulletStyle||'orb',...bulletProps};
-      const density=Math.max(1,Number(this.difficulty.bulletDensity)||1),count=Math.floor(density)+(this.rng.next()<density%1?1:0);
+      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage*scale.enemyDamage,color:'#fa897f',bulletStyle:e.bulletStyle||'orb',...bulletProps};
+      const density=Math.max(1,Number(this.difficulty.bulletDensity)||1)*scale.bullet,count=Math.floor(density)+(this.rng.next()<density%1?1:0);
       // 轻松旁听增加同一轮弹幕的数量，并用小角度散开，避免只靠提高速度制造难度。
       for(let i=0;i<count;i++){
         if(this.bullets.filter(b=>!b.friendly).length>=240)break;
@@ -754,7 +774,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         if(e.behavior==='strafe'&&D.los(e,p,this.obstacles)){const a=e.a+Math.PI/2,radial=d>310?1:d<210?-1:0;v={x:Math.cos(a)*.8+Math.cos(e.a)*radial*.6,y:Math.sin(a)*.8+Math.sin(e.a)*radial*.6};}
         D.moveEntity(e,v.x*speed*dt,v.y*speed*dt,this.obstacles);
       }
-      if(d<p.r+e.r+3&&e.behavior!=='bomb')this.hitPlayer(e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,e);
+      if(d<p.r+e.r+3&&e.behavior!=='bomb')this.hitPlayer(e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage*this.infiniteScale().enemyDamage,e);
       if(e.cooldown>0||e.windup>0||e.chargeTime>0)return;
       switch(e.behavior){
         case 'shoot':case 'fan':case 'strafe':case 'guard':{
@@ -769,10 +789,10 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
           this.enemyWindup(e,.62,()=>{e.chargeTime=.82;e.chargeX=Math.cos(a);e.chargeY=Math.sin(a);this.sound.play('charge');});break;
         }
         case 'slam':{
-          if(d>165){e.cooldown=.35;break;}e.cooldown=3.0;this.warnCircle(e.x,e.y,126,.85,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,e);this.enemyWindup(e,.85,()=>this.sound.play('impact'));break;
+          if(d>165){e.cooldown=.35;break;}e.cooldown=3.0;this.warnCircle(e.x,e.y,126,.85,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage*this.infiniteScale().enemyDamage,e);this.enemyWindup(e,.85,()=>this.sound.play('impact'));break;
         }
         case 'bomb':{
-          if(d>108){e.cooldown=.15;break;}e.cooldown=10;this.warnCircle(e.x,e.y,114,.80,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,null);this.enemyWindup(e,.78,()=>this.killEnemy(e));break;
+          if(d>108){e.cooldown=.15;break;}e.cooldown=10;this.warnCircle(e.x,e.y,114,.80,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage*this.infiniteScale().enemyDamage,null);this.enemyWindup(e,.78,()=>this.killEnemy(e));break;
         }
         case 'summon':{
           e.cooldown=4.9;if(e.summons<4&&this.enemies.length<14){this.enemyWindup(e,.9,()=>{for(let i=0;i<2;i++){const pos=this.pointFarFromPlayer(15,170);this.spawn('paper',pos.x,pos.y,{bounty:false});e.summons++;}});}
@@ -793,14 +813,14 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       const targetStage=e.hp/e.maxHp<.32?3:e.hp/e.maxHp<.66?2:1;
       if(targetStage>e.stage){
         e.stage=targetStage;e.phasePause=1.3;e.cooldown=1.8;this.bullets=this.bullets.filter(b=>b.friendly);this.hazards=[];this.jobs=this.jobs.filter(j=>j.friendly);this.shake=9;
-        this.fx('pulse',{x:e.x,y:e.y,r:260,color:e.color},.7);this.call('banner',`${D.FLOORS[f].bossName} · 第 ${e.stage} 阶段`,e.kind==='principal'?['','正式答辩','绩点评估 · 注意盖章预警','毕业审判 · 环形弹幕有缺口'][e.stage]:'换题了。别慌，攻击前仍然会给出预警。');this.sound.play('phase');
+        this.fx('pulse',{x:e.x,y:e.y,r:260,color:e.color},.7);this.call('banner',`${e.bossName||D.FLOORS[f].bossName} · 第 ${e.stage} 阶段`,e.kind==='principal'?['','正式答辩','绩点评估 · 注意盖章预警','毕业审判 · 环形弹幕有缺口'][e.stage]:'换题了。别慌，攻击前仍然会给出预警。');this.sound.play('phase');
       }
       if(e.phasePause>0){e.phasePause-=dt;return;}if(e.stun>0)return;
       const tx=W/2+Math.sin(e.age*.42)*210,ty=292+Math.sin(e.age*.61)*30,d=Math.hypot(tx-e.x,ty-e.y)||1;
       if(e.windup<=0)D.moveEntity(e,(tx-e.x)/d*42*dt,(ty-e.y)/d*42*dt,this.obstacles);
-      if(dist(e,p)<e.r+p.r+4)this.hitPlayer(18*this.difficulty.enemyDamage,e);
-      e.cooldown-=dt;if(e.cooldown>0)return;e.cooldown=Math.max(1.5,2.6-.25*e.stage);const pattern=e.pattern++;
-      const damage=(14+f*2)*this.difficulty.enemyDamage,baseA=e.a;
+      if(dist(e,p)<e.r+p.r+4)this.hitPlayer(18*this.difficulty.enemyDamage*this.infiniteScale().enemyDamage,e);
+      e.cooldown-=dt;if(e.cooldown>0)return;e.cooldown=Math.max(1.5,2.6-.25*e.stage);const pattern=e.patternOrder[e.pattern++%e.patternOrder.length];
+      const damage=(14+f*2)*this.difficulty.enemyDamage*this.infiniteScale().enemyDamage,baseA=e.a;
       const ring=(n,speed,phase,gap=2)=>{for(let i=0;i<n;i++)if(i>=gap)this.enemyBullet(e,phase+i*TAU/n,speed,{r:6});};
       if(e.kind==='ta'){
         switch(pattern%6){
@@ -969,8 +989,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       }
       if(e.boss){
         this.run.bosses++;this.room.bossDown=true;for(const other of this.enemies)if(other!==e)other.dead=true;this.bullets=[];this.hazards=[];this.jobs=[];this.turrets=[];this.orbits=[];this.mines=[];this.boss=null;this.shake=15;
-        this.emit('boss:defeated',{boss:e.kind,floor:this.run.floor+1});
-        if(this.run.floor===2){this.room.cleared=true;this.run.clears++;this.mode='winning';this.cinematicTime=2.2;this.fx('victory',{x:e.x,y:e.y,r:1400,color:'#ffe6a1'},2.2);this.call('banner','最后一个学分 · 已取得','梦正在散去。下课铃终于响了。');}
+        this.emit('boss:defeated',{boss:e.kind,name:e.bossName||D.FLOORS[this.run.floor].bossName,floor:this.run.floor+1,mode:this.run.mode,layer:this.run.infiniteLayer||0});
+        if(this.run.mode==='infinite'||this.run.floor===2){this.room.cleared=true;this.run.clears++;this.mode='winning';this.cinematicTime=2.2;this.fx('victory',{x:e.x,y:e.y,r:1400,color:'#ffe6a1'},2.2);this.call('banner',this.run.mode==='infinite'?`无限第 ${this.run.infiniteLayer} 层 · 已突破`:'最后一个学分 · 已取得',this.run.mode==='infinite'?'下一层攻击、生命与弹幕强度将提升。':'梦正在散去。下课铃终于响了。');}
       }
     }
     hitPlayer(amount,source){
@@ -1058,7 +1078,13 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       else if(p.x<PAD+45&&Math.abs(p.y-H/2)<68&&input.mx<-.1)this.transitionRoom('W');
       else if(p.x>W-PAD-45&&Math.abs(p.y-H/2)<68&&input.mx>.1)this.transitionRoom('E');
     }
-    nextFloor(){if(!this.portal||this.run.floor>=2||this.mode!=='playing')return;this.run.floor++;this.run.roomId=0;this.player.energy=this.stats.maxEnergy;this.player.shield=this.stats.maxShield;this.beginFloor();this.sound.play('portal');}
+    advanceInfiniteLayer(){
+      if(!this.run||this.run.mode!=='infinite')return;
+      this.run.infiniteLayer=(this.run.infiniteLayer||1)+1;this.run.floor=(this.run.floor+1)%3;this.run.roomId=0;
+      this.run.floors[this.run.floor]=D.generateFloor(`${this.run.seed}/infinite/${this.run.infiniteLayer}`,this.run.floor);
+      this.player.energy=this.stats.maxEnergy;this.player.shield=this.stats.maxShield;this.heal(Math.ceil(this.stats.maxHp*.12));this.portal=false;this.beginFloor();this.sound.play('portal');this.save();
+    }
+    nextFloor(){if(!this.portal||this.mode!=='playing')return;if(this.run.mode==='infinite'){this.advanceInfiniteLayer();return;}if(this.run.floor>=2)return;this.run.floor++;this.run.roomId=0;this.player.energy=this.stats.maxEnergy;this.player.shield=this.stats.maxShield;this.beginFloor();this.sound.play('portal');}
     getShop(){
       const r=this.room;if(!r.shop){const rng=new RNG(`${this.run.seed}/${this.run.floor}/${r.id}/shop`);const a=D.rollWeapon(rng,this.run.floor,1,null,this.meta.wins>0),b=D.rollWeapon(rng,this.run.floor,Math.min(3,this.run.floor+2),null,this.meta.wins>0);r.shop=[{type:'weapon',id:a.id,sold:false},{type:'weapon',id:b.id,sold:false},{type:'heal',sold:false},{type:'relic',sold:false}];}
       return r.shop.map((item,index)=>({...item,index,price:this.shopPrice(item)}));
@@ -1097,15 +1123,15 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     returnToMenu(){this.mode='menu';this.call('close');this.call('menu');this.emit('menu',{});}
     finish(won){
       if(!this.run||this.run.ended)return;this.run.ended=true;this.run.won=won;this.mode=won?'victory':'dead';
-      const bonus=won?Math.max(0,Math.round(900-this.run.elapsed*.3)):0;this.run.score=Math.round((this.run.score+this.run.coins+bonus)*this.difficulty.reward);
+      const bonus=won?Math.max(0,Math.round(900-this.run.elapsed*.3)):0;const infiniteBonus=this.run.mode==='infinite'?Math.round((this.run.infiniteLayer||1)*1000):0;this.run.score=Math.round((this.run.score+this.run.coins+bonus+infiniteBonus)*this.difficulty.reward);
       const inspiration=Math.round((this.run.clears*2+this.run.bosses*6+(won?25:3))*this.difficulty.reward);this.run.inspiration=inspiration;
       this.meta.runs++;if(won)this.meta.wins++;this.meta.best=Math.max(this.meta.best,this.run.score);this.meta.inspiration+=inspiration;
       this.meta.history.unshift({won,score:this.run.score,seed:this.run.seed,difficulty:this.run.difficulty,character:this.run.character,elapsed:Math.round(this.run.elapsed),date:new Date().toISOString()});this.meta.history=this.meta.history.slice(0,10);
-      if(won)this.discover('diploma');this.storage.write('meta',this.meta);this.storage.remove('run');this.call('close');this.call(won?'victory':'gameOver');this.emit('run:end',{won,score:this.run.score,inspiration,seed:this.run.seed,seconds:Math.round(this.run.elapsed),difficulty:this.run.difficulty});
+      if(won)this.discover('diploma');this.storage.write('meta',this.meta);this.storage.remove('run');this.call('close');this.call(won?'victory':'gameOver');this.emit('run:end',{won,score:this.run.score,inspiration,seed:this.run.seed,seconds:Math.round(this.run.elapsed),difficulty:this.run.difficulty,mode:this.run.mode,layer:this.run.infiniteLayer||0});
     }
     buyMeta(type){if(!['health','focus','shield'].includes(type)||this.mode!=='menu')return false;const level=this.meta.upgrades[type]||0,price=18+level*16;if(level>=3||this.meta.inspiration<price)return false;this.meta.inspiration-=price;this.meta.upgrades[type]=level+1;this.storage.write('meta',this.meta);this.sound.play('reward');return true;}
     setSetting(key,value){if(!Object.hasOwn(this.meta.settings,key))return false;if(key==='volume')value=clamp(Number(value)||0,0,1);else value=!!value;this.meta.settings[key]=value;this.storage.write('meta',this.meta);return true;}
-    snapshot(){return this.run?JSON.parse(JSON.stringify({mode:this.mode,seed:this.run.seed,difficulty:this.run.difficulty,character:this.run.character,floor:this.run.floor+1,roomId:this.run.roomId,roomType:this.room.type,cleared:this.room.cleared,player:this.player,stats:this.stats,inventory:this.run.inventory,relics:this.run.relics,synergies:D.activeSynergies(this.run.inventory).map(s=>s.id),coins:this.run.coins,score:this.run.score,kills:this.run.kills,clears:this.run.clears,elapsed:this.run.elapsed,enemyCount:this.enemies.filter(e=>!e.dead).length,boss:this.boss?{kind:this.boss.kind,hp:this.boss.hp,maxHp:this.boss.maxHp,stage:this.boss.stage}:null,ended:this.run.ended})): {mode:this.mode,version:D.VERSION};}
+    snapshot(){return this.run?JSON.parse(JSON.stringify({mode:this.mode,runMode:this.run.mode,seed:this.run.seed,difficulty:this.run.difficulty,character:this.run.character,floor:this.run.floor+1,layer:this.run.infiniteLayer||0,roomId:this.run.roomId,roomType:this.room.type,cleared:this.room.cleared,player:this.player,stats:this.stats,inventory:this.run.inventory,relics:this.run.relics,synergies:D.activeSynergies(this.run.inventory).map(s=>s.id),coins:this.run.coins,score:this.run.score,kills:this.run.kills,clears:this.run.clears,elapsed:this.run.elapsed,enemyCount:this.enemies.filter(e=>!e.dead).length,boss:this.boss?{kind:this.boss.kind,name:this.boss.bossName,hp:this.boss.hp,maxHp:this.boss.maxHp,stage:this.boss.stage}:null,ended:this.run.ended})): {mode:this.mode,version:D.VERSION};}
   }
   D.Game=Game;
 })(typeof window!=='undefined'?window:globalThis);
@@ -1394,7 +1420,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     drawTurret(t){const c=this.c;A.shadow(c,t.x,t.y,25);A.box(c,t.x-20,t.y-7,40,18,'#486e58',6);A.icon(c,t.w.icon,t.x,t.y-23,43,t.color);c.save();c.translate(t.x,t.y-17);c.rotate(t.a);A.box(c,5,-5,25,10,'#a9cdae',3);c.restore();c.fillStyle='#cee7b0';c.fillRect(t.x-17,t.y+16,34*Math.min(1,t.life/t.w.duration),3);}
     drawMine(m){const c=this.c;const armed=m.age>m.w.arm;c.save();c.strokeStyle=armed?'#e4c688':'#8e9980';c.globalAlpha=.55;c.setLineDash([4,6]);c.beginPath();c.ellipse(m.x,m.y,49,31,0,0,TAU);c.stroke();c.restore();A.icon(c,m.w.icon,m.x,m.y-10,30,m.color);}
     drawEnemyBars(){const c=this.c;for(const e of this.game.enemies){if(e.boss||e.hp>=e.maxHp||e.dead)continue;const w=e.elite?49:34,y=e.y-(e.r*2)-20;A.box(c,e.x-w/2,y,w,5,'#182c2450',2,'transparent',0);A.box(c,e.x-w/2,y,w*Math.max(0,e.hp/e.maxHp),5,e.elite?'#e6bb6f':'#d38d7c',2,'transparent',0);}}
-    drawBossBar(){const g=this.game,c=this.c,b=g.boss;const x=W/2-255,y=83,w=510;c.save();A.box(c,x-12,y-38,w+24,65,'#15251fe8',9,'#b2a684',1);c.textAlign='center';c.font='700 18px system-ui';c.fillStyle='#f0d9b0';c.fillText(D.FLOORS[g.run.floor].bossName,W/2,y-13);A.box(c,x,y,w,10,'#513f3b',4,'transparent',0);A.box(c,x,y,w*Math.max(0,b.hp/b.maxHp),10,'#d99596',4,'transparent',0);for(const mark of [.32,.66])A.line(c,x+w*mark,y-2,x+w*mark,y+12,'#edd5ab',2);c.font='11px ui-monospace,monospace';c.fillStyle='#ebd6b1';c.fillText(`PHASE 0${b.stage}   ·   ${Math.ceil(Math.max(0,b.hp))} / ${Math.round(b.maxHp)}`,W/2,y+24);c.restore();}
+    drawBossBar(){const g=this.game,c=this.c,b=g.boss;const x=W/2-255,y=83,w=510;c.save();A.box(c,x-12,y-38,w+24,65,'#15251fe8',9,'#b2a684',1);c.textAlign='center';c.font='700 18px system-ui';c.fillStyle='#f0d9b0';c.fillText(b.bossName||D.FLOORS[g.run.floor].bossName,W/2,y-13);A.box(c,x,y,w,10,'#513f3b',4,'transparent',0);A.box(c,x,y,w*Math.max(0,b.hp/b.maxHp),10,'#d99596',4,'transparent',0);for(const mark of [.32,.66])A.line(c,x+w*mark,y-2,x+w*mark,y+12,'#edd5ab',2);c.font='11px ui-monospace,monospace';c.fillStyle='#ebd6b1';c.fillText(`PHASE 0${b.stage}   ·   ${Math.ceil(Math.max(0,b.hp))} / ${Math.round(b.maxHp)}`,W/2,y+24);c.restore();}
     drawHazards(active){const c=this.c;for(const h of this.game.hazards){if(h.active!==active)continue;c.save();const alpha=h.active?.20:(.10+.14*(1-h.t/h.delay));c.fillStyle=`rgba(243,113,99,${alpha})`;c.strokeStyle=h.active?'#ffdc9c':'#f19b89';c.lineWidth=h.active?5:2;
         if(h.kind==='circle'){c.beginPath();c.arc(h.x,h.y,h.r,0,TAU);c.fill();c.setLineDash(h.active?[]:[8,6]);c.stroke();if(!h.active){c.setLineDash([]);c.beginPath();c.arc(h.x,h.y,h.r,-Math.PI/2,-Math.PI/2+(1-h.t/h.delay)*TAU);c.lineWidth=5;c.stroke();c.textAlign='center';c.font='bold 20px system-ui';c.fillStyle='#f7c3a0';c.fillText('!',h.x,h.y+7);}}
         else{c.lineWidth=h.width;c.strokeStyle=`rgba(245,134,111,${h.active?.40:.18})`;c.beginPath();c.moveTo(h.x,h.y);c.lineTo(h.x2,h.y2);c.stroke();c.lineWidth=h.active?7:2;c.strokeStyle=h.active?'#ffe4ad':'#f3b79a';if(!h.active)c.setLineDash([10,12]);c.stroke();}c.restore();}}
@@ -1485,7 +1511,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
   class UI{
     constructor(game){this.g=game;this.home=document.getElementById('viewHome');this.play=document.getElementById('viewPlay');this.overlay=document.getElementById('overlay');this.modal=document.getElementById('modal');this.selectedCharacter='geo';this.weaponKey='';this.mapKey='';this.bannerTimer=null;this.toastTimers=new Set();this.panel='';this.lastFocus=null;this.choiceLockedUntil=0;
       this.clickHandler=e=>{const btn=e.target.closest('[data-action]');if(btn&&this.panel==='choice'&&Date.now()<this.choiceLockedUntil){e.preventDefault();return;}if(btn&&!btn.disabled){e.preventDefault();this.g.sound.unlock?.();this.handle(btn.dataset.action,btn.dataset);}else if(e.target===this.overlay)this.dismiss();};
-      this.changeHandler=e=>{if(e.target.id==='importSaveFile'){this.importSave(e.target.files?.[0]);return;}if(e.target.id==='difficulty')document.getElementById('difficultyDesc').textContent=D.DIFFICULTIES[e.target.value].description;const setting=e.target.dataset.setting;if(setting){this.g.setSetting(setting,e.target.type==='checkbox'?e.target.checked:e.target.value);this.g.sound.configure?.(this.g.meta.settings);}if(['catalogSearch','catalogTag','catalogRarity'].includes(e.target.id))this.filterCatalog();};
+      this.changeHandler=e=>{if(e.target.id==='importSaveFile'){this.importSave(e.target.files?.[0]);return;}if(e.target.id==='difficulty')document.getElementById('difficultyDesc').textContent=D.DIFFICULTIES[e.target.value].description;if(e.target.id==='gameMode')document.getElementById('difficultyDesc').textContent=e.target.value==='infinite'?'无限计分；每层普通怪攻击、生命、数量 +10%，Boss 生命 +20%，弹幕强度 +10%。':'剧情三章；注意预警、灵活换武器即可。';const setting=e.target.dataset.setting;if(setting){this.g.setSetting(setting,e.target.type==='checkbox'?e.target.checked:e.target.value);this.g.sound.configure?.(this.g.meta.settings);}if(['catalogSearch','catalogTag','catalogRarity'].includes(e.target.id))this.filterCatalog();};
       document.addEventListener('click',this.clickHandler);document.addEventListener('input',this.changeHandler);
     }
     heading(title,kicker='',subtitle='',close=true){return `<div class="modal-heading"><div>${kicker?`<div class="eyebrow">${E(kicker)}</div>`:''}<h2 id="modal-title">${E(title)}</h2>${subtitle?`<p class="modal-subtitle">${E(subtitle)}</p>`:''}</div>${close?'<button class="modal-close" data-action="back" aria-label="关闭对话框">×</button>':''}</div>`;}
@@ -1497,7 +1523,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     }
     showPlay(){this.home.hidden=true;this.play.hidden=false;document.body.classList.add('in-game');this.weaponKey='';this.mapKey='';}
     renderCharacters(){document.getElementById('characterCards').innerHTML=D.CHARACTERS.map(c=>`<button class="character-card ${c.id===this.selectedCharacter?'selected':''}" data-action="character" data-id="${c.id}" aria-pressed="${c.id===this.selectedCharacter}"><span class="avatar">${D.iconSvg(c.id==='geo'?'helmet':c.id==='early'?'clock':'pen',c.color,49)}</span><span><h3>${c.name}</h3><p>${c.subtitle}</p><small>${c.passive}</small></span></button>`).join('');}
-    readStart(){return{character:this.selectedCharacter,difficulty:document.getElementById('difficulty').value,seed:document.getElementById('seed').value,graduate:document.getElementById('graduate').checked};}
+    readStart(){return{character:this.selectedCharacter,mode:document.getElementById('gameMode').value,difficulty:document.getElementById('difficulty').value,seed:document.getElementById('seed').value,graduate:document.getElementById('graduate').checked};}
     start(){this.pendingStart=this.readStart();if(this.g.hasSave()){this.open(this.heading('重新入梦？','NEW DREAM','上次的房间检查点仍在。开始新梦境会替换它。',false)+`<div class="modal-actions"><button class="button secondary" data-action="load">继续上次</button><button class="button primary" data-action="confirmStart">开始新的梦境</button><button class="button ghost" data-action="cancelStart">返回</button></div>`,'narrow','confirm');}else this.begin(this.pendingStart);}
     begin(options){this.showPlay();this.close();this.g.start(options);this.update();}
     handle(action,data){
@@ -1530,8 +1556,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         case 'quit':this.open(this.heading('先到这里，下次再醒。','RETURN TO MENU','回到菜单后，将从最近的房间检查点继续；未清完的战斗会重新开始。',false)+`<div class="modal-actions"><button class="button secondary" data-action="resume">继续战斗</button><button class="button primary" data-action="quitConfirm">返回主菜单</button></div>`,'narrow','quit');break;
         case 'quitConfirm':this.g.returnToMenu();break;
         case 'home':this.g.returnToMenu();break;
-        case 'retry':{const r=this.g.run;this.begin({character:r.character,difficulty:r.difficulty,seed:r.seed,skipStory:true});break;}
-        case 'newDream':{const r=this.g.run;this.begin({character:r.character,difficulty:r.difficulty,skipStory:true});break;}
+        case 'retry':{const r=this.g.run;this.begin({character:r.character,mode:r.mode,difficulty:r.difficulty,seed:r.seed,skipStory:true});break;}
+        case 'newDream':{const r=this.g.run;this.begin({character:r.character,mode:r.mode,difficulty:r.difficulty,skipStory:true});break;}
         case 'results':this.results(true);break;
         case 'certificate':this.certificate();break;
         case 'copySeed':this.copySeed();break;
@@ -1541,10 +1567,10 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     update(){
       const g=this.g;if(!g.run)return;const p=g.player,s=g.stats;
       for(const [id,v,max]of[['hp',p.hp,s.maxHp],['shield',p.shield,s.maxShield],['energy',p.energy,s.maxEnergy]]){document.getElementById(id+'Text').textContent=`${Math.ceil(Math.max(0,v))} / ${Math.round(max)}`;document.getElementById(id+'Fill').style.width=`${D.clamp(v/max*100,0,100)}%`;}
-      document.getElementById('chapterLabel').textContent=`${D.FLOORS[g.run.floor].short} · ${String(g.run.floor+1).padStart(2,'0')}`;
+      document.getElementById('chapterLabel').textContent=g.run.mode==='infinite'?`无限第 ${g.run.infiniteLayer} 层 · ${D.FLOORS[g.run.floor].short}`:`${D.FLOORS[g.run.floor].short} · ${String(g.run.floor+1).padStart(2,'0')}`;
       document.getElementById('roomLabel').textContent=`${D.ROOM_TYPES[g.room.type][0]} ${String(g.run.roomId+1).padStart(2,'0')}${g.room.cleared?' · 已开放':` · ${g.enemies.length} 敌人`}`;
       document.getElementById('coinsLabel').textContent=g.run.coins;
-      document.getElementById('goalLabel').textContent=g.room.cleared?(g.room.loot?'战利品在地上 · 靠近按 E 拾取':g.portal?'靠近中央传送阵，按 E 前往下一章':'出口开放 · 探索地图，寻找本层首领'):'房门已锁 · 清理所有敌人';
+      document.getElementById('goalLabel').textContent=g.room.cleared?(g.room.loot?'战利品在地上 · 靠近按 E 拾取':g.run.mode==='infinite'&&g.room.type==='boss'?'本层已突破 · 正在准备下一层':g.portal?'靠近中央传送阵，按 E 前往下一章':'出口开放 · 探索地图，寻找本层首领'):'房门已锁 · 清理所有敌人';
       document.getElementById('timeLabel').textContent=`${timeText(g.run.elapsed)} · 种子 ${g.run.seed}`;
       const syn=D.activeSynergies(g.run.inventory);document.getElementById('synergyLabel').textContent=syn.length?syn.map(x=>x.name).join(' / '):'不同标签，碰撞出新的搭配';
       for(const [id,cd,label]of[['dashStatus',p.dashCd,'空格 · 闪避'],['skillStatus',p.skillCd,'Q · 拒绝内卷'],['drinkStatus',p.drinkCd,'R · 喝水']]){const el=document.getElementById(id);el.textContent=cd>0?`${label} ${cd.toFixed(1)}s`:label;el.classList.toggle('cooling',cd>0);}
@@ -1559,7 +1585,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     renderStory(){const p=this.storyPages[this.storyIndex],icon=['clock','slides','book','hammer'][this.storyIndex%4];this.open(this.heading(p.speaker,this.storyEnding?'BACK TO REALITY':'PROLOGUE / 课间梦境','',false)+`<div class="story-layout"><div class="story-art">${D.iconSvg(this.storyEnding?'diploma':icon,'#adc79b',125)}</div><div><p class="story-text">${E(p.text)}</p><div class="story-progress">${this.storyPages.map((_,i)=>`<i class="${i<=this.storyIndex?'active':''}"></i>`).join('')}</div></div></div><div class="modal-actions"><button class="button ghost" data-action="skipStory">${this.storyEnding?'查看奖励':'跳过序章'}</button><button class="button primary" data-action="storyNext">${this.storyIndex===this.storyPages.length-1?(this.storyEnding?'下课了':'醒进梦里'):'下一页'} →</button></div>`,this.storyEnding?'ending':'','story');}
     nextStory(){if(this.storyIndex<this.storyPages.length-1){this.storyIndex++;this.renderStory();}else this.finishStory();}
     finishStory(){const fn=this.storyCallback;this.storyCallback=null;this.close();fn?.();}
-    bossIntro(floor,callback){this.bossCallback=callback;this.open(this.heading('迟到的挑战','BOSS ENCOUNTER','',false)+`<div class="boss-intro"><div class="boss-emblem">${D.iconSvg(floor.boss==='ta'?'laser':floor.boss==='chef'?'ladle':'diploma','#d5ba8e',104)}</div><div><div class="eyebrow">${E(floor.short)} · 守关者</div><h2>${E(floor.bossName)}</h2><blockquote>${E(floor.bossQuote)}</blockquote><p>先看红色预警，再躲攻击。环形弹幕有缺口，闪避和「拒绝内卷」都能帮助你。</p></div></div><div class="modal-actions"><button class="button primary" data-action="bossBegin">开始答辩 ↗</button></div>`,'dark','bossIntro');}
+    bossIntro(floor,callback){this.bossCallback=callback;const kind=floor.kind||floor.boss,name=floor.name||floor.bossName,quote=floor.quote||floor.bossQuote;this.open(this.heading('迟到的挑战','BOSS ENCOUNTER','',false)+`<div class="boss-intro"><div class="boss-emblem">${D.iconSvg(kind==='ta'?'laser':kind==='chef'?'ladle':'diploma','#d5ba8e',104)}</div><div><div class="eyebrow">${E(floor.short||'无限梦境')} · 守关者</div><h2>${E(name)}</h2><blockquote>${E(quote)}</blockquote><p>先看红色预警，再躲攻击。无限模式会随机组合攻击方式，并在每层提高强度。</p></div></div><div class="modal-actions"><button class="button primary" data-action="bossBegin">开始答辩 ↗</button></div>`,'dark','bossIntro');}
     weaponProfile(held,neutral=false){const w=D.WEAPONS[held.id];return D.weaponProfile(w,held.level||0,neutral?{}:this.g.stats);}
     weaponScore(held){return this.weaponProfile(held).score;}
     scoreCard(profile,label='战术评分'){

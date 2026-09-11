@@ -67,16 +67,16 @@
   <main class="app">
     <section class="intro" aria-labelledby="page-title">
       <div><p class="eyebrow">SINGLE PLAYER / 005</p><h1 id="page-title">水课梦魇</h1></div>
-      <p class="intro-copy">上课，睡着。醒来，把整个梦打通。穿过校园梦境，击败梦境校长，结束一局后成绩会自动进入对应难度排行榜。</p>
+      <p class="intro-copy">上课，睡着。醒来，把整个梦打通。剧情模式负责体验，无限模式负责挑战层数并进入专属计分榜。</p>
     </section>
 
     <section class="game-layout" aria-label="水课梦魇游戏与排行榜">
       <section class="game-frame"><iframe id="gameFrame" src="game/" title="水课梦魇：校园梦境冒险" allow="autoplay"></iframe></section>
       <aside class="rank-panel">
         <h2>水课梦魇排行榜</h2>
-        <p>只记录已登录玩家在“期末噩梦”中的最高分；轻松旁听和正常修读仅供练习，不计入排行榜。</p>
+        <p>只记录已登录玩家在“无限模式”中的最高分；剧情模式仅供体验，不计入这张排行榜。</p>
         <div class="rank-list">
-          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="期末噩梦" data-game-difficulty="high" aria-label="水课梦魇期末噩梦排行榜"></section>
+          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="无限模式" data-game-difficulty="infinite" aria-label="水课梦魇无限模式排行榜"></section>
         </div>
         <p class="game-status" id="gameStatus" aria-live="polite">完成一局后，这里会显示本次成绩。</p>
       </aside>
@@ -95,7 +95,7 @@
       const frame = document.getElementById("gameFrame");
       const status = document.getElementById("gameStatus");
       const client = window.gameAuth && window.gameAuth.client;
-      const difficultyName = { low: "轻松旁听", normal: "正常修读", high: "期末噩梦" };
+      const difficultyName = { low: "轻松旁听", normal: "正常修读", high: "期末噩梦", infinite: "无限模式" };
       const difficultyKey = { chill: "low", normal: "normal", nightmare: "high" };
 
       function setStatus(text, success = false) {
@@ -105,11 +105,12 @@
 
       async function saveResult(payload) {
         const score = Number(payload && payload.score);
-        const difficulty = difficultyKey[payload && payload.difficulty] || "normal";
+        const infinite = payload && payload.mode === "infinite";
+        const difficulty = infinite ? "infinite" : (difficultyKey[payload && payload.difficulty] || "normal");
         if (!Number.isFinite(score) || score < 0) return;
-        if (difficulty !== "high") {
+        if (!infinite && difficulty !== "high") {
           await window.gameProgress?.recordCompletion("dream-campus");
-          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；轻松旁听和正常修读不计入排行榜，只有期末噩梦计分。`);
+          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；剧情模式不计入排行榜，只有无限模式计分。`);
           return;
         }
         if (!client) {

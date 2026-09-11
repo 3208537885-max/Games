@@ -8,7 +8,7 @@
   class UI{
     constructor(game){this.g=game;this.home=document.getElementById('viewHome');this.play=document.getElementById('viewPlay');this.overlay=document.getElementById('overlay');this.modal=document.getElementById('modal');this.selectedCharacter='geo';this.weaponKey='';this.mapKey='';this.bannerTimer=null;this.toastTimers=new Set();this.panel='';this.lastFocus=null;this.choiceLockedUntil=0;
       this.clickHandler=e=>{const btn=e.target.closest('[data-action]');if(btn&&this.panel==='choice'&&Date.now()<this.choiceLockedUntil){e.preventDefault();return;}if(btn&&!btn.disabled){e.preventDefault();this.g.sound.unlock?.();this.handle(btn.dataset.action,btn.dataset);}else if(e.target===this.overlay)this.dismiss();};
-      this.changeHandler=e=>{if(e.target.id==='importSaveFile'){this.importSave(e.target.files?.[0]);return;}if(e.target.id==='difficulty')document.getElementById('difficultyDesc').textContent=D.DIFFICULTIES[e.target.value].description;const setting=e.target.dataset.setting;if(setting){this.g.setSetting(setting,e.target.type==='checkbox'?e.target.checked:e.target.value);this.g.sound.configure?.(this.g.meta.settings);}if(['catalogSearch','catalogTag','catalogRarity'].includes(e.target.id))this.filterCatalog();};
+      this.changeHandler=e=>{if(e.target.id==='importSaveFile'){this.importSave(e.target.files?.[0]);return;}if(e.target.id==='difficulty')document.getElementById('difficultyDesc').textContent=D.DIFFICULTIES[e.target.value].description;if(e.target.id==='gameMode')document.getElementById('difficultyDesc').textContent=e.target.value==='infinite'?'无限计分；每层普通怪攻击、生命、数量 +10%，Boss 生命 +20%，弹幕强度 +10%。':'剧情三章；注意预警、灵活换武器即可。';const setting=e.target.dataset.setting;if(setting){this.g.setSetting(setting,e.target.type==='checkbox'?e.target.checked:e.target.value);this.g.sound.configure?.(this.g.meta.settings);}if(['catalogSearch','catalogTag','catalogRarity'].includes(e.target.id))this.filterCatalog();};
       document.addEventListener('click',this.clickHandler);document.addEventListener('input',this.changeHandler);
     }
     heading(title,kicker='',subtitle='',close=true){return `<div class="modal-heading"><div>${kicker?`<div class="eyebrow">${E(kicker)}</div>`:''}<h2 id="modal-title">${E(title)}</h2>${subtitle?`<p class="modal-subtitle">${E(subtitle)}</p>`:''}</div>${close?'<button class="modal-close" data-action="back" aria-label="关闭对话框">×</button>':''}</div>`;}
@@ -20,7 +20,7 @@
     }
     showPlay(){this.home.hidden=true;this.play.hidden=false;document.body.classList.add('in-game');this.weaponKey='';this.mapKey='';}
     renderCharacters(){document.getElementById('characterCards').innerHTML=D.CHARACTERS.map(c=>`<button class="character-card ${c.id===this.selectedCharacter?'selected':''}" data-action="character" data-id="${c.id}" aria-pressed="${c.id===this.selectedCharacter}"><span class="avatar">${D.iconSvg(c.id==='geo'?'helmet':c.id==='early'?'clock':'pen',c.color,49)}</span><span><h3>${c.name}</h3><p>${c.subtitle}</p><small>${c.passive}</small></span></button>`).join('');}
-    readStart(){return{character:this.selectedCharacter,difficulty:document.getElementById('difficulty').value,seed:document.getElementById('seed').value,graduate:document.getElementById('graduate').checked};}
+    readStart(){return{character:this.selectedCharacter,mode:document.getElementById('gameMode').value,difficulty:document.getElementById('difficulty').value,seed:document.getElementById('seed').value,graduate:document.getElementById('graduate').checked};}
     start(){this.pendingStart=this.readStart();if(this.g.hasSave()){this.open(this.heading('重新入梦？','NEW DREAM','上次的房间检查点仍在。开始新梦境会替换它。',false)+`<div class="modal-actions"><button class="button secondary" data-action="load">继续上次</button><button class="button primary" data-action="confirmStart">开始新的梦境</button><button class="button ghost" data-action="cancelStart">返回</button></div>`,'narrow','confirm');}else this.begin(this.pendingStart);}
     begin(options){this.showPlay();this.close();this.g.start(options);this.update();}
     handle(action,data){
@@ -53,8 +53,8 @@
         case 'quit':this.open(this.heading('先到这里，下次再醒。','RETURN TO MENU','回到菜单后，将从最近的房间检查点继续；未清完的战斗会重新开始。',false)+`<div class="modal-actions"><button class="button secondary" data-action="resume">继续战斗</button><button class="button primary" data-action="quitConfirm">返回主菜单</button></div>`,'narrow','quit');break;
         case 'quitConfirm':this.g.returnToMenu();break;
         case 'home':this.g.returnToMenu();break;
-        case 'retry':{const r=this.g.run;this.begin({character:r.character,difficulty:r.difficulty,seed:r.seed,skipStory:true});break;}
-        case 'newDream':{const r=this.g.run;this.begin({character:r.character,difficulty:r.difficulty,skipStory:true});break;}
+        case 'retry':{const r=this.g.run;this.begin({character:r.character,mode:r.mode,difficulty:r.difficulty,seed:r.seed,skipStory:true});break;}
+        case 'newDream':{const r=this.g.run;this.begin({character:r.character,mode:r.mode,difficulty:r.difficulty,skipStory:true});break;}
         case 'results':this.results(true);break;
         case 'certificate':this.certificate();break;
         case 'copySeed':this.copySeed();break;
@@ -64,10 +64,10 @@
     update(){
       const g=this.g;if(!g.run)return;const p=g.player,s=g.stats;
       for(const [id,v,max]of[['hp',p.hp,s.maxHp],['shield',p.shield,s.maxShield],['energy',p.energy,s.maxEnergy]]){document.getElementById(id+'Text').textContent=`${Math.ceil(Math.max(0,v))} / ${Math.round(max)}`;document.getElementById(id+'Fill').style.width=`${D.clamp(v/max*100,0,100)}%`;}
-      document.getElementById('chapterLabel').textContent=`${D.FLOORS[g.run.floor].short} · ${String(g.run.floor+1).padStart(2,'0')}`;
+      document.getElementById('chapterLabel').textContent=g.run.mode==='infinite'?`无限第 ${g.run.infiniteLayer} 层 · ${D.FLOORS[g.run.floor].short}`:`${D.FLOORS[g.run.floor].short} · ${String(g.run.floor+1).padStart(2,'0')}`;
       document.getElementById('roomLabel').textContent=`${D.ROOM_TYPES[g.room.type][0]} ${String(g.run.roomId+1).padStart(2,'0')}${g.room.cleared?' · 已开放':` · ${g.enemies.length} 敌人`}`;
       document.getElementById('coinsLabel').textContent=g.run.coins;
-      document.getElementById('goalLabel').textContent=g.room.cleared?(g.room.loot?'战利品在地上 · 靠近按 E 拾取':g.portal?'靠近中央传送阵，按 E 前往下一章':'出口开放 · 探索地图，寻找本层首领'):'房门已锁 · 清理所有敌人';
+      document.getElementById('goalLabel').textContent=g.room.cleared?(g.room.loot?'战利品在地上 · 靠近按 E 拾取':g.run.mode==='infinite'&&g.room.type==='boss'?'本层已突破 · 正在准备下一层':g.portal?'靠近中央传送阵，按 E 前往下一章':'出口开放 · 探索地图，寻找本层首领'):'房门已锁 · 清理所有敌人';
       document.getElementById('timeLabel').textContent=`${timeText(g.run.elapsed)} · 种子 ${g.run.seed}`;
       const syn=D.activeSynergies(g.run.inventory);document.getElementById('synergyLabel').textContent=syn.length?syn.map(x=>x.name).join(' / '):'不同标签，碰撞出新的搭配';
       for(const [id,cd,label]of[['dashStatus',p.dashCd,'空格 · 闪避'],['skillStatus',p.skillCd,'Q · 拒绝内卷'],['drinkStatus',p.drinkCd,'R · 喝水']]){const el=document.getElementById(id);el.textContent=cd>0?`${label} ${cd.toFixed(1)}s`:label;el.classList.toggle('cooling',cd>0);}
@@ -82,7 +82,7 @@
     renderStory(){const p=this.storyPages[this.storyIndex],icon=['clock','slides','book','hammer'][this.storyIndex%4];this.open(this.heading(p.speaker,this.storyEnding?'BACK TO REALITY':'PROLOGUE / 课间梦境','',false)+`<div class="story-layout"><div class="story-art">${D.iconSvg(this.storyEnding?'diploma':icon,'#adc79b',125)}</div><div><p class="story-text">${E(p.text)}</p><div class="story-progress">${this.storyPages.map((_,i)=>`<i class="${i<=this.storyIndex?'active':''}"></i>`).join('')}</div></div></div><div class="modal-actions"><button class="button ghost" data-action="skipStory">${this.storyEnding?'查看奖励':'跳过序章'}</button><button class="button primary" data-action="storyNext">${this.storyIndex===this.storyPages.length-1?(this.storyEnding?'下课了':'醒进梦里'):'下一页'} →</button></div>`,this.storyEnding?'ending':'','story');}
     nextStory(){if(this.storyIndex<this.storyPages.length-1){this.storyIndex++;this.renderStory();}else this.finishStory();}
     finishStory(){const fn=this.storyCallback;this.storyCallback=null;this.close();fn?.();}
-    bossIntro(floor,callback){this.bossCallback=callback;this.open(this.heading('迟到的挑战','BOSS ENCOUNTER','',false)+`<div class="boss-intro"><div class="boss-emblem">${D.iconSvg(floor.boss==='ta'?'laser':floor.boss==='chef'?'ladle':'diploma','#d5ba8e',104)}</div><div><div class="eyebrow">${E(floor.short)} · 守关者</div><h2>${E(floor.bossName)}</h2><blockquote>${E(floor.bossQuote)}</blockquote><p>先看红色预警，再躲攻击。环形弹幕有缺口，闪避和「拒绝内卷」都能帮助你。</p></div></div><div class="modal-actions"><button class="button primary" data-action="bossBegin">开始答辩 ↗</button></div>`,'dark','bossIntro');}
+    bossIntro(floor,callback){this.bossCallback=callback;const kind=floor.kind||floor.boss,name=floor.name||floor.bossName,quote=floor.quote||floor.bossQuote;this.open(this.heading('迟到的挑战','BOSS ENCOUNTER','',false)+`<div class="boss-intro"><div class="boss-emblem">${D.iconSvg(kind==='ta'?'laser':kind==='chef'?'ladle':'diploma','#d5ba8e',104)}</div><div><div class="eyebrow">${E(floor.short||'无限梦境')} · 守关者</div><h2>${E(name)}</h2><blockquote>${E(quote)}</blockquote><p>先看红色预警，再躲攻击。无限模式会随机组合攻击方式，并在每层提高强度。</p></div></div><div class="modal-actions"><button class="button primary" data-action="bossBegin">开始答辩 ↗</button></div>`,'dark','bossIntro');}
     weaponProfile(held,neutral=false){const w=D.WEAPONS[held.id];return D.weaponProfile(w,held.level||0,neutral?{}:this.g.stats);}
     weaponScore(held){return this.weaponProfile(held).score;}
     scoreCard(profile,label='战术评分'){

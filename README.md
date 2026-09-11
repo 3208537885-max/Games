@@ -52,7 +52,7 @@
 
 启用联机功能后，也需要重新运行最新版 `supabase-setup.sql`。其中会创建联机房间和玩家表，并将它们加入 Supabase Realtime publication；若 SQL Editor 提示没有权限修改 publication，请在 Database 的 Replication 页面手动勾选 `multiplayer_rooms` 和 `multiplayer_players`。
 
-俄罗斯方块使用 `tetris` 作为 `game_slug`；水课梦魇使用 `dream-campus`，并按轻松旁听、正常修读、期末噩梦分别映射为 `low`、`normal`、`high`。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。
+俄罗斯方块使用 `tetris` 作为 `game_slug`；水课梦魇剧情模式仅供练习，无限模式使用 `difficulty = 'infinite'` 进入专属排行榜和首页总积分榜。新增游戏时，为排行榜请求使用新的 slug，并复用 `submit_score` RPC。修改 `supabase-setup.sql` 后需要在 Supabase SQL Editor 重新运行一次，才能启用无限模式成绩。
 
 反应速度测试在浏览器本机保留最近成绩；只有完成一组五次平均才会进入其排行榜。首页总积分榜统计俄罗斯方块、2048、打砖块、水课梦魇的标准难度与贪吃蛇高速成绩：每项当前第一名为 100 分，其余玩家按自己的分数与第一名分数的比例换算并累计；反应速度不参与总积分。已登录玩家每完成一局游戏，主页的累计完成局数会加一。
 

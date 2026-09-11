@@ -129,6 +129,12 @@ test('Complete seeded campaigns: doors, 3 bosses, portals, final cinematic, once
     check(g.mode==='winning');step(g,3);check(g.mode==='victory'&&g.run.won&&g.run.bosses===3);check(g.meta.wins===1&&g.meta.discovered.includes('diploma')&&ended===1);check(!g.hasSave());const reward=g.meta.inspiration;g.finish(true);check(g.meta.inspiration===reward&&ended===1);
   }
 });
+test('Infinite mode scales each layer, randomizes boss attacks, and continues after a boss',()=>{
+  const g=game({mode:'infinite',difficulty:'normal',seed:'INFINITE-QA'});check(g.run.mode==='infinite'&&g.run.infiniteLayer===1);
+  const first=g.spawn('paper',320,240,{spawnTime:0});const hp1=first.maxHp;g.run.infiniteLayer=2;const second=g.spawn('paper',320,240,{spawnTime:0});check(Math.abs(second.maxHp/hp1-1.1)<.0001,'enemy HP grows by 10% per layer');
+  g.resetTransient();g.run.floor=0;g.run.infiniteLayer=1;const b1=g.spawnBoss('ta',g.infiniteBossConfig()),bossHp1=b1.maxHp;g.resetTransient();g.run.infiniteLayer=2;const b2=g.spawnBoss('ta',g.infiniteBossConfig());check(Math.abs(b2.maxHp/bossHp1-1.2)<.0001,'boss HP grows by 20% per layer');check(b2.patternOrder.length>=5&&new Set(b2.patternOrder).size===b2.patternOrder.length,'boss attack pool is shuffled');
+  g.run.floor=2;g.run.infiniteLayer=1;g.run.floors[2]=D.generateFloor('INFINITE-QA/infinite/1',2);g.enterRoom(g.run.floors[2].bossId,null);const boss=g.boss;g.killEnemy(boss);check(g.mode==='winning'&&g.run.mode==='infinite');step(g,2.4);check(g.mode==='playing'&&g.run.infiniteLayer===2&&g.run.floor===0&&g.room.type==='start','infinite mode advances instead of ending');
+});
 test('Death, one-time revive, and capped permanent upgrades are consistent',()=>{
   const g=game();g.run.relics.push('secondChance');g.recompute();g.player.hp=1;g.player.shield=0;g.player.invuln=0;g.hitPlayer(999);check(g.run.usedRevive&&!g.run.ended);g.player.invuln=0;g.hitPlayer(999);check(g.mode==='dead'&&!g.run.won&&g.meta.runs===1&&g.meta.wins===0);g.returnToMenu();g.meta.inspiration=1000;for(let i=0;i<3;i++)check(g.buyMeta('focus'));check(!g.buyMeta('focus'));
 });

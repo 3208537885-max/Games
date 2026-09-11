@@ -46,7 +46,7 @@
 
 ```js
 window.DreamCampus.version;
-DreamCampus.start({seed:'MY-SEED',character:'geo',difficulty:'normal',skipStory:true});
+DreamCampus.start({seed:'MY-SEED',character:'geo',mode:'story',difficulty:'normal',skipStory:true});
 DreamCampus.pause();
 DreamCampus.resume();
 const state = DreamCampus.getState(); // JSON 克隆，不是可变的引擎引用
@@ -118,7 +118,7 @@ remove();
 
 这里的数值仅为结构示例，不是本次真实测试成绩。
 
-同一窗口可以用 `DreamCampus.on()`，或监听 DOM `dreamcampus:run:end`。配置的 `onEvent(name,payload)` 默认不启用。iframe 需要跨窗口消息时设置精确 `parentOrigin`；默认不发送。消息外壳为 `{game:'dream-campus',version:'1.0.0',event:'run:end',payload:{...}}`。
+同一窗口可以用 `DreamCampus.on()`，或监听 DOM `dreamcampus:run:end`。配置的 `onEvent(name,payload)` 默认不启用。iframe 需要跨窗口消息时设置精确 `parentOrigin`；默认不发送。消息外壳为 `{game:'dream-campus',version:'0.1.22',event:'run:end',payload:{...}}`；无限模式的 payload 会额外包含 `mode:'infinite'` 和当前层数 `layer`。
 
 禁止把浏览器事件当成可信线上排行或支付证明。代码没有默认上传数据。
 
