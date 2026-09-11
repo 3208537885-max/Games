@@ -2,7 +2,7 @@
   'use strict';const D=root.DC,E=D.safeText;
   const TAGS={water:'水系',food:'食物',geo:'地质',study:'学习',tech:'科技',daily:'日常',electric:'电系'};
   const TYPES={shot:'直射',spread:'散射',burst:'连发',beam:'贯穿激光',homing:'追踪',lob:'抛物爆弹',boomerang:'往返回旋',melee:'扇形近战',wave:'穿透冲击波',chain:'连锁电弧',orbit:'环绕护体',turret:'自动炮台',mine:'延时陷阱'};
-  const BULLET_STYLES={food:'饭盒弹道',drumstick:'鸡腿回旋',glitch:'故障像素',steam:'蒸汽冲击',spark:'成绩火花',stamp:'盖章冲击',paper:'书页残影',boba:'珍珠弹雨',sound:'广播声浪',ink:'红笔批注',scan:'离心光轨'};
+  const BULLET_STYLES={food:'饭盒弹道',drumstick:'鸡腿回旋',glitch:'故障像素',steam:'蒸汽冲击',spark:'成绩火花',stamp:'盖章冲击',paper:'书页残影',boba:'珍珠弹雨',sound:'广播声浪',ink:'红笔批注',scan:'离心光轨',coin:'饭卡硬币',chalk:'粉笔尘迹',frost:'低温晶雾',smoke:'蚊香烟团',ticket:'校车票轨',notification:'未读消息',formula:'公式残页'};
   const timeText=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${Math.floor(s%60).toString().padStart(2,'0')}`;
   D.TAGS=TAGS;D.WEAPON_TYPES=TYPES;D.BULLET_STYLES=BULLET_STYLES;D.formatTime=timeText;
   class UI{

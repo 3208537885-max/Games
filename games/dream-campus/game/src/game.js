@@ -484,12 +484,14 @@
       if(w.stun)e.stun=Math.max(e.stun,e.boss?Math.min(w.stun,.13):w.stun);
       if(w.burn){e.burn=Math.max(e.burn,w.burn);e.burnDps=Math.max(e.burnDps,base*.16);}
       if(w.knock&&!e.boss&&source){const d=dist(e,source)||1;D.moveEntity(e,(e.x-source.x)/d*w.knock*.15,(e.y-source.y)/d*w.knock*.15,this.obstacles);}
+      if(!w.dot)this.fx('impact',{x:e.x,y:e.y,r:Math.max(12,e.r*.7),color:this.weaponColor(w),style:w.bulletStyle||w.type,a:source?Math.atan2(e.y-source.y,e.x-source.x):0,seed:this.visualRng.int(0,999)},crit?.28:.18);
       this.text(e.x+(this.visualRng.next()-.5)*18,e.y-e.r-8,`${crit?'✦ ':''}${Math.max(1,Math.round(damage))}`,crit?'#ffdb8d':w.dot?'#f3ad80':'#f7f1d4',crit?20:14);
       this.particle(e.x,e.y,this.weaponColor(w),crit?6:3,95);this.sound.play('hit');
       if(e.hp<=0)this.killEnemy(e);
     }
     killEnemy(e){
       if(e.dead)return;e.dead=true;this.run.kills++;this.run.score+=e.boss?500:e.elite?45:e.bounty?12:4;
+      this.fx('enemyDeath',{x:e.x,y:e.y,r:e.r,color:e.color||'#c9ddae',style:e.behavior||e.kind,a:e.a||0,elite:!!e.elite,boss:!!e.boss,seed:this.visualRng.int(0,999)},e.boss?.9:e.elite?.58:.42);
       this.particle(e.x,e.y,e.color||'#c9ddae',e.boss?100:e.elite?24:13,e.boss?370:180);this.fx('poof',{x:e.x,y:e.y,r:e.r*1.9,color:e.color||'#c7dbaf'},.32);this.sound.play(e.boss?'bossDeath':'kill');
       if(e.bounty&&!e.boss)this.pickups.push({x:e.x,y:e.y,value:e.elite?6:1+this.rng.int(0,1),age:0});
       if(e.behavior==='split'){

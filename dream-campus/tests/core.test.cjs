@@ -4,8 +4,8 @@ const fs=require('node:fs');const path=require('node:path');
 const {D,MemoryStorage,game,step,dummy,choose}=require('./helpers.cjs');
 const tests=[];let assertions=0;const check=(v,m)=>{assertions++;assert.ok(v,m);};
 function test(name,fn){const start=performance.now();try{fn();tests.push({name,pass:true,ms:Math.round(performance.now()-start)});console.log('PASS',name);}catch(e){tests.push({name,pass:false,error:e.stack});console.error('FAIL',name,e.stack);}}
-test('Content: 62 unique weapons, 28 relics, 8 synergies, 13 attack behaviors',()=>{
-  check(Object.keys(D.WEAPONS).length===62);check(D.RELICS.length===28);check(D.SYNERGIES.length===8);check(new Set(Object.values(D.WEAPONS).map(w=>w.type)).size===13);
+test('Content: 70 unique weapons, 28 relics, 8 synergies, 13 attack behaviors',()=>{
+  check(Object.keys(D.WEAPONS).length===70);check(D.RELICS.length===28);check(D.SYNERGIES.length===8);check(new Set(Object.values(D.WEAPONS).map(w=>w.type)).size===13);
   for(const w of Object.values(D.WEAPONS)){check(w.id&&w.name&&w.description);for(const k of ['damage','interval','speed','energy'])check(Number.isFinite(w[k])&&w[k]>=0,w.id+' '+k);check(w.interval>=.07&&D.RARITIES[w.rarity]);const p=D.weaponProfile(w,0,{});check(Number.isInteger(p.score)&&p.score>=1&&p.score<=100,w.id+' score');check(['S','A','B','C','D'].includes(p.grade)&&p.role&&Object.values(p.axes).every(Number.isFinite),w.id+' profile');}
   const tierScores=[0,1,2,3,4].map(t=>{const scores=Object.values(D.WEAPONS).filter(w=>w.rarity===t).map(w=>D.weaponProfile(w,0,{}).score);return scores.reduce((a,b)=>a+b,0)/scores.length;});
   for(let i=1;i<tierScores.length;i++)check(tierScores[i]>tierScores[i-1],`weapon score tier ${i} should exceed tier ${i-1}`);
@@ -57,13 +57,20 @@ test('Orbit weapons block and reflect enemy bullets, then fire auxiliary shots',
   const target=dummy(g,730,360);g.updateSummons(1.1);
   check(g.bullets.some(b=>b.friendly&&b.w.bulletStyle==='orbit'&&b.w.type==='homing'),'orbit emits a periodic auxiliary projectile');
 });
-test('All 62 weapons create real damage with their actual engine behavior',()=>{
+test('All 70 weapons create real damage with their actual engine behavior',()=>{
   for(const w of Object.values(D.WEAPONS)){
     const g=game();g.run.inventory[0]={id:w.id,level:0};g.recompute();g.stats.crit=0;g.player.x=350;g.player.y=360;g.player.invuln=999;
     const d=w.type==='orbit'?w.range:w.type==='melee'?80:100,e=dummy(g,350+d,360);g.input={mx:0,my:0,aimX:e.x,aimY:e.y,fire:true};
     for(let i=0;i<360;i++){e.x=350+d;e.y=360;g.update(1/60,g.input);}
     check(e.hp<1e9,'no damage: '+w.id);check(Number.isFinite(e.hp)&&Number.isFinite(g.player.energy),w.id+' finite');
   }
+});
+test('Weapon hits and enemy deaths emit bounded combat feedback effects',()=>{
+  const g=game(),e=dummy(g,700,360);g.stats.crit=0;g.hitEnemy(e,10,{tag:'study',type:'shot',bulletStyle:'chalk',crit:0},g.player);
+  check(g.effects.some(v=>v.type==='impact'&&v.style==='chalk'));
+  e.hp=1;g.hitEnemy(e,10,{tag:'daily',type:'shot',bulletStyle:'ticket',crit:0},g.player);
+  check(g.effects.some(v=>v.type==='enemyDeath'&&v.style===e.behavior));
+  for(let i=0;i<160;i++)g.fx('impact',{x:0,y:0,r:10,color:'#fff'},.1);check(g.effects.length<=100);
 });
 test('Beam and very fast projectiles hit front targets but not through cover',()=>{
   for(const id of ['laser','rail']){

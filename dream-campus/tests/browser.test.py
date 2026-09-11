@@ -69,7 +69,17 @@ with sync_playwright() as p:
     page.keyboard.press('f');page.wait_for_timeout(500)
     record('Autofire toggle creates real projectiles',page.evaluate('__DC_DEBUG__.game.bullets.some(b=>b.friendly)'))
     page.evaluate("document.getElementById('banner').hidden=true;document.getElementById('toasts').innerHTML='' ");screenshot(page,'combat.png')
-    page.keyboard.press('f');page.evaluate("__DC_DEBUG__.game.offerRelics('浏览器测试')")
+    page.keyboard.press('f')
+    page.evaluate("""(()=>{const g=__DC_DEBUG__.game;g.enemies=[];g.jobs=[];g.bullets=[];
+      const ids=['lastBalance','chalkMachine','mungSoup','mosquitoCoil','campusBus','unread99','finalFinalDraft'];
+      ids.forEach((id,i)=>{const w={...DC.WEAPONS[id],speed:0,life:5};const b=g.createBullet(w,{x:285+i*98,y:245+(i%2)*82},0);b.life=b.maxLife=5;b.vx=b.vy=0;});
+      g.spawn('charger',330,555,{elite:true,spawnTime:0,speed:0,windup:2,cooldown:999});
+      g.spawn('mosquito',580,555,{spawnTime:0,speed:0,wet:3,slow:3,cooldown:999});
+      g.spawn('summoner',830,555,{spawnTime:0,speed:0,burn:3,stun:3,cooldown:999});
+    })()""");page.wait_for_timeout(120)
+    record('New weapon projectiles and enemy status effects render together',page.evaluate('__DC_DEBUG__.game.bullets.length===7&&__DC_DEBUG__.game.enemies.length===3'))
+    screenshot(page,'combat-effects-0.1.23.png')
+    page.evaluate("__DC_DEBUG__.game.offerRelics('浏览器测试')")
     record('Relic choice displays three unique options',page.locator('[data-action="relic"]').count()==3)
     screenshot(page,'relics.png');page.locator('[data-action="relic"]').first.click();record('Relic choice applies and resumes',page.evaluate("__DC_DEBUG__.game.run.relics.length===1&&__DC_DEBUG__.game.mode==='playing'"))
     page.evaluate("__DC_DEBUG__.game.offerWeapon('laptop')");page.wait_for_timeout(900);screenshot(page,'weapon.png');page.locator('[data-action="replace"][data-slot="0"]').click()
@@ -81,8 +91,8 @@ with sync_playwright() as p:
     record('Returning home exposes the checkpoint Continue button',page.locator('#continueBtn').is_visible());page.locator('#continueBtn').click()
     record('Continue reloads the room and the upgraded weapon',page.evaluate("__DC_DEBUG__.game.mode==='playing'&&__DC_DEBUG__.game.weapon.id==='laptop'&&__DC_DEBUG__.game.run.inventory[0].level===1"))
     page.evaluate("__DC_DEBUG__.game.returnToMenu()");page.locator('[data-action="catalog"]').click()
-    record('Catalog initially contains all 62 implemented weapons',page.locator('.catalog-card').count()==62)
-    page.locator('#catalogSearch').fill('地质');record('Catalog search filters actual content',0<page.locator('.catalog-card').count()<62);screenshot(page,'catalog.png');page.keyboard.press('Escape')
+    record('Catalog initially contains all 70 implemented weapons',page.locator('.catalog-card').count()==70)
+    page.locator('#catalogSearch').fill('地质');record('Catalog search filters actual content',0<page.locator('.catalog-card').count()<70);screenshot(page,'catalog.png');page.keyboard.press('Escape')
     page.locator('.home [data-action="settings"]').click();page.locator('[data-setting="music"]').uncheck()
     record('Settings checkbox changes the live audio setting',page.evaluate('!__DC_DEBUG__.game.meta.settings.music'))
     page.keyboard.press('Escape');payload=page.evaluate('DreamCampus.exportSave()');page.evaluate('DreamCampus.importSave(DreamCampus.exportSave())')
