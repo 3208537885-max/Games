@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.16';
+  DC.VERSION = '0.1.18';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -23,7 +23,11 @@
     ['coffee','冰美式',1,'spread',6,0.34,2,540,'food','cup','把疲惫泼向敌人。五束咖啡令目标减速。',{pellets:5,spread:0.42,slow:1.5,life:0.7}],
     ['laser','老师的激光笔',1,'beam',11,0.19,3,0,'tech','laser','老师说“看这里”，这一整条线上都得看。',{range:750,width:4}],
     ['meal','拼好饭',1,'lob',47,0.78,5,410,'food','meal','一份主食，两份爆炸，三位同学拼团。',{radius:82,life:0.8,fragments:3}],
+    ['duckrice','鸭腿饭',1,'lob',63,0.86,4,450,'food','meal','鸭腿先到，作业靠后。落地后炸出油亮的范围冲击，并分裂出三枚饭粒弹。',{radius:78,burn:3.4,life:0.72,fragments:3,bulletStyle:'food'}],
+    ['chickenrice','鸡腿饭',1,'boomerang',38,0.58,2,570,'food','drumstick','鸡腿饭盒绕场一周，去程和回程都能命中；回程会自动找回你。',{range:350,life:1.55,bulletStyle:'drumstick'}],
     ['keyboard','机械键盘',1,'spread',6,0.40,3,620,'tech','keyboard','WASD 四键齐发，终于不用只负责逃跑。',{pellets:4,spread:0.25,life:0.8}],
+    ['courseLock','卡死的选课网站',2,'mine',76,1.18,6,0,'tech','laptop','鼠标转圈五分钟，敌人只要靠近就会触发崩溃爆炸。',{radius:104,arm:.6,duration:4.5,range:360,bulletStyle:'glitch'}],
+    ['refreshQueue','抢课刷新器',2,'burst',14,0.52,3,780,'tech','keyboard','连续刷新四次，每一发都带着“请稍候”的残影。',{burst:4,delay:.06,spread:.06,life:.7,bulletStyle:'glitch'}],
     ['hammer','地质锤',1,'melee',49,0.59,1,0,'geo','hammer','敲开作业的岩壳。近战震击，附带击退。',{range:126,arc:1.9,knock:220,stun:0.30}],
     ['chalk','粉笔头',1,'burst',10,0.54,2,660,'study','chalk','一轮三发，精准点名；毕业多年也忘不掉。',{burst:3,delay:0.075,spread:0.05,life:0.95}],
     ['usb','祖传 U 盘',1,'homing',21,0.38,3,390,'tech','usb','里面有十届真题，会自己寻找知识盲区。',{turn:4.5,life:1.7}],
@@ -34,6 +38,7 @@
     ['compass','地质罗盘',2,'orbit',14,1.65,10,0,'geo','compass','三枚磁针绕身守护，近身的烦恼都有方向。',{count:3,duration:6,range:94}],
     ['rockcore','取芯钻头',2,'shot',31,0.55,4,520,'geo','core','从作业表层，一路钻到知识内核。',{pierce:5,life:1.25,size:7}],
     ['soda','摇过的汽水',2,'wave',28,0.58,4,440,'water','bottle','宽幅汽水浪，穿透敌人，沿途留下潮湿。',{pierce:5,wet:3,life:0.95,size:15}],
+    ['canteenstew','食堂大锅菜',2,'wave',33,0.60,4,440,'food','pot','一勺浑厚汤汁横扫前方，留下短暂蒸汽并让敌人减速。',{size:22,pierce:7,slow:1.2,life:1.1,bulletStyle:'steam'}],
     ['umbrella','八级风暴雨伞',2,'melee',52,0.67,4,0,'water','umbrella','开伞就是一圈反击。挥砍同时清除附近敌弹。',{range:148,arc:3.6,clear:true,knock:230}],
     ['wifi','满格校园网',2,'turret',12,3.0,13,0,'tech','router','部署路由炮台，自动向最近且可见的怪物发包。',{duration:11,rate:0.40,range:430}],
     ['mouse','电竞鼠标',2,'burst',12,0.43,4,780,'tech','mouse','三连点，物理级手速。',{burst:3,delay:0.055,spread:0.025,life:0.85}],
@@ -46,6 +51,7 @@
     ['fan','宿舍落地扇',3,'turret',8,3.2,15,0,'daily','fan','风扇三散射；最多同时保留两座炮台。',{duration:12,rate:0.55,pellets:3,range:440}],
     ['bubbletea','全糖加料奶茶',3,'spread',10,0.55,6,440,'food','boba','六颗珍珠扇形爆射，黏住目标。',{pellets:6,spread:0.55,slow:2,life:0.9}],
     ['report','小组作业·最终版',3,'boomerang',36,0.65,5,450,'study','report','最终版、最终版 2、真的最终版——总会回来。',{range:410,life:1.65}],
+    ['gradeCurve','成绩曲线',3,'chain',32,0.58,7,0,'study','slides','先给最近的敌人打一个问号，再沿着成绩曲线弹跳四次。',{range:460,jumps:4,jumpRange:160,bulletStyle:'spark'}],
     ['drone','航拍测绘无人机',3,'turret',22,3.2,16,0,'geo','drone','原地悬停测绘，追踪弹自动标注地表异常。',{duration:11,rate:0.65,homing:true,range:500}],
     ['lint','滚筒洗衣机',3,'wave',39,0.58,7,460,'daily','washer','把知识拧干，洗涤波穿透并推开前方敌人。',{size:19,pierce:6,knock:180,wet:2,life:1.0}],
     ['mineral','矿物标本盒',3,'spread',15,0.78,7,540,'geo','mineral','石英、长石、云母齐射；每枚晶片可再穿一只。',{pellets:5,spread:0.46,pierce:1,life:0.9}],
@@ -114,9 +120,9 @@
     nightmare:{name:'期末噩梦',description:'普通敌人生命 ×2.7；Boss 生命在当前基准上 ×0.75，弹速 ×1.65、伤害 ×1.83；最终 Boss 封顶 9000 生命。',enemyHp:2.7,bossHp:.75,finalBossCap:9000,enemyDamage:1.83,bulletSpeed:1.65,bulletDensity:1,bulletWaves:2,reward:1.25}
   };
   DC.FLOORS = [
-    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:4620,mobs:['paper','slime','rollcall','charger','printer']},
-    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:9265,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner']},
-    {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb']}
+    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:4620,mobs:['paper','slime','rollcall','charger','printer','elective']},
+    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:9265,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner','captcha']},
+    {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb','queue']}
   ];
   DC.ENEMIES = {
     paper:{name:'会跑的作业',hp:38,speed:93,r:15,color:'#eee3b6',cost:1,behavior:'chase',damage:10},
@@ -125,13 +131,16 @@
     rollcall:{name:'点名册',hp:42,speed:57,r:17,color:'#d68e84',cost:1.4,behavior:'shoot',damage:11},
     charger:{name:'内卷冲刺人',hp:62,speed:72,r:17,color:'#ecb572',cost:1.6,behavior:'charge',damage:13},
     printer:{name:'卡纸打印机',hp:68,speed:0,r:21,color:'#94b3b5',cost:1.8,behavior:'fan',damage:10},
+    elective:{name:'卡死的选课网站',hp:86,speed:0,r:21,color:'#7fb8d8',cost:2.1,behavior:'fan',damage:12,bulletStyle:'glitch'},
     bomb:{name:'爆炸催缴单',hp:30,speed:108,r:15,color:'#ed8b85',cost:1.3,behavior:'bomb',damage:15},
     cleaner:{name:'扫地大魔王',hp:135,speed:64,r:24,color:'#afc7b9',cost:2.6,behavior:'slam',damage:15},
     mosquito:{name:'熄灯后蚊子',hp:34,speed:105,r:13,color:'#bea7d5',cost:1.3,behavior:'strafe',damage:9},
     summoner:{name:'小组甩锅王',hp:79,speed:47,r:20,color:'#d7a994',cost:2.4,behavior:'summon',damage:11},
     ghost:{name:'断线校园网',hp:63,speed:67,r:18,color:'#8bd4d1',cost:2.1,behavior:'teleport',damage:12},
     proctor:{name:'监考铁壁',hp:127,speed:62,r:23,color:'#9b9bae',cost:2.4,behavior:'guard',damage:14},
-    slide:{name:'无限下一页',hp:81,speed:44,r:21,color:'#bfa2d2',cost:2.2,behavior:'radial',damage:11}
+    slide:{name:'无限下一页',hp:81,speed:44,r:21,color:'#bfa2d2',cost:2.2,behavior:'radial',damage:11},
+    captcha:{name:'验证码循环框',hp:54,speed:80,r:16,color:'#e1a5d3',cost:1.7,behavior:'radial',damage:12,bulletStyle:'glitch'},
+    queue:{name:'排队进度条',hp:72,speed:88,r:18,color:'#8cc8a6',cost:1.9,behavior:'shoot',damage:13,bulletStyle:'spark'}
   };
   DC.EVENTS = [
     {id:'nap',title:'自习室的空沙发',text:'一张没有人占座的沙发，简直像个陷阱。不过你真的有点困。',choices:[{text:'眯五分钟',detail:'回复 32 生命',heal:32},{text:'继续奋斗',detail:'获得 24 学分币',coins:24}]},

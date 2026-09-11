@@ -4,8 +4,8 @@ const fs=require('node:fs');const path=require('node:path');
 const {D,MemoryStorage,game,step,dummy,choose}=require('./helpers.cjs');
 const tests=[];let assertions=0;const check=(v,m)=>{assertions++;assert.ok(v,m);};
 function test(name,fn){const start=performance.now();try{fn();tests.push({name,pass:true,ms:Math.round(performance.now()-start)});console.log('PASS',name);}catch(e){tests.push({name,pass:false,error:e.stack});console.error('FAIL',name,e.stack);}}
-test('Content: 48 unique weapons, 28 relics, 8 synergies, 13 attack behaviors',()=>{
-  check(Object.keys(D.WEAPONS).length===48);check(D.RELICS.length===28);check(D.SYNERGIES.length===8);check(new Set(Object.values(D.WEAPONS).map(w=>w.type)).size===13);
+test('Content: 54 unique weapons, 28 relics, 8 synergies, 13 attack behaviors',()=>{
+  check(Object.keys(D.WEAPONS).length===54);check(D.RELICS.length===28);check(D.SYNERGIES.length===8);check(new Set(Object.values(D.WEAPONS).map(w=>w.type)).size===13);
   for(const w of Object.values(D.WEAPONS)){check(w.id&&w.name&&w.description);for(const k of ['damage','interval','speed','energy'])check(Number.isFinite(w[k])&&w[k]>=0,w.id+' '+k);check(w.interval>=.07&&D.RARITIES[w.rarity]);}
 });
 test('Seeded maps: 1,500 floors, unique cells, connected graph, guaranteed special rooms',()=>{
@@ -46,7 +46,7 @@ test('Focus recovery, drinking, dash immunity, and per-slot fire cooldowns',()=>
   g.player.invuln=0;g.update(1/60,{mx:1,my:0,dash:true});const hp=g.player.hp;check(!g.hitPlayer(100,{x:1,y:1}));check(g.player.hp===hp);
   g.player.cooldowns=[0,0];g.fire();const cd=g.player.cooldowns[0];g.swap(1);g.swap(0);g.fire();check(g.player.cooldowns[0]===cd);
 });
-test('All 48 weapons create real damage with their actual engine behavior',()=>{
+test('All 54 weapons create real damage with their actual engine behavior',()=>{
   for(const w of Object.values(D.WEAPONS)){
     const g=game();g.run.inventory[0]={id:w.id,level:0};g.recompute();g.stats.crit=0;g.player.x=350;g.player.y=360;g.player.invuln=999;
     const d=w.type==='orbit'?w.range:w.type==='melee'?80:100,e=dummy(g,350+d,360);g.input={mx:0,my:0,aimX:e.x,aimY:e.y,fire:true};

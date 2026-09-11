@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T07:14:24.091Z",
+  "generatedAt": "2026-09-11T10:47:43.522Z",
   "method": "30-second continuous-fire stationary-target test; no character/relic/meta/synergy boosts; 100 initial focus +14/s regen; no drinking or skill; targets at95/280px; target knockback reset; inherent weapon crit retained.",
   "weapons": [
     {
@@ -153,6 +153,36 @@
       "maxBullets": 4
     },
     {
+      "id": "duckrice",
+      "name": "鸭腿饭",
+      "rarity": "精良",
+      "tier": 1,
+      "behavior": "lob",
+      "baseDamage": 63,
+      "interval": 0.86,
+      "energy": 4,
+      "closeDPS": 81.88,
+      "farDPS": 82.91,
+      "spent30s": 140,
+      "firstFarHit": 0.517,
+      "maxBullets": 4
+    },
+    {
+      "id": "chickenrice",
+      "name": "鸡腿饭",
+      "rarity": "精良",
+      "tier": 1,
+      "behavior": "boomerang",
+      "baseDamage": 38,
+      "interval": 0.58,
+      "energy": 2,
+      "closeDPS": 142.12,
+      "farDPS": 142.12,
+      "spent30s": 104,
+      "firstFarHit": 0.4,
+      "maxBullets": 2
+    },
+    {
       "id": "keyboard",
       "name": "机械键盘",
       "rarity": "精良",
@@ -166,6 +196,36 @@
       "spent30s": 216,
       "firstFarHit": 0.367,
       "maxBullets": 5
+    },
+    {
+      "id": "courseLock",
+      "name": "卡死的选课网站",
+      "rarity": "稀有",
+      "tier": 2,
+      "behavior": "mine",
+      "baseDamage": 76,
+      "interval": 1.18,
+      "energy": 6,
+      "closeDPS": 74.29,
+      "farDPS": 74.29,
+      "spent30s": 156,
+      "firstFarHit": 0.583,
+      "maxBullets": 0
+    },
+    {
+      "id": "refreshQueue",
+      "name": "抢课刷新器",
+      "rarity": "稀有",
+      "tier": 2,
+      "behavior": "burst",
+      "baseDamage": 14,
+      "interval": 0.52,
+      "energy": 3,
+      "closeDPS": 128.67,
+      "farDPS": 127.53,
+      "spent30s": 171,
+      "firstFarHit": 0.283,
+      "maxBullets": 4
     },
     {
       "id": "hammer",
@@ -315,6 +375,21 @@
       "farDPS": 58.07,
       "spent30s": 208,
       "firstFarHit": 0.5,
+      "maxBullets": 2
+    },
+    {
+      "id": "canteenstew",
+      "name": "食堂大锅菜",
+      "rarity": "稀有",
+      "tier": 2,
+      "behavior": "wave",
+      "baseDamage": 33,
+      "interval": 0.6,
+      "energy": 4,
+      "closeDPS": 67.1,
+      "farDPS": 67.1,
+      "spent30s": 200,
+      "firstFarHit": 0.483,
       "maxBullets": 2
     },
     {
@@ -496,6 +571,21 @@
       "spent30s": 235,
       "firstFarHit": 0.517,
       "maxBullets": 2
+    },
+    {
+      "id": "gradeCurve",
+      "name": "成绩曲线",
+      "rarity": "史诗",
+      "tier": 3,
+      "behavior": "chain",
+      "baseDamage": 32,
+      "interval": 0.58,
+      "energy": 7,
+      "closeDPS": 74.88,
+      "farDPS": 74.88,
+      "spent30s": 364,
+      "firstFarHit": 0,
+      "maxBullets": 0
     },
     {
       "id": "drone",

@@ -1,7 +1,7 @@
 {
-  "passed": 59,
+  "passed": 38,
   "failed": 0,
-  "baseUrl": "http://127.0.0.1:8787",
+  "baseUrl": null,
   "checks": [
     {
       "name": "Relative runtime asset assets/favicon.svg",
@@ -9,10 +9,6 @@
     },
     {
       "name": "dist mirrors source assets/favicon.svg",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes assets/favicon.svg",
       "pass": true
     },
     {
@@ -24,23 +20,11 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes styles.css",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset config.js",
       "pass": true
     },
     {
       "name": "dist mirrors source config.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes config.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML config.js",
       "pass": true
     },
     {
@@ -52,27 +36,11 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes src/data.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/data.js",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset src/core.js",
       "pass": true
     },
     {
       "name": "dist mirrors source src/core.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes src/core.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/core.js",
       "pass": true
     },
     {
@@ -84,27 +52,11 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes src/game.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/game.js",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset src/art.js",
       "pass": true
     },
     {
       "name": "dist mirrors source src/art.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes src/art.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/art.js",
       "pass": true
     },
     {
@@ -116,27 +68,11 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes src/renderer.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/renderer.js",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset src/audio.js",
       "pass": true
     },
     {
       "name": "dist mirrors source src/audio.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes src/audio.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/audio.js",
       "pass": true
     },
     {
@@ -148,14 +84,6 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes src/ui.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/ui.js",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset src/main.js",
       "pass": true
     },
@@ -164,23 +92,11 @@
       "pass": true
     },
     {
-      "name": "HTTP response bytes src/main.js",
-      "pass": true
-    },
-    {
-      "name": "HTTP JavaScript is not HTML src/main.js",
-      "pass": true
-    },
-    {
       "name": "Relative runtime asset assets/key-art.svg",
       "pass": true
     },
     {
       "name": "dist mirrors source assets/key-art.svg",
-      "pass": true
-    },
-    {
-      "name": "HTTP response bytes assets/key-art.svg",
       "pass": true
     },
     {

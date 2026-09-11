@@ -244,7 +244,7 @@
       if(this.bullets.filter(b=>!b.friendly).length>=240)return;
       const v=speed*this.difficulty.bulletSpeed;
       const {__wave=false,...bulletProps}=props;
-      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,color:'#fa897f',...bulletProps};
+      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,color:'#fa897f',bulletStyle:e.bulletStyle||'orb',...bulletProps};
       const density=Math.max(1,Number(this.difficulty.bulletDensity)||1),count=Math.floor(density)+(this.rng.next()<density%1?1:0);
       // 轻松旁听增加同一轮弹幕的数量，并用小角度散开，避免只靠提高速度制造难度。
       for(let i=0;i<count;i++){
