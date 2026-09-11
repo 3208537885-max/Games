@@ -24,6 +24,9 @@ html[data-control-mode="desktop"] .touch-controls{display:none!important}
 html[data-control-mode="desktop"] .control-strip{display:block}
 html[data-control-mode="touch"] .control-strip{display:none!important}
 
+.replace-card.recommended{border-color:#7d9d67;background:#e7f0d9;box-shadow:0 0 0 2px #7d9d6730}
+.replace-card small{font:700 10px ui-monospace,monospace;color:#6e8462}
+
 /* Touch controls use the screen's free margins instead of covering the arena. */
 @media (pointer:coarse) and (orientation:landscape){.touch-play .joystick{bottom:83px}.touch-play .touch-buttons{bottom:58px}}
 @media (pointer:coarse) and (orientation:portrait){
@@ -97,7 +100,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.14';
+  DC.VERSION = '0.1.15';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -204,13 +207,13 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     {id:'cram',name:'期末突击人',subtitle:'一晚一支笔，一个奇迹。',color:'#c5a2ed',hp:38,energy:125,speed:229,regen:17,starter:'pencil',secondary:'thermos',mods:{crit:0.07},passive:'125 专注 · 恢复更快 · 暴击 +7%'}
   ];
   DC.DIFFICULTIES = {
-    chill:{name:'轻松旁听',description:'敌人生命 ×1.9125、弹速 ×1.32、伤害 ×1.05；弹幕密度约 ×3.5。',enemyHp:1.9125,enemyDamage:1.05,bulletSpeed:1.32,bulletDensity:3.5,bulletWaves:2,reward:0.85},
-    normal:{name:'正常修读',description:'敌人生命 ×2.25、弹速 ×1.5、伤害 ×1.5；每次攻击连续发射两波弹幕。',enemyHp:2.25,enemyDamage:1.5,bulletSpeed:1.5,bulletDensity:1,bulletWaves:2,reward:1},
-    nightmare:{name:'期末噩梦',description:'敌人生命 ×2.7、弹速 ×1.65、伤害 ×1.83；每次攻击连续发射两波弹幕。',enemyHp:2.7,enemyDamage:1.83,bulletSpeed:1.65,bulletDensity:1,bulletWaves:2,reward:1.25}
+    chill:{name:'轻松旁听',description:'普通敌人生命 ×1.9125；Boss 生命在当前基准上 ×0.75，弹速 ×1.32、伤害 ×1.05。',enemyHp:1.9125,bossHp:.75,enemyDamage:1.05,bulletSpeed:1.32,bulletDensity:3.5,bulletWaves:2,reward:0.85},
+    normal:{name:'正常修读',description:'普通敌人生命 ×2.25；Boss 生命在当前基准上 ×0.75，弹速与伤害 ×1.5。',enemyHp:2.25,bossHp:.75,enemyDamage:1.5,bulletSpeed:1.5,bulletDensity:1,bulletWaves:2,reward:1},
+    nightmare:{name:'期末噩梦',description:'普通敌人生命 ×2.7；Boss 生命在当前基准上 ×0.75，弹速 ×1.65、伤害 ×1.83；最终 Boss 封顶 9000 生命。',enemyHp:2.7,bossHp:.75,finalBossCap:9000,enemyDamage:1.83,bulletSpeed:1.65,bulletDensity:1,bulletWaves:2,reward:1.25}
   };
   DC.FLOORS = [
-    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:6600,mobs:['paper','slime','rollcall','charger','printer']},
-    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:10900,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner']},
+    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:4620,mobs:['paper','slime','rollcall','charger','printer']},
+    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:9265,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner']},
     {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb']}
   ];
   DC.ENEMIES = {
@@ -508,7 +511,8 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       this.call('toast',`第 ${this.wave} / ${this.totalWaves} 波 · 先躲预警，再找输出机会`);this.sound.play('wave');
     }
     spawnBoss(kind){
-      const hp=D.FLOORS[this.run.floor].bossHp*this.difficulty.enemyHp;
+      const baseHp=D.FLOORS[this.run.floor].bossHp*(this.difficulty.bossHp||1);
+      const hp=this.run.floor===2?Math.min(baseHp,this.difficulty.finalBossCap||Infinity):baseHp;
       const e={id:++this.uid,kind,boss:true,x:W/2,y:280,r:kind==='principal'?37:34,hp,maxHp:hp,a:Math.PI/2,age:0,spawnTime:1,cooldown:2.2,stage:1,pattern:0,stun:0,slow:0,wet:0,burn:0,burnDps:0,burnTick:0,flash:0,windup:0,bounty:true,phasePause:0,damage:18,color:kind==='ta'?'#d1afdf':kind==='chef'?'#efc780':'#eb9db5'};
       this.enemies.push(e);this.boss=e;return e;
     }
@@ -667,7 +671,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       if(e.boss){this.updateBoss(e,dt);return;}
       if(e.stun>0)return;
       const p=this.player,d=dist(e,p);e.a=Math.atan2(p.y-e.y,p.x-e.x);e.cooldown-=dt;
-      if(e.chargeTime>0){e.chargeTime-=dt;const ox=e.x,oy=e.y;D.moveEntity(e,e.chargeX*335*dt,e.chargeY*335*dt,this.obstacles);if(Math.hypot(e.x-ox,e.y-oy)<dt*100){e.chargeTime=0;e.stun=.75;}if(e.chargeTime<=0)e.stun=.45;}
+      if(e.chargeTime>0){e.chargeTime-=dt;const ox=e.x,oy=e.y;D.moveEntity(e,e.chargeX*620*dt,e.chargeY*620*dt,this.obstacles);if(Math.hypot(e.x-ox,e.y-oy)<dt*100){e.chargeTime=0;e.stun=.75;}if(e.chargeTime<=0)e.stun=.45;}
       else if(e.windup<=0){
         let speed=e.speed*(e.slow>0?.55:1),v=this.flow.direction(e,p);
         if(['shoot','fan','summon','radial','teleport'].includes(e.behavior)&&D.los(e,p,this.obstacles)){if(d<205){v.x*=-1;v.y*=-1;speed*=.8;}else if(d<330)speed=0;}
@@ -679,13 +683,14 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       switch(e.behavior){
         case 'shoot':case 'fan':case 'strafe':case 'guard':{
           if(!D.los(e,p,this.obstacles)){e.cooldown=.4;break;}
-          const a=e.a,n=e.behavior==='fan'?5:e.behavior==='guard'?3:1;e.cooldown=e.behavior==='fan'?2.8:2.2;
-          this.enemyWindup(e,.57,()=>{for(let i=0;i<n;i++)this.enemyBullet(e,a+(i-(n-1)/2)*.19,e.behavior==='strafe'?205:185);});break;
+          const purple=e.kind==='mosquito',a=e.a,n=purple?6:e.behavior==='fan'?5:e.behavior==='guard'?3:1;e.cooldown=purple?2.5:e.behavior==='fan'?2.8:2.2;
+          this.enemyWindup(e,purple?.48:.57,()=>{for(let i=0;i<n;i++)this.enemyBullet(e,a+(i-(n-1)/2)*(purple?.105:.19),purple?285:e.behavior==='strafe'?205:185);});break;
         }
         case 'charge':{
           if(d>490||!D.los(e,p,this.obstacles)){e.cooldown=.5;break;}const a=e.a;e.cooldown=3.2;
-          this.fx('warningLine',{x:e.x,y:e.y,x2:e.x+Math.cos(a)*270,y2:e.y+Math.sin(a)*270},.7);
-          this.enemyWindup(e,.70,()=>{e.chargeTime=.62;e.chargeX=Math.cos(a);e.chargeY=Math.sin(a);this.sound.play('charge');});break;
+          this.fx('warningLine',{x:e.x,y:e.y,x2:e.x+Math.cos(a)*430,y2:e.y+Math.sin(a)*430},.7);
+          // 方向在预警结束时锁定，随后高速直冲；玩家需要用闪避穿过攻击窗口。
+          this.enemyWindup(e,.62,()=>{e.chargeTime=.82;e.chargeX=Math.cos(a);e.chargeY=Math.sin(a);this.sound.play('charge');});break;
         }
         case 'slam':{
           if(d>165){e.cooldown=.35;break;}e.cooldown=3.0;this.warnCircle(e.x,e.y,126,.85,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,e);this.enemyWindup(e,.85,()=>this.sound.play('impact'));break;
@@ -722,25 +727,61 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
       const damage=(14+f*2)*this.difficulty.enemyDamage,baseA=e.a;
       const ring=(n,speed,phase,gap=2)=>{for(let i=0;i<n;i++)if(i>=gap)this.enemyBullet(e,phase+i*TAU/n,speed,{r:6});};
       if(e.kind==='ta'){
-        switch(pattern%3){
+        switch(pattern%6){
           case 0:this.enemyWindup(e,.75,()=>{for(let i=-2-e.stage;i<=2+e.stage;i++)this.enemyBullet(e,baseA+i*.14,184);});break;
           case 1:{for(let i=0;i<2+e.stage;i++){const a=TAU*i/(2+e.stage),x=clamp(p.x+Math.cos(a)*55,PAD+90,W-PAD-90),y=clamp(p.y+Math.sin(a)*55,PAD+90,H-PAD-90);this.warnCircle(x,y,61,.95+i*.18,damage,e);}e.windup=.8;break;}
           case 2:this.enemyWindup(e,.9,()=>ring(14+e.stage*2,150,this.rng.next()*TAU,3));break;
+          case 3:{
+            const base=baseA+.18;
+            for(let i=-1;i<=1;i++)this.warnLine(e.x,e.y,e.x+Math.cos(base+i*.32)*1200,e.y+Math.sin(base+i*.32)*1200,15,1.0+i*.08,damage,e,.52);
+            e.windup=1.0;break;
+          }
+          case 4:{
+            this.enemyWindup(e,.62,()=>{for(let i=0;i<5+e.stage;i++){const a=baseA+(i-(4+e.stage)/2)*.11;this.enemyBullet(e,a,218,{r:7});this.schedule(.24,()=>this.enemyBullet(e,a+.09,235,{r:7}),e);}});break;
+          }
+          case 5:{
+            const phase=this.rng.next()*TAU;
+            this.enemyWindup(e,.72,()=>{for(let i=0;i<16+e.stage*2;i++)this.schedule(i*.055,()=>this.enemyBullet(e,phase+i*.24,168+i*3,{r:6}),e);});break;
+          }
         }
       }else if(e.kind==='chef'){
-        switch(pattern%4){
+        switch(pattern%7){
           case 0:this.enemyWindup(e,.75,()=>{for(let j=0;j<3;j++)this.schedule(j*.25,()=>{for(let i=-3;i<=3;i++)this.enemyBullet(e,baseA+i*.16+(j-1)*.065,175+j*18,{r:7});},e);});break;
           case 1:for(let i=0;i<3+e.stage;i++){const pos=i===0?{x:p.x,y:p.y}:this.pointFarFromPlayer(10,0);this.warnCircle(pos.x,pos.y,75,1.0+i*.12,damage+2,e);}e.windup=.9;break;
           case 2:this.enemyWindup(e,.9,()=>ring(17+e.stage,165,this.rng.next()*TAU,3));break;
           case 3:{const x=clamp(p.x,160,W-160);this.warnLine(x,PAD+5,x,H-PAD-5,62,1.0,damage,e,.55);if(e.stage>=2)this.warnLine(PAD+5,p.y,W-PAD-5,p.y,42,1.35,damage,e,.50);e.windup=1.0;break;}
+          case 4:{
+            this.enemyWindup(e,.68,()=>{for(let i=0;i<12+e.stage*2;i++)this.enemyBullet(e,TAU*i/(12+e.stage*2)+this.rng.next()*.08,176,{r:7});});break;
+          }
+          case 5:{
+            for(let i=-2;i<=2;i++)this.warnLine(e.x,e.y,e.x+Math.cos(baseA+i*.16)*1200,e.y+Math.sin(baseA+i*.16)*1200,18,1.05+i*.08,damage,e,.48);
+            e.windup=1.0;break;
+          }
+          case 6:{
+            this.enemyWindup(e,.74,()=>{for(let i=0;i<4+e.stage;i++){const a=TAU*i/(4+e.stage)+this.rng.next()*.2;const x=clamp(p.x+Math.cos(a)*115,PAD+75,W-PAD-75),y=clamp(p.y+Math.sin(a)*115,PAD+75,H-PAD-75);this.warnCircle(x,y,58,.12+i*.10,damage+3,e);}});break;
+          }
         }
       }else{
-        switch(pattern%5){
+        switch(pattern%9){
           case 0:{const phase=this.rng.next()*TAU;this.enemyWindup(e,.85,()=>{ring(18+e.stage*2,170,phase,4);if(e.stage>=2)this.schedule(.5,()=>ring(18+e.stage*2,155,phase+.13,4),e);});break;}
           case 1:{this.warnCircle(p.x,p.y,90,1.05,damage+3,e);for(let i=1;i<e.stage+2;i++){const pos=this.pointFarFromPlayer(20,70);this.warnCircle(pos.x,pos.y,78,1.10+i*.18,damage,e);}e.windup=.9;break;}
           case 2:{const a=baseA;for(let i=0;i<e.stage+1;i++){const ra=a+(i-(e.stage)/2)*.33;this.warnLine(e.x,e.y,e.x+Math.cos(ra)*1200,e.y+Math.sin(ra)*1200,19,1.10,damage,e,.70);}e.windup=1.1;break;}
           case 3:{this.enemyWindup(e,.85,()=>{if(this.enemies.filter(x=>!x.boss).length<4){for(let i=0;i<2;i++){const pos=this.pointFarFromPlayer(18,250);this.spawn(e.stage===3?'rollcall':'paper',pos.x,pos.y,{bounty:false});}}for(let i=-3;i<=3;i++)this.enemyBullet(e,baseA+i*.15,205);});break;}
           case 4:{const safe=this.rng.int(1,4),lane=(W-2*PAD)/6;for(let i=0;i<6;i++)if(i!==safe&&i!==safe-1)this.warnLine(PAD+lane*(i+.5),PAD,PAD+lane*(i+.5),H-PAD,70,1.2,damage,e,.65);this.enemyWindup(e,1.0,()=>{for(let i=-2;i<=2;i++)this.enemyBullet(e,baseA+i*.18,175);});break;}
+          case 5:{
+            this.enemyWindup(e,.72,()=>{for(let j=0;j<3;j++)for(let i=-2;i<=2;i++)this.enemyBullet(e,baseA+(i*.18)+(j-1)*.08,220+j*12,{r:7});});break;
+          }
+          case 6:{
+            for(let i=0;i<4+e.stage;i++){const a=baseA+(i-(3+e.stage)/2)*.28;this.warnLine(e.x,e.y,e.x+Math.cos(a)*1200,e.y+Math.sin(a)*1200,22,1.0+i*.12,damage,e,.55);}
+            e.windup=1.05;break;
+          }
+          case 7:{
+            this.enemyWindup(e,.65,()=>{for(let i=0;i<8+e.stage;i++){const a=TAU*i/(8+e.stage);const x=clamp(p.x+Math.cos(a)*90,PAD+70,W-PAD-70),y=clamp(p.y+Math.sin(a)*90,PAD+70,H-PAD-70);this.warnCircle(x,y,48,.15+i*.05,damage+4,e);}});break;
+          }
+          case 8:{
+            const phase=this.rng.next()*TAU;
+            this.enemyWindup(e,.8,()=>{for(let i=0;i<22+e.stage*2;i++)this.enemyBullet(e,phase+i*TAU/(22+e.stage*2),190,{r:5});this.schedule(.38,()=>ring(16+e.stage,205,phase+.18,2),e);});break;
+          }
         }
       }
     }
@@ -882,7 +923,13 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
         this.call('toast',`获得遗物：${r.name}`);this.emit('relic:acquired',{id:r.id});
       }else if(pending.type==='weapon'){
         if(choice==='salvage'){const w=D.WEAPONS[pending.weapon.id],coins=8+w.rarity*4;this.run.coins+=coins;this.call('toast',`已拆解为 ${coins} 学分币。`);}
-        else if(choice===0||choice===1){this.run.inventory[choice]={...pending.weapon};this.run.selected=choice;this.player.cooldowns[choice]=.2;this.recompute();this.call('toast',`已装备 ${D.WEAPONS[pending.weapon.id].name}`);this.emit('weapon:equipped',{...pending.weapon,slot:choice});}
+        else if(choice===0||choice===1){
+          const old={...this.run.inventory[choice]};
+          this.run.inventory[choice]={...pending.weapon};this.run.selected=choice;this.player.cooldowns[choice]=.2;
+          const a=this.player.a||0,dropX=clamp(this.player.x-Math.cos(a)*128,PAD+28,W-PAD-28),dropY=clamp(this.player.y-Math.sin(a)*128,PAD+28,H-PAD-28);
+          this.room.loot={id:old.id,level:old.level||0,x:dropX,y:dropY};
+          this.recompute();this.call('toast',`已装备 ${D.WEAPONS[pending.weapon.id].name} · ${D.WEAPONS[old.id].name} 已掉在脚边`);this.emit('weapon:equipped',{...pending.weapon,slot:choice,replaced:old});
+        }
         else return false;
       }else return false;
       this.run.pending=null;this.mode='playing';this.call('close');this.sound.play('reward');this.save();return true;
@@ -1400,11 +1447,21 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
     nextStory(){if(this.storyIndex<this.storyPages.length-1){this.storyIndex++;this.renderStory();}else this.finishStory();}
     finishStory(){const fn=this.storyCallback;this.storyCallback=null;this.close();fn?.();}
     bossIntro(floor,callback){this.bossCallback=callback;this.open(this.heading('迟到的挑战','BOSS ENCOUNTER','',false)+`<div class="boss-intro"><div class="boss-emblem">${D.iconSvg(floor.boss==='ta'?'laser':floor.boss==='chef'?'ladle':'diploma','#d5ba8e',104)}</div><div><div class="eyebrow">${E(floor.short)} · 守关者</div><h2>${E(floor.bossName)}</h2><blockquote>${E(floor.bossQuote)}</blockquote><p>先看红色预警，再躲攻击。环形弹幕有缺口，闪避和「拒绝内卷」都能帮助你。</p></div></div><div class="modal-actions"><button class="button primary" data-action="bossBegin">开始答辩 ↗</button></div>`,'dark','bossIntro');}
+    weaponScore(held){
+      const w=D.WEAPONS[held.id],raw=D.weaponDamage(w,held.level||0,this.g.stats)/Math.max(.1,w.interval||1);
+      const typeBonus={beam:1.22,orbit:1.18,turret:1.15,mine:1.1,chain:1.12}[w.type]||1;
+      return Math.max(1,Math.round(raw*typeBonus));
+    }
+    weaponAdvice(next,old){
+      const delta=this.weaponScore(next)-this.weaponScore(old);
+      return delta>8?`推荐替换 · 综合评分 +${delta}`:delta<-8?`不建议替换 · 综合评分 ${delta}`:'评分接近 · 按机制和标签选择';
+    }
     choice(pending){
       if(pending.type==='relic')this.open(this.heading('带走一份灵感','CHOOSE A RELIC',`${pending.source} · 三选一（候选不足时按剩余数量展示）` ,false)+`<div class="reward-grid">${pending.options.map(id=>{const r=D.RELICS.find(r=>r.id===id);return `<button class="reward-card" data-action="relic" data-id="${r.id}"><span class="reward-icon">${D.iconSvg(r.icon,'#b4d197',75)}</span><span class="relic-count">本局唯一遗物</span><h3>${E(r.name)}</h3><p>${E(r.description)}</p><span class="pick-label">选择这一份 →</span></button>`;}).join('')}</div><p class="minor-text">已获得的遗物不会重复出现。暂停背包中可查看所有效果。</p>`,'','choice');
       else{
         const held=pending.weapon,w=D.WEAPONS[held.id],rare=D.RARITIES[w.rarity];
-        this.open(this.heading('找到一件好东西','WEAPON FOUND',pending.source,false)+`<div class="weapon-offer"><div class="big-icon">${D.iconSvg(w.icon,rare.color,92)}</div><div><span class="rarity-badge" style="--rarity:${rare.color}">${rare.name} · ${TAGS[w.tag]}</span><h3>${E(w.name)}${held.level?' +'+held.level:''}</h3><p>${E(w.description)}</p><div class="weapon-stats"><span>机制 ${TYPES[w.type]}</span><span>单次基础 ${Math.round(w.damage*rare.scale)}</span><span>间隔 ${w.interval.toFixed(2)}s</span><span>专注 ${w.energy}</span></div></div></div><div class="replace-grid">${this.g.run.inventory.map((old,i)=>{const ow=D.WEAPONS[old.id];const next=this.g.run.inventory.map((v,j)=>j===i?held:v);const syn=D.activeSynergies(next);return `<button class="replace-card" data-action="replace" data-slot="${i}"><span class="eyebrow">替换武器槽 ${i+1}</span><h4>${E(ow.name)}${old.level?' +'+old.level:''}</h4><p>${syn.length?'激活：'+syn.map(s=>E(s.name)).join(' / '):'新装备将直接替换旧装备'}</p></button>`;}).join('')}</div><div class="modal-actions"><span class="minor-text">被替换的旧武器离场，不返还币。</span><button class="button secondary" data-action="salvage">拆解新武器 · +${8+w.rarity*4} 学分币</button></div>`,'','choice');
+        const offerScore=this.weaponScore(held);
+        this.open(this.heading('找到一件好东西','WEAPON FOUND',pending.source,false)+`<div class="weapon-offer"><div class="big-icon">${D.iconSvg(w.icon,rare.color,92)}</div><div><span class="rarity-badge" style="--rarity:${rare.color}">${rare.name} · ${TAGS[w.tag]}</span><h3>${E(w.name)}${held.level?' +'+held.level:''}</h3><p>${E(w.description)}</p><div class="weapon-stats"><span>机制 ${TYPES[w.type]}</span><span>单次基础 ${Math.round(w.damage*rare.scale)}</span><span>间隔 ${w.interval.toFixed(2)}s</span><span>专注 ${w.energy}</span><span>综合评分 ${offerScore}</span></div></div></div><p class="minor-text">评分综合考虑基础伤害、攻击间隔、耗能与武器机制，仅作选择建议。</p><div class="replace-grid">${this.g.run.inventory.map((old,i)=>{const ow=D.WEAPONS[old.id],next=this.g.run.inventory.map((v,j)=>j===i?held:v),syn=D.activeSynergies(next),delta=offerScore-this.weaponScore(old);return `<button class="replace-card ${delta>8?'recommended':''}" data-action="replace" data-slot="${i}"><span class="eyebrow">替换武器槽 ${i+1}</span><h4>${E(ow.name)}${old.level?' +'+old.level:''} <small>当前 ${this.weaponScore(old)}</small></h4><p>换成新武器：${offerScore} 分 · ${this.weaponAdvice(held,old)}</p><p>${syn.length?'激活：'+syn.map(s=>E(s.name)).join(' / '):'不改变羁绊组合'}</p></button>`;}).join('')}</div><div class="modal-actions"><span class="minor-text">替换后，旧武器会掉在脚边，可再次拾取。</span><button class="button secondary" data-action="salvage">拆解新武器 · +${8+w.rarity*4} 学分币</button></div>`,'','choice');
       }
     }
     help(){

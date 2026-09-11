@@ -1,9 +1,9 @@
 {
   "suite": "core and simulation",
-  "date": "2026-09-11T06:51:41.009Z",
+  "date": "2026-09-11T07:14:24.147Z",
   "passed": 22,
   "failed": 0,
-  "assertions": 429586,
+  "assertions": 429569,
   "tests": [
     {
       "name": "Content: 48 unique weapons, 28 relics, 8 synergies, 13 attack behaviors",
@@ -13,32 +13,32 @@
     {
       "name": "Seeded maps: 1,500 floors, unique cells, connected graph, guaranteed special rooms",
       "pass": true,
-      "ms": 54
+      "ms": 60
     },
     {
       "name": "Interior navigation: 450 generated layouts preserve a connected walkable field",
       "pass": true,
-      "ms": 44
+      "ms": 51
     },
     {
       "name": "Movement and rays: dash cannot tunnel through a thin prop; room bounds clip rays",
       "pass": true,
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "Loot: deterministic pools; graduation weapon stays locked until a win",
       "pass": true,
-      "ms": 9
+      "ms": 10
     },
     {
       "name": "Synergies require two separate tags; stat ceilings and +3 upgrade ceiling",
       "pass": true,
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "Pause freezes all gameplay clocks and player coordinates",
       "pass": true,
-      "ms": 3
+      "ms": 2
     },
     {
       "name": "Focus recovery, drinking, dash immunity, and per-slot fire cooldowns",
@@ -48,7 +48,7 @@
     {
       "name": "All 48 weapons create real damage with their actual engine behavior",
       "pass": true,
-      "ms": 115
+      "ms": 135
     },
     {
       "name": "Beam and very fast projectiles hit front targets but not through cover",
@@ -58,7 +58,7 @@
     {
       "name": "Water/electric interaction applies 35% bonus; boss stun has a short cap",
       "pass": true,
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "Visual settings do not alter combat RNG or critical damage",
@@ -78,7 +78,7 @@
     {
       "name": "All eight event branches execute; costs and HP payments stay valid",
       "pass": true,
-      "ms": 7
+      "ms": 8
     },
     {
       "name": "Room-boundary save rolls an unfinished battle back; cleared rooms do not respawn",
@@ -98,17 +98,17 @@
     {
       "name": "Each boss executes all three phases without non-finite entities",
       "pass": true,
-      "ms": 68
+      "ms": 81
     },
     {
       "name": "Summon and particle limits hold in a 90-second stress simulation",
       "pass": true,
-      "ms": 282
+      "ms": 323
     },
     {
       "name": "Complete seeded campaigns: doors, 3 bosses, portals, final cinematic, once-only rewards",
       "pass": true,
-      "ms": 56
+      "ms": 61
     },
     {
       "name": "Death, one-time revive, and capped permanent upgrades are consistent",

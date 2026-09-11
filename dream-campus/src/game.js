@@ -104,7 +104,8 @@
       this.call('toast',`第 ${this.wave} / ${this.totalWaves} 波 · 先躲预警，再找输出机会`);this.sound.play('wave');
     }
     spawnBoss(kind){
-      const hp=D.FLOORS[this.run.floor].bossHp*this.difficulty.enemyHp;
+      const baseHp=D.FLOORS[this.run.floor].bossHp*(this.difficulty.bossHp||1);
+      const hp=this.run.floor===2?Math.min(baseHp,this.difficulty.finalBossCap||Infinity):baseHp;
       const e={id:++this.uid,kind,boss:true,x:W/2,y:280,r:kind==='principal'?37:34,hp,maxHp:hp,a:Math.PI/2,age:0,spawnTime:1,cooldown:2.2,stage:1,pattern:0,stun:0,slow:0,wet:0,burn:0,burnDps:0,burnTick:0,flash:0,windup:0,bounty:true,phasePause:0,damage:18,color:kind==='ta'?'#d1afdf':kind==='chef'?'#efc780':'#eb9db5'};
       this.enemies.push(e);this.boss=e;return e;
     }
@@ -263,7 +264,7 @@
       if(e.boss){this.updateBoss(e,dt);return;}
       if(e.stun>0)return;
       const p=this.player,d=dist(e,p);e.a=Math.atan2(p.y-e.y,p.x-e.x);e.cooldown-=dt;
-      if(e.chargeTime>0){e.chargeTime-=dt;const ox=e.x,oy=e.y;D.moveEntity(e,e.chargeX*335*dt,e.chargeY*335*dt,this.obstacles);if(Math.hypot(e.x-ox,e.y-oy)<dt*100){e.chargeTime=0;e.stun=.75;}if(e.chargeTime<=0)e.stun=.45;}
+      if(e.chargeTime>0){e.chargeTime-=dt;const ox=e.x,oy=e.y;D.moveEntity(e,e.chargeX*620*dt,e.chargeY*620*dt,this.obstacles);if(Math.hypot(e.x-ox,e.y-oy)<dt*100){e.chargeTime=0;e.stun=.75;}if(e.chargeTime<=0)e.stun=.45;}
       else if(e.windup<=0){
         let speed=e.speed*(e.slow>0?.55:1),v=this.flow.direction(e,p);
         if(['shoot','fan','summon','radial','teleport'].includes(e.behavior)&&D.los(e,p,this.obstacles)){if(d<205){v.x*=-1;v.y*=-1;speed*=.8;}else if(d<330)speed=0;}
@@ -275,13 +276,14 @@
       switch(e.behavior){
         case 'shoot':case 'fan':case 'strafe':case 'guard':{
           if(!D.los(e,p,this.obstacles)){e.cooldown=.4;break;}
-          const a=e.a,n=e.behavior==='fan'?5:e.behavior==='guard'?3:1;e.cooldown=e.behavior==='fan'?2.8:2.2;
-          this.enemyWindup(e,.57,()=>{for(let i=0;i<n;i++)this.enemyBullet(e,a+(i-(n-1)/2)*.19,e.behavior==='strafe'?205:185);});break;
+          const purple=e.kind==='mosquito',a=e.a,n=purple?6:e.behavior==='fan'?5:e.behavior==='guard'?3:1;e.cooldown=purple?2.5:e.behavior==='fan'?2.8:2.2;
+          this.enemyWindup(e,purple?.48:.57,()=>{for(let i=0;i<n;i++)this.enemyBullet(e,a+(i-(n-1)/2)*(purple?.105:.19),purple?285:e.behavior==='strafe'?205:185);});break;
         }
         case 'charge':{
           if(d>490||!D.los(e,p,this.obstacles)){e.cooldown=.5;break;}const a=e.a;e.cooldown=3.2;
-          this.fx('warningLine',{x:e.x,y:e.y,x2:e.x+Math.cos(a)*270,y2:e.y+Math.sin(a)*270},.7);
-          this.enemyWindup(e,.70,()=>{e.chargeTime=.62;e.chargeX=Math.cos(a);e.chargeY=Math.sin(a);this.sound.play('charge');});break;
+          this.fx('warningLine',{x:e.x,y:e.y,x2:e.x+Math.cos(a)*430,y2:e.y+Math.sin(a)*430},.7);
+          // 方向在预警结束时锁定，随后高速直冲；玩家需要用闪避穿过攻击窗口。
+          this.enemyWindup(e,.62,()=>{e.chargeTime=.82;e.chargeX=Math.cos(a);e.chargeY=Math.sin(a);this.sound.play('charge');});break;
         }
         case 'slam':{
           if(d>165){e.cooldown=.35;break;}e.cooldown=3.0;this.warnCircle(e.x,e.y,126,.85,e.damage*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,e);this.enemyWindup(e,.85,()=>this.sound.play('impact'));break;
@@ -318,25 +320,61 @@
       const damage=(14+f*2)*this.difficulty.enemyDamage,baseA=e.a;
       const ring=(n,speed,phase,gap=2)=>{for(let i=0;i<n;i++)if(i>=gap)this.enemyBullet(e,phase+i*TAU/n,speed,{r:6});};
       if(e.kind==='ta'){
-        switch(pattern%3){
+        switch(pattern%6){
           case 0:this.enemyWindup(e,.75,()=>{for(let i=-2-e.stage;i<=2+e.stage;i++)this.enemyBullet(e,baseA+i*.14,184);});break;
           case 1:{for(let i=0;i<2+e.stage;i++){const a=TAU*i/(2+e.stage),x=clamp(p.x+Math.cos(a)*55,PAD+90,W-PAD-90),y=clamp(p.y+Math.sin(a)*55,PAD+90,H-PAD-90);this.warnCircle(x,y,61,.95+i*.18,damage,e);}e.windup=.8;break;}
           case 2:this.enemyWindup(e,.9,()=>ring(14+e.stage*2,150,this.rng.next()*TAU,3));break;
+          case 3:{
+            const base=baseA+.18;
+            for(let i=-1;i<=1;i++)this.warnLine(e.x,e.y,e.x+Math.cos(base+i*.32)*1200,e.y+Math.sin(base+i*.32)*1200,15,1.0+i*.08,damage,e,.52);
+            e.windup=1.0;break;
+          }
+          case 4:{
+            this.enemyWindup(e,.62,()=>{for(let i=0;i<5+e.stage;i++){const a=baseA+(i-(4+e.stage)/2)*.11;this.enemyBullet(e,a,218,{r:7});this.schedule(.24,()=>this.enemyBullet(e,a+.09,235,{r:7}),e);}});break;
+          }
+          case 5:{
+            const phase=this.rng.next()*TAU;
+            this.enemyWindup(e,.72,()=>{for(let i=0;i<16+e.stage*2;i++)this.schedule(i*.055,()=>this.enemyBullet(e,phase+i*.24,168+i*3,{r:6}),e);});break;
+          }
         }
       }else if(e.kind==='chef'){
-        switch(pattern%4){
+        switch(pattern%7){
           case 0:this.enemyWindup(e,.75,()=>{for(let j=0;j<3;j++)this.schedule(j*.25,()=>{for(let i=-3;i<=3;i++)this.enemyBullet(e,baseA+i*.16+(j-1)*.065,175+j*18,{r:7});},e);});break;
           case 1:for(let i=0;i<3+e.stage;i++){const pos=i===0?{x:p.x,y:p.y}:this.pointFarFromPlayer(10,0);this.warnCircle(pos.x,pos.y,75,1.0+i*.12,damage+2,e);}e.windup=.9;break;
           case 2:this.enemyWindup(e,.9,()=>ring(17+e.stage,165,this.rng.next()*TAU,3));break;
           case 3:{const x=clamp(p.x,160,W-160);this.warnLine(x,PAD+5,x,H-PAD-5,62,1.0,damage,e,.55);if(e.stage>=2)this.warnLine(PAD+5,p.y,W-PAD-5,p.y,42,1.35,damage,e,.50);e.windup=1.0;break;}
+          case 4:{
+            this.enemyWindup(e,.68,()=>{for(let i=0;i<12+e.stage*2;i++)this.enemyBullet(e,TAU*i/(12+e.stage*2)+this.rng.next()*.08,176,{r:7});});break;
+          }
+          case 5:{
+            for(let i=-2;i<=2;i++)this.warnLine(e.x,e.y,e.x+Math.cos(baseA+i*.16)*1200,e.y+Math.sin(baseA+i*.16)*1200,18,1.05+i*.08,damage,e,.48);
+            e.windup=1.0;break;
+          }
+          case 6:{
+            this.enemyWindup(e,.74,()=>{for(let i=0;i<4+e.stage;i++){const a=TAU*i/(4+e.stage)+this.rng.next()*.2;const x=clamp(p.x+Math.cos(a)*115,PAD+75,W-PAD-75),y=clamp(p.y+Math.sin(a)*115,PAD+75,H-PAD-75);this.warnCircle(x,y,58,.12+i*.10,damage+3,e);}});break;
+          }
         }
       }else{
-        switch(pattern%5){
+        switch(pattern%9){
           case 0:{const phase=this.rng.next()*TAU;this.enemyWindup(e,.85,()=>{ring(18+e.stage*2,170,phase,4);if(e.stage>=2)this.schedule(.5,()=>ring(18+e.stage*2,155,phase+.13,4),e);});break;}
           case 1:{this.warnCircle(p.x,p.y,90,1.05,damage+3,e);for(let i=1;i<e.stage+2;i++){const pos=this.pointFarFromPlayer(20,70);this.warnCircle(pos.x,pos.y,78,1.10+i*.18,damage,e);}e.windup=.9;break;}
           case 2:{const a=baseA;for(let i=0;i<e.stage+1;i++){const ra=a+(i-(e.stage)/2)*.33;this.warnLine(e.x,e.y,e.x+Math.cos(ra)*1200,e.y+Math.sin(ra)*1200,19,1.10,damage,e,.70);}e.windup=1.1;break;}
           case 3:{this.enemyWindup(e,.85,()=>{if(this.enemies.filter(x=>!x.boss).length<4){for(let i=0;i<2;i++){const pos=this.pointFarFromPlayer(18,250);this.spawn(e.stage===3?'rollcall':'paper',pos.x,pos.y,{bounty:false});}}for(let i=-3;i<=3;i++)this.enemyBullet(e,baseA+i*.15,205);});break;}
           case 4:{const safe=this.rng.int(1,4),lane=(W-2*PAD)/6;for(let i=0;i<6;i++)if(i!==safe&&i!==safe-1)this.warnLine(PAD+lane*(i+.5),PAD,PAD+lane*(i+.5),H-PAD,70,1.2,damage,e,.65);this.enemyWindup(e,1.0,()=>{for(let i=-2;i<=2;i++)this.enemyBullet(e,baseA+i*.18,175);});break;}
+          case 5:{
+            this.enemyWindup(e,.72,()=>{for(let j=0;j<3;j++)for(let i=-2;i<=2;i++)this.enemyBullet(e,baseA+(i*.18)+(j-1)*.08,220+j*12,{r:7});});break;
+          }
+          case 6:{
+            for(let i=0;i<4+e.stage;i++){const a=baseA+(i-(3+e.stage)/2)*.28;this.warnLine(e.x,e.y,e.x+Math.cos(a)*1200,e.y+Math.sin(a)*1200,22,1.0+i*.12,damage,e,.55);}
+            e.windup=1.05;break;
+          }
+          case 7:{
+            this.enemyWindup(e,.65,()=>{for(let i=0;i<8+e.stage;i++){const a=TAU*i/(8+e.stage);const x=clamp(p.x+Math.cos(a)*90,PAD+70,W-PAD-70),y=clamp(p.y+Math.sin(a)*90,PAD+70,H-PAD-70);this.warnCircle(x,y,48,.15+i*.05,damage+4,e);}});break;
+          }
+          case 8:{
+            const phase=this.rng.next()*TAU;
+            this.enemyWindup(e,.8,()=>{for(let i=0;i<22+e.stage*2;i++)this.enemyBullet(e,phase+i*TAU/(22+e.stage*2),190,{r:5});this.schedule(.38,()=>ring(16+e.stage,205,phase+.18,2),e);});break;
+          }
         }
       }
     }
@@ -478,7 +516,13 @@
         this.call('toast',`获得遗物：${r.name}`);this.emit('relic:acquired',{id:r.id});
       }else if(pending.type==='weapon'){
         if(choice==='salvage'){const w=D.WEAPONS[pending.weapon.id],coins=8+w.rarity*4;this.run.coins+=coins;this.call('toast',`已拆解为 ${coins} 学分币。`);}
-        else if(choice===0||choice===1){this.run.inventory[choice]={...pending.weapon};this.run.selected=choice;this.player.cooldowns[choice]=.2;this.recompute();this.call('toast',`已装备 ${D.WEAPONS[pending.weapon.id].name}`);this.emit('weapon:equipped',{...pending.weapon,slot:choice});}
+        else if(choice===0||choice===1){
+          const old={...this.run.inventory[choice]};
+          this.run.inventory[choice]={...pending.weapon};this.run.selected=choice;this.player.cooldowns[choice]=.2;
+          const a=this.player.a||0,dropX=clamp(this.player.x-Math.cos(a)*128,PAD+28,W-PAD-28),dropY=clamp(this.player.y-Math.sin(a)*128,PAD+28,H-PAD-28);
+          this.room.loot={id:old.id,level:old.level||0,x:dropX,y:dropY};
+          this.recompute();this.call('toast',`已装备 ${D.WEAPONS[pending.weapon.id].name} · ${D.WEAPONS[old.id].name} 已掉在脚边`);this.emit('weapon:equipped',{...pending.weapon,slot:choice,replaced:old});
+        }
         else return false;
       }else return false;
       this.run.pending=null;this.mode='playing';this.call('close');this.sound.play('reward');this.save();return true;
