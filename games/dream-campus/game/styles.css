@@ -17,6 +17,10 @@ html[data-control-mode="touch"] .control-strip{display:none!important}
 .replace-card.recommended{border-color:#7d9d67;background:#e7f0d9;box-shadow:0 0 0 2px #7d9d6730}
 .replace-card small{font:700 10px ui-monospace,monospace;color:#6e8462}
 
+/* 奖励卡片缓慢展开，并给连续击杀后的鼠标点击留出防误触窗口。 */
+@keyframes choice-reveal{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal.choice-reveal{animation:choice-reveal .85s cubic-bezier(.2,.8,.25,1) both}
+
 /* Touch controls use the screen's free margins instead of covering the arena. */
 @media (pointer:coarse) and (orientation:landscape){.touch-play .joystick{bottom:83px}.touch-play .touch-buttons{bottom:58px}}
 @media (pointer:coarse) and (orientation:portrait){

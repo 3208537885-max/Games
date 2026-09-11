@@ -212,7 +212,7 @@
           this.fx('slash',{x:p.x,y:p.y,a,arc:w.arc,r:w.range,color},.23);
           for(const e of this.enemies){if(e.dead)continue;const d=dist(p,e),ea=Math.atan2(e.y-p.y,e.x-p.x),da=Math.atan2(Math.sin(ea-a),Math.cos(ea-a));if(d<w.range+e.r&&Math.abs(da)<w.arc/2&&D.los(p,e,this.obstacles))this.hitEnemy(e,w.damage,w,p);}
           for(const ob of [...this.obstacles]){const c={x:ob.x+ob.w/2,y:ob.y+ob.h/2},da=Math.atan2(Math.sin(Math.atan2(c.y-p.y,c.x-p.x)-a),Math.cos(Math.atan2(c.y-p.y,c.x-p.x)-a));if(dist(p,c)<w.range&&Math.abs(da)<w.arc/2)this.damageProp(ob,w.damage);}
-          if(w.clear)this.bullets=this.bullets.filter(b=>b.friendly||dist(p,b)>w.range);break;
+          if(w.clear){const before=this.bullets.length;this.bullets=this.bullets.filter(b=>b.friendly||dist(p,b)>w.range);const cleared=before-this.bullets.length;if(cleared){this.fx('pulse',{x:p.x,y:p.y,r:w.range,color:'#b8eee0'},.28);this.particle(p.x,p.y,'#b8eee0',Math.min(22,cleared*2),180);this.text(p.x,p.y-52,`清除弹幕 ×${cleared}`,'#b8eee0',15);}}break;
         }
         case 'orbit':{
           this.orbits=this.orbits.filter(v=>v.weapon!==w.id);

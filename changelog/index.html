@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.15</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.16</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,14 +131,36 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.15">
+          <article class="release current" data-version="0.1.16">
             <div class="release-card">
-              <header class="release-head"><div><h2 class="release-version">0.1.15</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <header class="release-head"><div><h2 class="release-version">0.1.16</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <h3>更新日志与奖励防误触修复</h3>
+              <ul class="changes">
+                <li>补齐 0.1.10～0.1.15 的完整版本时间线，并将本次修复标记为当前版本 0.1.16。</li>
+                <li>近战武器挥击时会清除攻击范围内的敌方弹幕；奖励选择框增加缓慢出现动画和短暂防误触锁定。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.15">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.15</h2><p class="release-date">2026.09.11</p></div></header>
               <h3>水课梦魇 Boss 节奏与武器选择</h3>
               <ul class="changes">
                 <li>三层 Boss 采用 70% / 85% / 100% 的生命梯度；每个难度再降低 25%，最高难度最终 Boss 生命硬上限为 9000。</li>
                 <li>新增多组 Boss 攻击模式；冲撞怪会锁定方向高速冲撞，紫色小怪会发射 6 发高速直线弹幕。</li>
                 <li>武器奖励新增综合评分和替换建议；替换后旧武器会掉在脚边，可以再次拾取换回。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.14">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.14</h2><p class="release-date">2026.09.11</p></div></header>
+              <h3>水课梦魇小怪强度调整</h3>
+              <ul class="changes">
+                <li>普通怪物生命值在 0.1.13 的基础上再次提高 1.5 倍，三档难度实际倍率为 1.9125 / 2.25 / 2.7。</li>
+                <li>保留三位 Boss 相对原始数值 10 倍的生命、两波弹幕和最高难度排行榜规则。</li>
               </ul>
             </div>
           </article>
@@ -322,7 +344,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 16 · v0.1.15</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 17 · v0.1.16</span>
       </div>
     </section>
 
@@ -332,7 +354,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.15</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.16</span></div></footer>
 
   <script>
     (() => {
