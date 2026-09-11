@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '1.0.0';
+  DC.VERSION = '0.1.13';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -109,14 +109,14 @@
     {id:'cram',name:'期末突击人',subtitle:'一晚一支笔，一个奇迹。',color:'#c5a2ed',hp:38,energy:125,speed:229,regen:17,starter:'pencil',secondary:'thermos',mods:{crit:0.07},passive:'125 专注 · 恢复更快 · 暴击 +7%'}
   ];
   DC.DIFFICULTIES = {
-    chill:{name:'轻松旁听',description:'敌人伤害 ×0.70，生命 ×0.85；弹幕密度约 ×3.5，更适合第一次醒来。',enemyHp:0.85,enemyDamage:0.70,bulletSpeed:0.88,bulletDensity:3.5,reward:0.85},
-    normal:{name:'正常修读',description:'标准数值；注意预警、灵活换武器即可。',enemyHp:1,enemyDamage:1,bulletSpeed:1,bulletDensity:1,reward:1},
-    nightmare:{name:'期末噩梦',description:'敌人伤害 ×1.22，生命 ×1.20，弹速 ×1.10。',enemyHp:1.20,enemyDamage:1.22,bulletSpeed:1.10,bulletDensity:1,reward:1.25}
+    chill:{name:'轻松旁听',description:'敌人生命 ×1.275、弹速 ×1.32、伤害 ×1.05；弹幕密度约 ×3.5。',enemyHp:1.275,enemyDamage:1.05,bulletSpeed:1.32,bulletDensity:3.5,bulletWaves:2,reward:0.85},
+    normal:{name:'正常修读',description:'敌人生命 ×1.5、弹速 ×1.5、伤害 ×1.5；每次攻击连续发射两波弹幕。',enemyHp:1.5,enemyDamage:1.5,bulletSpeed:1.5,bulletDensity:1,bulletWaves:2,reward:1},
+    nightmare:{name:'期末噩梦',description:'敌人生命 ×1.8、弹速 ×1.65、伤害 ×1.83；每次攻击连续发射两波弹幕。',enemyHp:1.8,enemyDamage:1.83,bulletSpeed:1.65,bulletDensity:1,bulletWaves:2,reward:1.25}
   };
   DC.FLOORS = [
-    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:660,mobs:['paper','slime','rollcall','charger','printer']},
-    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:1090,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner']},
-    {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:1860,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb']}
+    {name:'第一章 · 永无止境的早八',short:'教学楼',subtitle:'投影仪还在放第 1 页。你已经睡进第 36 页。',palette:['#263d37','#2d4740','#426456','#76bd96'],boss:'ta',bossName:'点名助教',bossQuote:'“这位同学，请回答一下！”',baseHp:1,baseDamage:1,bossHp:6600,mobs:['paper','slime','rollcall','charger','printer']},
+    {name:'第二章 · 饭点生存法则',short:'食堂 / 宿舍',subtitle:'取餐码失效了，阿姨的手却抖出了弹幕。',palette:['#423e32','#514b3c','#736248','#d9b074'],boss:'chef',bossName:'手抖阿姨 · 盛饭机甲',bossQuote:'“同学，少打一点也是为你好。”',baseHp:1.42,baseDamage:1.15,bossHp:10900,mobs:['paper','charger','printer','bomb','cleaner','mosquito','summoner']},
+    {name:'第三章 · 学分尽头的高塔',short:'行政楼',subtitle:'公章盖过了现实，毕业只差最后一个同意。',palette:['#363545','#454052','#675b78','#b49acd'],boss:'principal',bossName:'梦境校长 · 学分之主',bossQuote:'“还差一个学分，就可以醒来了。”',baseHp:1.92,baseDamage:1.30,bossHp:18600,mobs:['rollcall','printer','ghost','proctor','slide','summoner','cleaner','bomb']}
   ];
   DC.ENEMIES = {
     paper:{name:'会跑的作业',hp:38,speed:93,r:15,color:'#eee3b6',cost:1,behavior:'chase',damage:10},

@@ -242,7 +242,8 @@
     enemyBullet(e,a,speed=185,props={}){
       if(this.bullets.filter(b=>!b.friendly).length>=240)return;
       const v=speed*this.difficulty.bulletSpeed;
-      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,color:'#fa897f',...props};
+      const {__wave=false,...bulletProps}=props;
+      const base={x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),r:6,age:0,life:5,maxLife:5,friendly:false,damage:(e.damage||11)*D.FLOORS[this.run.floor].baseDamage*this.difficulty.enemyDamage,color:'#fa897f',...bulletProps};
       const density=Math.max(1,Number(this.difficulty.bulletDensity)||1),count=Math.floor(density)+(this.rng.next()<density%1?1:0);
       // 轻松旁听增加同一轮弹幕的数量，并用小角度散开，避免只靠提高速度制造难度。
       for(let i=0;i<count;i++){
@@ -250,6 +251,7 @@
         const offset=i===0?0:(i%2===1?Math.ceil(i/2):-Math.ceil(i/2))*.065,angle=a+offset;
         this.bullets.push({id:++this.uid,...base,a:angle,vx:Math.cos(angle)*v,vy:Math.sin(angle)*v});
       }
+      if(!__wave&&this.difficulty.bulletWaves>1)this.schedule(.12,()=>{if(!e.dead)this.enemyBullet(e,a,speed,{...bulletProps,__wave:true});},e);
     }
     warnCircle(x,y,r,delay,damage,owner=null){this.hazards.push({kind:'circle',x,y,r,t:delay,delay,life:.38,active:false,damage,owner,hit:false});}
     warnLine(x,y,x2,y2,width,delay,damage,owner=null,duration=.48){this.hazards.push({kind:'line',x,y,x2,y2,width,t:delay,delay,life:duration,active:false,damage,owner,hit:false});}

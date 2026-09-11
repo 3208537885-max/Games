@@ -74,10 +74,8 @@
       <section class="game-frame"><iframe id="gameFrame" src="game/" title="水课梦魇：校园梦境冒险" allow="autoplay"></iframe></section>
       <aside class="rank-panel">
         <h2>水课梦魇排行榜</h2>
-        <p>只记录已登录玩家的最高分。游戏结束后，成绩会按难度分别保存。</p>
+        <p>只记录已登录玩家在“期末噩梦”中的最高分；轻松旁听和正常修读仅供练习，不计入排行榜。</p>
         <div class="rank-list">
-          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="轻松旁听" data-game-difficulty="low" aria-label="水课梦魇轻松旁听排行榜"></section>
-          <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="正常修读" data-game-difficulty="normal" aria-label="水课梦魇正常修读排行榜"></section>
           <section class="desktop-game-leaderboard" data-game-leaderboard="dream-campus" data-game-title="期末噩梦" data-game-difficulty="high" aria-label="水课梦魇期末噩梦排行榜"></section>
         </div>
         <p class="game-status" id="gameStatus" aria-live="polite">完成一局后，这里会显示本次成绩。</p>
@@ -109,6 +107,11 @@
         const score = Number(payload && payload.score);
         const difficulty = difficultyKey[payload && payload.difficulty] || "normal";
         if (!Number.isFinite(score) || score < 0) return;
+        if (difficulty !== "high") {
+          await window.gameProgress?.recordCompletion("dream-campus");
+          setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；轻松旁听和正常修读不计入排行榜，只有期末噩梦计分。`);
+          return;
+        }
         if (!client) {
           setStatus(`本局 ${score.toLocaleString("zh-CN")} 分；排行榜服务未加载。`);
           return;

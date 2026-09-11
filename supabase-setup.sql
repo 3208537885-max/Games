@@ -159,7 +159,8 @@ as $$
     where high_score > 0
       and (
         (game_slug = 'snake' and difficulty = 'high')
-        or (game_slug in ('tetris', '2048', 'breakout', 'dream-campus') and difficulty = 'normal')
+        or (game_slug in ('tetris', '2048', 'breakout') and difficulty = 'normal')
+        or (game_slug = 'dream-campus' and difficulty = 'high')
       )
   ),
   game_leaders as (

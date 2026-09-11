@@ -1,9 +1,9 @@
 {
   "suite": "core and simulation",
-  "date": "2026-09-11T05:12:05.362Z",
+  "date": "2026-09-11T06:30:46.912Z",
   "passed": 22,
   "failed": 0,
-  "assertions": 429582,
+  "assertions": 429586,
   "tests": [
     {
       "name": "Content: 48 unique weapons, 28 relics, 8 synergies, 13 attack behaviors",
@@ -13,17 +13,17 @@
     {
       "name": "Seeded maps: 1,500 floors, unique cells, connected graph, guaranteed special rooms",
       "pass": true,
-      "ms": 62
+      "ms": 56
     },
     {
       "name": "Interior navigation: 450 generated layouts preserve a connected walkable field",
       "pass": true,
-      "ms": 55
+      "ms": 46
     },
     {
       "name": "Movement and rays: dash cannot tunnel through a thin prop; room bounds clip rays",
       "pass": true,
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "Loot: deterministic pools; graduation weapon stays locked until a win",
@@ -48,7 +48,7 @@
     {
       "name": "All 48 weapons create real damage with their actual engine behavior",
       "pass": true,
-      "ms": 125
+      "ms": 115
     },
     {
       "name": "Beam and very fast projectiles hit front targets but not through cover",
@@ -58,12 +58,12 @@
     {
       "name": "Water/electric interaction applies 35% bonus; boss stun has a short cap",
       "pass": true,
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "Visual settings do not alter combat RNG or critical damage",
       "pass": true,
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "Treasure pickup is transactional and cannot be claimed twice",
@@ -98,22 +98,22 @@
     {
       "name": "Each boss executes all three phases without non-finite entities",
       "pass": true,
-      "ms": 72
+      "ms": 69
     },
     {
       "name": "Summon and particle limits hold in a 90-second stress simulation",
       "pass": true,
-      "ms": 295
+      "ms": 277
     },
     {
       "name": "Complete seeded campaigns: doors, 3 bosses, portals, final cinematic, once-only rewards",
       "pass": true,
-      "ms": 61
+      "ms": 55
     },
     {
       "name": "Death, one-time revive, and capped permanent upgrades are consistent",
       "pass": true,
-      "ms": 0
+      "ms": 1
     }
   ]
 }
