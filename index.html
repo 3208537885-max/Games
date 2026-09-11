@@ -92,6 +92,12 @@
     .library { padding-bottom: 58px; }
     .game-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .game-entry { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr) 138px; gap: 10px; align-items: stretch; }
+    .dream-campus-entry { order: -1; }
+    .dream-campus-entry .game-card { border-color: #3e674f; background: #12281f; }
+    .dream-campus-entry .game-card:hover, .dream-campus-entry .game-card:focus-within { background: #19382a; border-color: #9bcf86; }
+    .dream-campus-cover { background: #12281f; }
+    .dream-campus-cover img { filter: brightness(.58) saturate(.78) contrast(1.12); transform: scale(1.35); }
+    .dream-campus-entry .game-card:hover .dream-campus-cover img, .dream-campus-entry .game-card:focus-within .dream-campus-cover img { transform: scale(1.41); }
     .mini-leaderboard { min-height: 410px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
     .mini-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
     .mini-title { font-size: 12px; font-weight: 800; }
@@ -249,7 +255,7 @@
       小游戏大合集
     </a>
     <div class="account-area">
-      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.20"><span class="version-label">更新日志</span><span>v0.1.20</span></a>
+      <a class="version-link" href="changelog/" aria-label="浏览更新日志，当前版本 0.1.21"><span class="version-label">更新日志</span><span>v0.1.21</span></a>
       <a class="version-link" href="matches/" aria-label="浏览联机对局记录"><span>对局记录</span></a>
       <span class="auth-state" id="authState">未登录</span>
       <button class="account-button" id="authOpenButton" type="button">登录</button>
@@ -276,6 +282,25 @@
       </div>
 
       <div class="game-grid">
+        <div class="game-entry dream-campus-entry">
+          <a class="game-card" href="games/dream-campus/" aria-label="开始游玩水课梦魇">
+            <div class="game-cover dream-campus-cover" aria-hidden="true">
+              <img src="games/dream-campus/game/assets/key-art.svg" alt="" width="1280" height="720">
+              <div class="cover-scan"></div>
+            </div>
+            <div class="game-content">
+              <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
+              <h3 class="game-name">水课梦魇</h3>
+              <p class="game-description">在校园梦境中战斗、探索并击败梦境校长，完成一场完整冒险。</p>
+              <span class="play-link">开始游戏</span>
+            </div>
+          </a>
+          <aside class="mini-leaderboard" data-leaderboard="dream-campus" data-difficulty="high">
+            <div class="mini-head"><span class="mini-title">水课梦魇榜</span><span class="mini-scope">噩梦</span></div>
+            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
+            <span class="mini-status">正在读取</span>
+          </aside>
+        </div>
         <div class="game-entry">
           <a class="game-card" href="games/tetra/" aria-label="开始游玩俄罗斯方块">
             <div class="game-cover" aria-hidden="true">
@@ -283,7 +308,7 @@
               <div class="cover-scan"></div>
             </div>
             <div class="game-content">
-              <div class="game-meta"><span>ARCADE / 001</span><span>2026</span></div>
+              <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
               <h3 class="game-name">俄罗斯方块</h3>
               <p class="game-description">带有连击、暂存和节奏反馈的现代俄罗斯方块。</p>
               <span class="play-link">开始游戏</span>
@@ -303,7 +328,7 @@
               <div class="cover-scan"></div>
             </div>
             <div class="game-content">
-              <div class="game-meta"><span>ARCADE / 002</span><span>2026</span></div>
+              <div class="game-meta"><span>ARCADE / 003</span><span>2026</span></div>
               <h3 class="game-name">2048</h3>
               <p class="game-description">滑动数字方块，合成更大的数字并冲击 2048。</p>
               <span class="play-link">开始游戏</span>
@@ -323,7 +348,7 @@
               <div class="cover-scan"></div>
             </div>
             <div class="game-content">
-              <div class="game-meta"><span>ARCADE / 003</span><span>2026</span></div>
+              <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
               <h3 class="game-name">贪吃蛇</h3>
               <p class="game-description">低、中、高三档速度，穿过边界继续前进。</p>
               <span class="play-link">开始游戏</span>
@@ -350,7 +375,7 @@
               <div class="cover-scan"></div>
             </div>
             <div class="game-content">
-              <div class="game-meta"><span>ARCADE / 004</span><span>2026</span></div>
+              <div class="game-meta"><span>ARCADE / 005</span><span>2026</span></div>
               <h3 class="game-name">打砖块</h3>
               <p class="game-description">开局 6 行砖块，清空任意一行后顶部立刻补上一行。</p>
               <span class="play-link">开始游戏</span>
@@ -363,25 +388,6 @@
           </aside>
         </div>
 
-        <div class="game-entry">
-          <a class="game-card" href="games/dream-campus/" aria-label="开始游玩水课梦魇">
-            <div class="game-cover" aria-hidden="true">
-              <img src="games/dream-campus/game/assets/key-art.svg" alt="" width="1280" height="720">
-              <div class="cover-scan"></div>
-            </div>
-            <div class="game-content">
-              <div class="game-meta"><span>ARCADE / 005</span><span>2026</span></div>
-              <h3 class="game-name">水课梦魇</h3>
-              <p class="game-description">在校园梦境中战斗、探索并击败梦境校长，完成一场完整冒险。</p>
-              <span class="play-link">开始游戏</span>
-            </div>
-          </a>
-          <aside class="mini-leaderboard" data-leaderboard="dream-campus" data-difficulty="high">
-            <div class="mini-head"><span class="mini-title">水课梦魇榜</span><span class="mini-scope">噩梦</span></div>
-            <ol class="mini-list"><li class="mini-empty">正在读取...</li></ol>
-            <span class="mini-status">正在读取</span>
-          </aside>
-        </div>
       </div>
     </section>
 

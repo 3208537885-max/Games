@@ -19,8 +19,10 @@ def record(name,condition,detail=''):
     ok=bool(condition);results.append({'name':name,'pass':ok,'detail':detail});print(('PASS ' if ok else 'FAIL ')+name,detail)
     return ok
 
-def boot(browser,width=1440,height=1080,touch=False,shim=True):
-    context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,has_touch=touch,is_mobile=touch)
+def boot(browser,width=1440,height=1080,touch=False,shim=True,wechat=False):
+    options={'viewport':{'width':width,'height':height},'device_scale_factor':1,'has_touch':touch,'is_mobile':touch}
+    if wechat: options['user_agent']='Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 MicroMessenger/8.0.45'
+    context=browser.new_context(**options)
     page=context.new_page();page.on('pageerror',lambda e:errors.append(str(e)))
     prefix=SHIM if shim else 'window.DREAM_CAMPUS_CONFIG={debug:true};'
     page.set_content(HTML.replace('<script>\n','<script>\n'+prefix+'\n',1),wait_until='load');page.wait_for_timeout(250)
@@ -124,6 +126,10 @@ with sync_playwright() as p:
         page.evaluate("__DC_DEBUG__.game.offerRelics('触屏奖励测试')");screenshot(page,name+'-reward.png')
         record(name+' reward buttons remain reachable',all(v['width']>55 and v['height']>80 for v in page.locator('[data-action="relic"]').evaluate_all('(es)=>es.map(e=>({width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height}))')))
         ctx.close()
+    ctx,page=boot(browser,390,844,True,wechat=True);page.evaluate("DreamCampus.start({seed:'WECHAT',skipStory:true,character:'early'});__DC_DEBUG__.warp(0,1);__DC_DEBUG__.game.player.invuln=999");page.wait_for_timeout(500)
+    record('WeChat portrait mode is detected',page.evaluate("document.documentElement.dataset.wechat==='true'"))
+    record('WeChat portrait mode stays playable without the rotation blocker',page.evaluate("getComputedStyle(document.querySelector('.touch-play'),'::before').content=='none'"))
+    record('WeChat portrait controls stay inside the viewport',page.evaluate("(()=>{let m=document.querySelector('#moveStick').getBoundingClientRect();return m.bottom<=innerHeight+1&&m.right<=innerWidth+1&&m.left>=-1})()"));check_layout(page,'WeChat portrait arena overflow');ctx.close()
     browser.close()
 record('No uncaught JavaScript errors in tested browser paths',not errors,'; '.join(errors))
 report={'generatedAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'transport':'Offline standalone HTML via Playwright set_content; real Chromium canvas/DOM/input/audio; browser disk persistence replaced by a documented in-memory Web Storage shim except the fallback test.','passed':sum(t['pass'] for t in results),'failed':sum(not t['pass'] for t in results),'errors':errors,'tests':results}

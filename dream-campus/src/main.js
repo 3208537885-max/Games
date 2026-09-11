@@ -11,8 +11,9 @@
   // 只把真正的手机/平板当作触控端，避免带触摸屏的桌面电脑误显示手机控件。
   const mobileDevice=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||
     (window.matchMedia('(pointer: coarse)').matches&&navigator.maxTouchPoints>0&&Math.max(screen.width,screen.height)<=1024);
+  const wechatDevice=/MicroMessenger/i.test(navigator.userAgent);
   function updateOrientation(){document.documentElement.dataset.orientation=window.matchMedia('(orientation: portrait)').matches?'portrait':'landscape';}
-  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';updateOrientation();
+  document.documentElement.dataset.controlMode=mobileDevice?'touch':'desktop';document.documentElement.dataset.wechat=wechatDevice?'true':'false';updateOrientation();
   const handlers=[];const listen=(target,name,fn,options)=>{target.addEventListener(name,fn,options);handlers.push(()=>target.removeEventListener(name,fn,options));};
   function resetInput(){keys.clear();mouseDown=false;input.fire=false;input.mx=0;input.my=0;input.dash=false;input.skill=false;input.drink=false;input.interact=false;input.swap=null;touch.move={x:0,y:0};touch.aim={x:0,y:0};touch.aiming=false;document.querySelectorAll('.joystick i').forEach(el=>el.style.transform='');}
   function coordinates(e){const rect=canvas.getBoundingClientRect();return {x:(e.clientX-rect.left)/rect.width*D.W,y:(e.clientY-rect.top)/rect.height*D.H};}

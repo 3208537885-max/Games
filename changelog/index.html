@@ -116,7 +116,7 @@
         <p class="eyebrow">RELEASE NOTES</p>
         <h1 id="page-title">更新日志</h1>
       </div>
-      <div class="version-stamp"><span>当前版本</span><strong>v0.1.20</strong></div>
+      <div class="version-stamp"><span>当前版本</span><strong>v0.1.21</strong></div>
     </section>
 
     <section class="timeline-shell" aria-labelledby="timeline-title">
@@ -131,14 +131,14 @@
       <div class="timeline-rail-wrap">
         <div class="timeline" id="timeline" tabindex="0" aria-label="版本更新记录">
           <!-- 维护规则：每次面向玩家的更新发布前，都必须在此新增一条对应的 0.1.n 更新日志。 -->
-          <article class="release current" data-version="0.1.20">
+          <article class="release current" data-version="0.1.21">
             <div class="release-card">
-              <header class="release-head"><div><h2 class="release-version">0.1.20</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
-              <h3>环绕武器防御强化与手机横屏操作</h3>
+              <header class="release-head"><div><h2 class="release-version">0.1.21</h2><p class="release-date">2026.09.11</p></div><span class="release-tag">CURRENT</span></header>
+              <h3>微信竖屏兼容与游戏厅入口统一</h3>
               <ul class="changes">
-                <li>地质罗盘、图书馆占座伞、八百页 PPT 和实验室离心机现在可以阻挡并反弹敌方弹幕，反弹弹会以特殊轨迹回击敌人。</li>
-                <li>环绕物会周期性发射辅助追踪弹，并增加护盾光环、反射闪光和回击弹的视觉反馈。</li>
-                <li>手机端自动识别触控设备并强制横屏游玩，控制改为左侧射击摇杆、右侧移动摇杆和冲刺按钮；技能、换枪、喝水与交互按钮移除，靠近目标时自动交互。</li>
+                <li>补回遗漏的 0.1.17 双人 2048 联机稳定性与结算更新，版本时间线现在连续可浏览。</li>
+                <li>微信内置浏览器识别为竖屏兼容模式，不再被横屏遮罩挡住；普通手机浏览器仍保留横屏提示。横屏摇杆缩小并避开安全区，弹窗关闭按钮也调整到可点击位置。</li>
+                <li>水课梦魇移动到单人游戏第一位，游戏厅入口改用深绿暗色游戏内风格，并重新编号其它单人游戏。</li>
               </ul>
             </div>
           </article>
@@ -151,6 +151,18 @@
                 <li>新增鸭腿饭、鸡腿饭、卡死的选课网站、抢课刷新器、食堂大锅菜和成绩曲线 6 件武器，均接入掉落、商店和武器图鉴。</li>
                 <li>新增卡死的选课网站、验证码循环框和排队进度条 3 类敌怪，并加入故障像素、饭盒、蒸汽和成绩火花等弹幕表现。</li>
                 <li>图鉴、武器槽和新生指南补充特殊弹道与得分细则；武器总数由 48 件更新为 54 件。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="release" data-version="0.1.17">
+            <div class="release-card">
+              <header class="release-head"><div><h2 class="release-version">0.1.17</h2><p class="release-date">2026.09.11</p></div></header>
+              <h3>双人 2048 联机稳定性与结算优化</h3>
+              <ul class="changes">
+                <li>双方棋盘状态改用递增版本号和顺序发送，网络延迟或请求乱序时不会再用旧棋盘覆盖新棋盘。</li>
+                <li>降低房间状态轮询间隔，并加入刷新串行保护；副机能独立生成自己的方块，同时持续看到对手最新局面。</li>
+                <li>时间结束后显示明确的胜利、失败或平局结算层，展示双方最终分数，并支持重新读取结果与返回游戏厅。</li>
               </ul>
             </div>
           </article>
@@ -368,7 +380,7 @@
 
       <div class="shell">
         <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
-        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 21 · v0.1.20</span>
+        <span class="timeline-status" id="timelineStatus" aria-live="polite">01 / 23 · v0.1.21</span>
       </div>
     </section>
 
@@ -378,7 +390,7 @@
     </section>
   </main>
 
-  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.20</span></div></footer>
+  <footer><div class="shell footer-inner"><span>CHANGELOG</span><span>v0.1.21</span></div></footer>
 
   <script>
     (() => {

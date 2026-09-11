@@ -14,6 +14,23 @@ html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::before
 html[data-control-mode="touch"][data-orientation="portrait"] .touch-play::after{content:"旋转设备后即可开始";position:absolute;inset:54% 0 auto;text-align:center;z-index:31;color:#abc09c;font-size:11px;pointer-events:none}
 @media (pointer:coarse) and (orientation:landscape){html[data-control-mode="touch"] .touch-play .aim-stick{left:18px;right:auto}html[data-control-mode="touch"] .touch-play .move-stick{right:18px;left:auto}}
 
+/* WeChat WebView may lock portrait; keep the game usable there instead of blocking it. */
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play::before,
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play::after{display:none;content:none}
+html[data-control-mode="touch"] .touch-play .joystick{width:76px;height:76px;bottom:12px}
+html[data-control-mode="touch"] .touch-play .joystick i{width:30px;height:30px;left:22px;top:22px}
+html[data-control-mode="touch"] .touch-play .touch-buttons{bottom:10px}
+html[data-control-mode="touch"] .touch-play .touch-buttons button{width:40px;height:40px;font-size:9px}
+html[data-control-mode="touch"] .overlay{align-items:flex-start;padding:max(18px,env(safe-area-inset-top)) 12px max(18px,env(safe-area-inset-bottom))}
+html[data-control-mode="touch"] .overlay .modal{margin-top:8px;padding-top:48px;max-height:calc(100dvh - 26px)}
+html[data-control-mode="touch"] .overlay .modal-close{position:absolute;top:max(12px,env(safe-area-inset-top) + 8px);right:12px;z-index:2}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play{overflow:auto}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play .stage-wrap{flex:0 0 auto;align-items:flex-start;padding-top:8px}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play .arena{width:min(calc(100vw - 14px),520px)!important;height:auto!important;aspect-ratio:1.6}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play .joystick{bottom:10px}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play .aim-stick{left:12px;right:auto}
+html[data-control-mode="touch"][data-wechat="true"][data-orientation="portrait"] .touch-play .move-stick{right:12px;left:auto}
+
 html[data-embedded="true"] .home-header{height:70px}html[data-embedded="true"] .home-footer>span{display:none}
 
 /* 操作模式由设备类型决定，而不是单看 pointer:coarse，避免桌面触摸屏显示手机 UI。 */
