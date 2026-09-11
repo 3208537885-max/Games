@@ -1,0 +1,50 @@
+PASS No-storage fallback boots and offers a playable game 
+PASS No-storage fallback renders the arena 
+PASS Desktop home has no horizontal overflow {'width': 1440, 'scroll': 1440, 'body': 1440}
+PASS Original cover SVG is decoded 
+PASS Start button enters the four-page prologue 
+PASS Prologue ends in the first chapter 
+PASS Keyboard WASD actually moves the character 
+PASS Weapon hotkeys switch slots 
+PASS Escape pauses simulation and opens a modal 
+PASS Map hotkey opens the explored-room map 
+PASS Inventory hotkey opens the build screen 
+PASS Combat room actually spawns a wave 
+PASS Autofire toggle creates real projectiles 
+PASS Relic choice displays three unique options 
+PASS Relic choice applies and resumes 
+PASS Weapon replacement applies the selected item 
+PASS Shop upgrade debits currency and persists +1 
+PASS Returning home exposes the checkpoint Continue button 
+PASS Continue reloads the room and the upgraded weapon 
+PASS Catalog initially contains all 48 implemented weapons 
+PASS Catalog search filters actual content 
+PASS Settings checkbox changes the live audio setting 
+PASS Save export/import transaction keeps a valid checkpoint 
+PASS Public weapon API accepts a new definition 
+PASS Public API rejects invalid definitions 
+PASS Principal encounter opens its own boss introduction 
+PASS Principal changes into the third phase 
+PASS Boss defeat starts an actual victory animation 
+PASS Victory reaches the three-page return-to-reality epilogue 
+PASS Results show score, inspiration and graduation reward 
+PASS Graduation reward is unlocked exactly once 
+PASS Certificate button generates a self-contained SVG 
+PASS Ending returns to a working menu with graduation selection 
+PASS Desktop final menu retains layout {'width': 1440, 'scroll': 1440, 'body': 1440}
+PASS Destroy API stops and removes debug instance 
+PASS mobile-portrait home overflow {'width': 390, 'scroll': 390, 'body': 390}
+PASS mobile-portrait displays both touch joysticks 
+PASS mobile-portrait arena overflow {'width': 390, 'scroll': 390, 'body': 390}
+PASS mobile-portrait touch joystick changes player position 
+PASS mobile-portrait touch skill button actually fires 
+PASS mobile-portrait reward buttons remain reachable 
+PASS mobile-landscape home overflow {'width': 844, 'scroll': 844, 'body': 844}
+PASS mobile-landscape displays both touch joysticks 
+PASS mobile-landscape arena overflow {'width': 844, 'scroll': 844, 'body': 844}
+PASS mobile-landscape touch joystick changes player position 
+PASS mobile-landscape touch skill button actually fires 
+PASS mobile-landscape reward buttons remain reachable 
+PASS No uncaught JavaScript errors in tested browser paths 
+
+48 passed / 0 failed

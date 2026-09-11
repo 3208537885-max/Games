@@ -1,0 +1,60 @@
+PASS Relative runtime asset assets/favicon.svg
+PASS dist mirrors source assets/favicon.svg
+PASS HTTP response bytes assets/favicon.svg
+PASS Relative runtime asset styles.css
+PASS dist mirrors source styles.css
+PASS HTTP response bytes styles.css
+PASS Relative runtime asset config.js
+PASS dist mirrors source config.js
+PASS HTTP response bytes config.js
+PASS HTTP JavaScript is not HTML config.js
+PASS Relative runtime asset src/data.js
+PASS dist mirrors source src/data.js
+PASS HTTP response bytes src/data.js
+PASS HTTP JavaScript is not HTML src/data.js
+PASS Relative runtime asset src/core.js
+PASS dist mirrors source src/core.js
+PASS HTTP response bytes src/core.js
+PASS HTTP JavaScript is not HTML src/core.js
+PASS Relative runtime asset src/game.js
+PASS dist mirrors source src/game.js
+PASS HTTP response bytes src/game.js
+PASS HTTP JavaScript is not HTML src/game.js
+PASS Relative runtime asset src/art.js
+PASS dist mirrors source src/art.js
+PASS HTTP response bytes src/art.js
+PASS HTTP JavaScript is not HTML src/art.js
+PASS Relative runtime asset src/renderer.js
+PASS dist mirrors source src/renderer.js
+PASS HTTP response bytes src/renderer.js
+PASS HTTP JavaScript is not HTML src/renderer.js
+PASS Relative runtime asset src/audio.js
+PASS dist mirrors source src/audio.js
+PASS HTTP response bytes src/audio.js
+PASS HTTP JavaScript is not HTML src/audio.js
+PASS Relative runtime asset src/ui.js
+PASS dist mirrors source src/ui.js
+PASS HTTP response bytes src/ui.js
+PASS HTTP JavaScript is not HTML src/ui.js
+PASS Relative runtime asset src/main.js
+PASS dist mirrors source src/main.js
+PASS HTTP response bytes src/main.js
+PASS HTTP JavaScript is not HTML src/main.js
+PASS Relative runtime asset assets/key-art.svg
+PASS dist mirrors source assets/key-art.svg
+PASS HTTP response bytes assets/key-art.svg
+PASS Standalone has no external script tags
+PASS Standalone has no external stylesheet link
+PASS Standalone embeds original cover
+PASS Standalone contains both engine and API
+PASS Production default debug is false
+PASS Delivery includes CODEX_HANDOFF.md
+PASS Delivery includes README.md
+PASS Delivery includes LICENSE
+PASS Delivery includes docs/ARCHITECTURE.md
+PASS Delivery includes docs/GAME_DESIGN.md
+PASS Delivery includes docs/CONTENT_CATALOG.md
+PASS Delivery includes docs/BALANCE.md
+PASS Delivery includes docs/KNOWN_LIMITATIONS.md
+PASS Delivery includes docs/DEPLOYMENT.md
+59 passed / 0 failed

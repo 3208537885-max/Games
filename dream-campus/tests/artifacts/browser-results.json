@@ -1,0 +1,249 @@
+{
+  "generatedAt": "2026-09-10T18:18:54Z",
+  "transport": "Offline standalone HTML via Playwright set_content; real Chromium canvas/DOM/input/audio; browser disk persistence replaced by a documented in-memory Web Storage shim except the fallback test.",
+  "passed": 48,
+  "failed": 0,
+  "errors": [],
+  "tests": [
+    {
+      "name": "No-storage fallback boots and offers a playable game",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "No-storage fallback renders the arena",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop home has no horizontal overflow",
+      "pass": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'body': 1440}"
+    },
+    {
+      "name": "Original cover SVG is decoded",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Start button enters the four-page prologue",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Prologue ends in the first chapter",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Keyboard WASD actually moves the character",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Weapon hotkeys switch slots",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Escape pauses simulation and opens a modal",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Map hotkey opens the explored-room map",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Inventory hotkey opens the build screen",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Combat room actually spawns a wave",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Autofire toggle creates real projectiles",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Relic choice displays three unique options",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Relic choice applies and resumes",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Weapon replacement applies the selected item",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Shop upgrade debits currency and persists +1",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Returning home exposes the checkpoint Continue button",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Continue reloads the room and the upgraded weapon",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Catalog initially contains all 48 implemented weapons",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Catalog search filters actual content",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Settings checkbox changes the live audio setting",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Save export/import transaction keeps a valid checkpoint",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Public weapon API accepts a new definition",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Public API rejects invalid definitions",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Principal encounter opens its own boss introduction",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Principal changes into the third phase",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Boss defeat starts an actual victory animation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Victory reaches the three-page return-to-reality epilogue",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Results show score, inspiration and graduation reward",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Graduation reward is unlocked exactly once",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Certificate button generates a self-contained SVG",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Ending returns to a working menu with graduation selection",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop final menu retains layout",
+      "pass": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'body': 1440}"
+    },
+    {
+      "name": "Destroy API stops and removes debug instance",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-portrait home overflow",
+      "pass": true,
+      "detail": "{'width': 390, 'scroll': 390, 'body': 390}"
+    },
+    {
+      "name": "mobile-portrait displays both touch joysticks",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-portrait arena overflow",
+      "pass": true,
+      "detail": "{'width': 390, 'scroll': 390, 'body': 390}"
+    },
+    {
+      "name": "mobile-portrait touch joystick changes player position",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-portrait touch skill button actually fires",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-portrait reward buttons remain reachable",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-landscape home overflow",
+      "pass": true,
+      "detail": "{'width': 844, 'scroll': 844, 'body': 844}"
+    },
+    {
+      "name": "mobile-landscape displays both touch joysticks",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-landscape arena overflow",
+      "pass": true,
+      "detail": "{'width': 844, 'scroll': 844, 'body': 844}"
+    },
+    {
+      "name": "mobile-landscape touch joystick changes player position",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-landscape touch skill button actually fires",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-landscape reward buttons remain reachable",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "No uncaught JavaScript errors in tested browser paths",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

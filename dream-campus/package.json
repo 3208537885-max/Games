@@ -1,0 +1,13 @@
+{
+  "name": "dream-campus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Original offline-first campus roguelite. No runtime dependencies or build step required.",
+  "scripts": {
+    "test": "node tests/core.test.cjs",
+    "test:balance": "node tests/balance.cjs",
+    "dev": "python3 tools/serve.py --open",
+    "build": "python3 tools/build.py"
+  },
+  "license": "MIT"
+}

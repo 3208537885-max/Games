@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>个人项目嵌入示例</title>
+<style>body{margin:0;background:#f4f0e2;font:14px system-ui,sans-serif}header{padding:16px 24px;display:flex;justify-content:space-between;gap:16px}iframe{display:block;width:100%;height:calc(100dvh - 54px);min-height:420px;border:0}a{color:#2f634d}</style></head>
+<body><header><a href="../index.html">直接全页游玩</a><span id="status">这是 iframe 容器参考；没有改动游戏本体。</span></header>
+<iframe id="game" src="../index.html" title="水课梦魇" allow="autoplay"></iframe>
+<script>
+const frame=document.getElementById('game');
+frame.addEventListener('load',()=>{try{if(location.origin!=='null')frame.contentWindow.DREAM_CAMPUS_CONFIG.parentOrigin=location.origin;}catch(e){/* Cross-origin host must configure the game explicitly. */}});
+window.addEventListener('message',event=>{
+  if(event.source!==frame.contentWindow||event.origin!==new URL(frame.src).origin)return;
+  if(event.data?.game==='dream-campus'&&event.data.event==='run:end'){
+    const result=event.data.payload;
+    if(typeof result.won==='boolean'&&Number.isFinite(result.score))document.getElementById('status').textContent=(result.won?'成功醒来':'梦境结束')+' · '+result.score+' 分';
+  }
+});
+</script></body></html>

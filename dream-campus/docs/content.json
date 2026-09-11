@@ -1,0 +1,1828 @@
+{
+  "version": "1.0.0",
+  "rarities": [
+    {
+      "name": "普通",
+      "color": "#c3d0c7",
+      "scale": 1,
+      "price": 28
+    },
+    {
+      "name": "精良",
+      "color": "#80dba1",
+      "scale": 1.1,
+      "price": 42
+    },
+    {
+      "name": "稀有",
+      "color": "#66d8d1",
+      "scale": 1.22,
+      "price": 60
+    },
+    {
+      "name": "史诗",
+      "color": "#c69af4",
+      "scale": 1.35,
+      "price": 82
+    },
+    {
+      "name": "传说",
+      "color": "#ffc86b",
+      "scale": 1.5,
+      "price": 108
+    },
+    {
+      "name": "毕业限定",
+      "color": "#ff8d9d",
+      "scale": 1.58,
+      "price": 125
+    }
+  ],
+  "weapons": [
+    {
+      "id": "waterbook",
+      "name": "水课课本",
+      "rarity": 0,
+      "type": "shot",
+      "damage": 9,
+      "interval": 0.2,
+      "energy": 0,
+      "speed": 540,
+      "tag": "water",
+      "icon": "book",
+      "description": "知识没进脑子，水先喷出来了。稳定连射，命中附加潮湿。",
+      "life": 0.9,
+      "spread": 0.045,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "wet": 2
+    },
+    {
+      "id": "pencil",
+      "name": "自动铅笔",
+      "rarity": 0,
+      "type": "shot",
+      "damage": 17,
+      "interval": 0.37,
+      "energy": 0,
+      "speed": 680,
+      "tag": "study",
+      "icon": "pen",
+      "description": "只有 0.5 毫米，却能穿过两只作业怪。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 1,
+      "size": 5
+    },
+    {
+      "id": "slipper",
+      "name": "宿舍拖鞋",
+      "rarity": 0,
+      "type": "boomerang",
+      "damage": 23,
+      "interval": 0.65,
+      "energy": 0,
+      "speed": 410,
+      "tag": "daily",
+      "icon": "shoe",
+      "description": "投出去还会回来，往返各算一次。",
+      "life": 1.3,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 275
+    },
+    {
+      "id": "thermos",
+      "name": "保温杯",
+      "rarity": 0,
+      "type": "spread",
+      "damage": 7,
+      "interval": 0.44,
+      "energy": 1,
+      "speed": 400,
+      "tag": "water",
+      "icon": "cup",
+      "description": "枸杞三连喷；近距离尤其管用。",
+      "life": 0.65,
+      "spread": 0.24,
+      "pellets": 3,
+      "pierce": 0,
+      "size": 5,
+      "wet": 2
+    },
+    {
+      "id": "ruler",
+      "name": "三角尺",
+      "rarity": 0,
+      "type": "melee",
+      "damage": 39,
+      "interval": 0.55,
+      "energy": 0,
+      "speed": 0,
+      "tag": "study",
+      "icon": "ruler",
+      "description": "谁说几何没有杀伤力？扇形挥砍并击退。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 110,
+      "arc": 1.6,
+      "knock": 180
+    },
+    {
+      "id": "noodles",
+      "name": "泡面调料包",
+      "rarity": 0,
+      "type": "lob",
+      "damage": 35,
+      "interval": 0.8,
+      "energy": 3,
+      "speed": 430,
+      "tag": "food",
+      "icon": "noodle",
+      "description": "撕开、抛出，炸出一片红烧牛肉味。",
+      "life": 0.68,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "radius": 66,
+      "burn": 2
+    },
+    {
+      "id": "card",
+      "name": "回旋校园卡",
+      "rarity": 1,
+      "type": "boomerang",
+      "damage": 24,
+      "interval": 0.55,
+      "energy": 2,
+      "speed": 470,
+      "tag": "daily",
+      "icon": "card",
+      "description": "余额为零，但攻击不是。穿透后自动归位。",
+      "life": 1.4,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 330
+    },
+    {
+      "id": "coffee",
+      "name": "冰美式",
+      "rarity": 1,
+      "type": "spread",
+      "damage": 6,
+      "interval": 0.34,
+      "energy": 2,
+      "speed": 540,
+      "tag": "food",
+      "icon": "cup",
+      "description": "把疲惫泼向敌人。五束咖啡令目标减速。",
+      "life": 0.7,
+      "spread": 0.42,
+      "pellets": 5,
+      "pierce": 0,
+      "size": 5,
+      "slow": 1.5
+    },
+    {
+      "id": "laser",
+      "name": "老师的激光笔",
+      "rarity": 1,
+      "type": "beam",
+      "damage": 11,
+      "interval": 0.19,
+      "energy": 3,
+      "speed": 0,
+      "tag": "tech",
+      "icon": "laser",
+      "description": "老师说“看这里”，这一整条线上都得看。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 750,
+      "width": 4
+    },
+    {
+      "id": "meal",
+      "name": "拼好饭",
+      "rarity": 1,
+      "type": "lob",
+      "damage": 47,
+      "interval": 0.78,
+      "energy": 5,
+      "speed": 410,
+      "tag": "food",
+      "icon": "meal",
+      "description": "一份主食，两份爆炸，三位同学拼团。",
+      "life": 0.8,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "radius": 82,
+      "fragments": 3
+    },
+    {
+      "id": "keyboard",
+      "name": "机械键盘",
+      "rarity": 1,
+      "type": "spread",
+      "damage": 6,
+      "interval": 0.4,
+      "energy": 3,
+      "speed": 620,
+      "tag": "tech",
+      "icon": "keyboard",
+      "description": "WASD 四键齐发，终于不用只负责逃跑。",
+      "life": 0.8,
+      "spread": 0.25,
+      "pellets": 4,
+      "pierce": 0,
+      "size": 5
+    },
+    {
+      "id": "hammer",
+      "name": "地质锤",
+      "rarity": 1,
+      "type": "melee",
+      "damage": 49,
+      "interval": 0.59,
+      "energy": 1,
+      "speed": 0,
+      "tag": "geo",
+      "icon": "hammer",
+      "description": "敲开作业的岩壳。近战震击，附带击退。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 126,
+      "arc": 1.9,
+      "knock": 220,
+      "stun": 0.3
+    },
+    {
+      "id": "chalk",
+      "name": "粉笔头",
+      "rarity": 1,
+      "type": "burst",
+      "damage": 10,
+      "interval": 0.54,
+      "energy": 2,
+      "speed": 660,
+      "tag": "study",
+      "icon": "chalk",
+      "description": "一轮三发，精准点名；毕业多年也忘不掉。",
+      "life": 0.95,
+      "spread": 0.05,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "burst": 3,
+      "delay": 0.075
+    },
+    {
+      "id": "usb",
+      "name": "祖传 U 盘",
+      "rarity": 1,
+      "type": "homing",
+      "damage": 21,
+      "interval": 0.38,
+      "energy": 3,
+      "speed": 390,
+      "tag": "tech",
+      "icon": "usb",
+      "description": "里面有十届真题，会自己寻找知识盲区。",
+      "life": 1.7,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "turn": 4.5
+    },
+    {
+      "id": "stapler",
+      "name": "重型订书机",
+      "rarity": 2,
+      "type": "burst",
+      "damage": 16,
+      "interval": 0.65,
+      "energy": 4,
+      "speed": 720,
+      "tag": "study",
+      "icon": "stapler",
+      "description": "一键装订三连击；穿透第一页，也穿透第二页。",
+      "life": 0.95,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 1,
+      "size": 5,
+      "burst": 3,
+      "delay": 0.085
+    },
+    {
+      "id": "laptop",
+      "name": "满血游戏本",
+      "rarity": 2,
+      "type": "spread",
+      "damage": 7,
+      "interval": 0.31,
+      "energy": 5,
+      "speed": 610,
+      "tag": "tech",
+      "icon": "laptop",
+      "description": "风扇起飞，RGB 弹幕启动。近战全中很强，远射会散。",
+      "life": 0.85,
+      "spread": 0.34,
+      "pellets": 5,
+      "pierce": 0,
+      "size": 5,
+      "burn": 0.8
+    },
+    {
+      "id": "powerbank",
+      "name": "共享充电宝",
+      "rarity": 2,
+      "type": "chain",
+      "damage": 25,
+      "interval": 0.62,
+      "energy": 6,
+      "speed": 0,
+      "tag": "electric",
+      "icon": "battery",
+      "description": "押金退不了，电可以放。连锁电弧跳跃三次。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 430,
+      "jumps": 3,
+      "jumpRange": 145
+    },
+    {
+      "id": "express",
+      "name": "最后一公里快递",
+      "rarity": 2,
+      "type": "homing",
+      "damage": 31,
+      "interval": 0.62,
+      "energy": 5,
+      "speed": 330,
+      "tag": "daily",
+      "icon": "parcel",
+      "description": "您的快递已到达怪物脸上。追踪命中小范围爆炸。",
+      "life": 1.8,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "turn": 3.8,
+      "radius": 48
+    },
+    {
+      "id": "compass",
+      "name": "地质罗盘",
+      "rarity": 2,
+      "type": "orbit",
+      "damage": 14,
+      "interval": 1.65,
+      "energy": 10,
+      "speed": 0,
+      "tag": "geo",
+      "icon": "compass",
+      "description": "三枚磁针绕身守护，近身的烦恼都有方向。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "count": 3,
+      "duration": 6,
+      "range": 94
+    },
+    {
+      "id": "rockcore",
+      "name": "取芯钻头",
+      "rarity": 2,
+      "type": "shot",
+      "damage": 31,
+      "interval": 0.55,
+      "energy": 4,
+      "speed": 520,
+      "tag": "geo",
+      "icon": "core",
+      "description": "从作业表层，一路钻到知识内核。",
+      "life": 1.25,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 5,
+      "size": 7
+    },
+    {
+      "id": "soda",
+      "name": "摇过的汽水",
+      "rarity": 2,
+      "type": "wave",
+      "damage": 28,
+      "interval": 0.58,
+      "energy": 4,
+      "speed": 440,
+      "tag": "water",
+      "icon": "bottle",
+      "description": "宽幅汽水浪，穿透敌人，沿途留下潮湿。",
+      "life": 0.95,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 5,
+      "size": 15,
+      "wet": 3
+    },
+    {
+      "id": "umbrella",
+      "name": "八级风暴雨伞",
+      "rarity": 2,
+      "type": "melee",
+      "damage": 52,
+      "interval": 0.67,
+      "energy": 4,
+      "speed": 0,
+      "tag": "water",
+      "icon": "umbrella",
+      "description": "开伞就是一圈反击。挥砍同时清除附近敌弹。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 148,
+      "arc": 3.6,
+      "clear": true,
+      "knock": 230
+    },
+    {
+      "id": "wifi",
+      "name": "满格校园网",
+      "rarity": 2,
+      "type": "turret",
+      "damage": 12,
+      "interval": 3,
+      "energy": 13,
+      "speed": 0,
+      "tag": "tech",
+      "icon": "router",
+      "description": "部署路由炮台，自动向最近且可见的怪物发包。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "duration": 11,
+      "rate": 0.4,
+      "range": 430
+    },
+    {
+      "id": "mouse",
+      "name": "电竞鼠标",
+      "rarity": 2,
+      "type": "burst",
+      "damage": 12,
+      "interval": 0.43,
+      "energy": 4,
+      "speed": 780,
+      "tag": "tech",
+      "icon": "mouse",
+      "description": "三连点，物理级手速。",
+      "life": 0.85,
+      "spread": 0.025,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "burst": 3,
+      "delay": 0.055
+    },
+    {
+      "id": "hotpot",
+      "name": "宿舍违禁小火锅",
+      "rarity": 3,
+      "type": "lob",
+      "damage": 59,
+      "interval": 0.9,
+      "energy": 8,
+      "speed": 390,
+      "tag": "food",
+      "icon": "pot",
+      "description": "不鼓励违纪，只鼓励把梦里的作业煮熟。",
+      "life": 0.85,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "radius": 100,
+      "burn": 3.8
+    },
+    {
+      "id": "ppt",
+      "name": "八百页 PPT",
+      "rarity": 3,
+      "type": "orbit",
+      "damage": 19,
+      "interval": 1.9,
+      "energy": 12,
+      "speed": 0,
+      "tag": "study",
+      "icon": "slides",
+      "description": "还没讲完，但已经把你围住了。四张幻灯片自动护体。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "count": 4,
+      "duration": 7,
+      "range": 108
+    },
+    {
+      "id": "deadline",
+      "name": "DDL 倒计时",
+      "rarity": 3,
+      "type": "mine",
+      "damage": 70,
+      "interval": 1.35,
+      "energy": 8,
+      "speed": 0,
+      "tag": "study",
+      "icon": "clock",
+      "description": "在准星附近留下倒计时。靠近触发，逾期自动爆炸。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "radius": 108,
+      "arm": 0.65,
+      "duration": 4,
+      "range": 340
+    },
+    {
+      "id": "scholarship",
+      "name": "奖学金申请表",
+      "rarity": 3,
+      "type": "beam",
+      "damage": 27,
+      "interval": 0.4,
+      "energy": 6,
+      "speed": 0,
+      "tag": "study",
+      "icon": "certificate",
+      "description": "审核过长，激光也很长。直线穿透整排敌人。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 940,
+      "width": 7
+    },
+    {
+      "id": "microscope",
+      "name": "偏光显微镜",
+      "rarity": 3,
+      "type": "beam",
+      "damage": 17,
+      "interval": 0.25,
+      "energy": 5,
+      "speed": 0,
+      "tag": "geo",
+      "icon": "scope",
+      "description": "交叉偏光锁定晶体弱点，额外提高暴击率。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 760,
+      "width": 6,
+      "crit": 0.18
+    },
+    {
+      "id": "seismic",
+      "name": "地震检波器",
+      "rarity": 3,
+      "type": "wave",
+      "damage": 42,
+      "interval": 0.68,
+      "energy": 6,
+      "speed": 400,
+      "tag": "geo",
+      "icon": "sensor",
+      "description": "发出宽幅穿透震波，震得作业当场停顿。",
+      "life": 1.25,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 8,
+      "size": 21,
+      "stun": 0.35
+    },
+    {
+      "id": "fan",
+      "name": "宿舍落地扇",
+      "rarity": 3,
+      "type": "turret",
+      "damage": 8,
+      "interval": 3.2,
+      "energy": 15,
+      "speed": 0,
+      "tag": "daily",
+      "icon": "fan",
+      "description": "风扇三散射；最多同时保留两座炮台。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 3,
+      "pierce": 0,
+      "size": 5,
+      "duration": 12,
+      "rate": 0.55,
+      "range": 440
+    },
+    {
+      "id": "bubbletea",
+      "name": "全糖加料奶茶",
+      "rarity": 3,
+      "type": "spread",
+      "damage": 10,
+      "interval": 0.55,
+      "energy": 6,
+      "speed": 440,
+      "tag": "food",
+      "icon": "boba",
+      "description": "六颗珍珠扇形爆射，黏住目标。",
+      "life": 0.9,
+      "spread": 0.55,
+      "pellets": 6,
+      "pierce": 0,
+      "size": 5,
+      "slow": 2
+    },
+    {
+      "id": "report",
+      "name": "小组作业·最终版",
+      "rarity": 3,
+      "type": "boomerang",
+      "damage": 36,
+      "interval": 0.65,
+      "energy": 5,
+      "speed": 450,
+      "tag": "study",
+      "icon": "report",
+      "description": "最终版、最终版 2、真的最终版——总会回来。",
+      "life": 1.65,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 410
+    },
+    {
+      "id": "drone",
+      "name": "航拍测绘无人机",
+      "rarity": 3,
+      "type": "turret",
+      "damage": 22,
+      "interval": 3.2,
+      "energy": 16,
+      "speed": 0,
+      "tag": "geo",
+      "icon": "drone",
+      "description": "原地悬停测绘，追踪弹自动标注地表异常。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "duration": 11,
+      "rate": 0.65,
+      "homing": true,
+      "range": 500
+    },
+    {
+      "id": "lint",
+      "name": "滚筒洗衣机",
+      "rarity": 3,
+      "type": "wave",
+      "damage": 39,
+      "interval": 0.58,
+      "energy": 7,
+      "speed": 460,
+      "tag": "daily",
+      "icon": "washer",
+      "description": "把知识拧干，洗涤波穿透并推开前方敌人。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 6,
+      "size": 19,
+      "knock": 180,
+      "wet": 2
+    },
+    {
+      "id": "mineral",
+      "name": "矿物标本盒",
+      "rarity": 3,
+      "type": "spread",
+      "damage": 15,
+      "interval": 0.78,
+      "energy": 7,
+      "speed": 540,
+      "tag": "geo",
+      "icon": "mineral",
+      "description": "石英、长石、云母齐射；每枚晶片可再穿一只。",
+      "life": 0.9,
+      "spread": 0.46,
+      "pellets": 5,
+      "pierce": 1,
+      "size": 5
+    },
+    {
+      "id": "quantum",
+      "name": "量子游戏本",
+      "rarity": 4,
+      "type": "burst",
+      "damage": 11,
+      "interval": 0.43,
+      "energy": 8,
+      "speed": 760,
+      "tag": "tech",
+      "icon": "laptop",
+      "description": "风扇变成涡轮。五发超频弹，强但吃专注值。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 1,
+      "size": 5,
+      "burst": 5,
+      "delay": 0.045
+    },
+    {
+      "id": "petrel",
+      "name": "三维建模工作站",
+      "rarity": 4,
+      "type": "turret",
+      "damage": 18,
+      "interval": 3.8,
+      "energy": 19,
+      "speed": 0,
+      "tag": "geo",
+      "icon": "station",
+      "description": "把敌人也纳入网格：双弹自动建模炮台。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 2,
+      "pierce": 0,
+      "size": 5,
+      "duration": 13,
+      "rate": 0.78,
+      "range": 520
+    },
+    {
+      "id": "steam",
+      "name": "SAGD 蒸汽双井",
+      "rarity": 4,
+      "type": "spread",
+      "damage": 15,
+      "interval": 0.47,
+      "energy": 7,
+      "speed": 480,
+      "tag": "geo",
+      "icon": "pipe",
+      "description": "双井并行，三束高温蒸汽同时开采梦境。",
+      "life": 1.05,
+      "spread": 0.15,
+      "pellets": 3,
+      "pierce": 1,
+      "size": 5,
+      "burn": 2.2,
+      "wet": 2
+    },
+    {
+      "id": "fault",
+      "name": "断层解释神器",
+      "rarity": 4,
+      "type": "wave",
+      "damage": 64,
+      "interval": 0.86,
+      "energy": 9,
+      "speed": 530,
+      "tag": "geo",
+      "icon": "fault",
+      "description": "一道断层震波贯穿全场，让敌方计划发生错断。",
+      "life": 1.5,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 12,
+      "size": 25,
+      "stun": 0.42
+    },
+    {
+      "id": "canteen",
+      "name": "食堂无限续饭勺",
+      "rarity": 4,
+      "type": "melee",
+      "damage": 93,
+      "interval": 0.76,
+      "energy": 4,
+      "speed": 0,
+      "tag": "food",
+      "icon": "ladle",
+      "description": "这一勺不手抖。超大扇形，清弹且重击。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 173,
+      "arc": 2.5,
+      "knock": 280,
+      "clear": true
+    },
+    {
+      "id": "admission",
+      "name": "保研通知书",
+      "rarity": 4,
+      "type": "homing",
+      "damage": 25,
+      "interval": 0.48,
+      "energy": 7,
+      "speed": 440,
+      "tag": "study",
+      "icon": "letter",
+      "description": "两封追踪喜报自动寻找敌人；快乐可以分享。",
+      "life": 1.8,
+      "spread": 0.2,
+      "pellets": 2,
+      "pierce": 0,
+      "size": 5,
+      "turn": 5
+    },
+    {
+      "id": "thesis",
+      "name": "论文查重粉碎机",
+      "rarity": 4,
+      "type": "beam",
+      "damage": 31,
+      "interval": 0.34,
+      "energy": 7,
+      "speed": 0,
+      "tag": "study",
+      "icon": "printer",
+      "description": "重复率降下去了，沿线怪物也一起消失。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 1020,
+      "width": 10
+    },
+    {
+      "id": "rail",
+      "name": "返乡高铁票",
+      "rarity": 4,
+      "type": "shot",
+      "damage": 83,
+      "interval": 0.96,
+      "energy": 9,
+      "speed": 1100,
+      "tag": "daily",
+      "icon": "ticket",
+      "description": "没有什么能挡住放假回家的学生。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 10,
+      "size": 9
+    },
+    {
+      "id": "storm",
+      "name": "实验室特斯拉线圈",
+      "rarity": 4,
+      "type": "chain",
+      "damage": 41,
+      "interval": 0.66,
+      "energy": 8,
+      "speed": 0,
+      "tag": "electric",
+      "icon": "coil",
+      "description": "五次连锁电击；潮湿敌人会受到额外电伤。",
+      "life": 1,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "range": 490,
+      "jumps": 5,
+      "jumpRange": 175
+    },
+    {
+      "id": "meteor",
+      "name": "野外实习陨石锤",
+      "rarity": 4,
+      "type": "lob",
+      "damage": 87,
+      "interval": 1.06,
+      "energy": 10,
+      "speed": 380,
+      "tag": "geo",
+      "icon": "meteor",
+      "description": "野外捡来的标本，带一点天体级冲击力。",
+      "life": 0.92,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 0,
+      "size": 5,
+      "radius": 127,
+      "burn": 2.5,
+      "fragments": 5
+    },
+    {
+      "id": "roommate",
+      "name": "室友的起床气",
+      "rarity": 4,
+      "type": "wave",
+      "damage": 65,
+      "interval": 0.85,
+      "energy": 9,
+      "speed": 400,
+      "tag": "daily",
+      "icon": "alarm",
+      "description": "不要惹早八室友。这道声浪让整排敌人短暂眩晕。",
+      "life": 1.3,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 10,
+      "size": 26,
+      "stun": 0.6
+    },
+    {
+      "id": "diploma",
+      "name": "毕业证发射器",
+      "rarity": 5,
+      "type": "homing",
+      "damage": 29,
+      "interval": 0.35,
+      "energy": 5,
+      "speed": 520,
+      "tag": "study",
+      "icon": "diploma",
+      "description": "你已经醒来过一次。毕业证会追踪目标并穿透一次。",
+      "life": 1.9,
+      "spread": 0,
+      "pellets": 1,
+      "pierce": 1,
+      "size": 5,
+      "turn": 5.4,
+      "unlock": "win"
+    }
+  ],
+  "relics": [
+    {
+      "id": "notes",
+      "name": "学霸的笔记",
+      "icon": "book",
+      "description": "所有伤害 +12%。笔迹清楚，逻辑也清楚。",
+      "mods": {
+        "damage": 0.12
+      }
+    },
+    {
+      "id": "coffeeCard",
+      "name": "咖啡月卡",
+      "icon": "cup",
+      "description": "攻击速度 +12%，专注恢复 +2/秒。",
+      "mods": {
+        "haste": 0.12,
+        "regen": 2
+      }
+    },
+    {
+      "id": "sneakers",
+      "name": "体测神鞋",
+      "icon": "shoe",
+      "description": "移速 +12%，闪避冷却缩短 12%。",
+      "mods": {
+        "speed": 0.12,
+        "dash": 0.12
+      }
+    },
+    {
+      "id": "helmet",
+      "name": "野外实习安全帽",
+      "icon": "helmet",
+      "description": "最大生命 +20，立即回复 20。",
+      "mods": {
+        "hp": 20
+      },
+      "heal": 20
+    },
+    {
+      "id": "insurance",
+      "name": "大学生医保",
+      "icon": "heart",
+      "description": "每次清理战斗房回复 5 点生命。",
+      "mods": {
+        "roomHeal": 5
+      }
+    },
+    {
+      "id": "battery",
+      "name": "满电充电宝",
+      "icon": "battery",
+      "description": "专注上限 +25，专注恢复 +3/秒。",
+      "mods": {
+        "energy": 25,
+        "regen": 3
+      }
+    },
+    {
+      "id": "goggles",
+      "name": "实验护目镜",
+      "icon": "goggles",
+      "description": "暴击率 +10%。暴击造成 1.7 倍伤害。",
+      "mods": {
+        "crit": 0.1
+      }
+    },
+    {
+      "id": "shield",
+      "name": "防破防耳机",
+      "icon": "headset",
+      "description": "护盾上限 +18，立即充满护盾。",
+      "mods": {
+        "shield": 18
+      },
+      "refillShield": true
+    },
+    {
+      "id": "coupon",
+      "name": "神券膨胀包",
+      "icon": "ticket",
+      "description": "此后商店价格降低 20%。",
+      "mods": {
+        "discount": 0.2
+      }
+    },
+    {
+      "id": "internship",
+      "name": "实习工资到账",
+      "icon": "coin",
+      "description": "立刻获得 45 学分币，后续清房奖励 +4。",
+      "mods": {
+        "roomCoins": 4
+      },
+      "coins": 45
+    },
+    {
+      "id": "waterproof",
+      "name": "防水野簿",
+      "icon": "book",
+      "description": "水系伤害 +28%；所有潮湿目标再受伤时 +10%。",
+      "mods": {
+        "water": 0.28,
+        "wetBonus": 0.1
+      }
+    },
+    {
+      "id": "extension",
+      "name": "万能插线板",
+      "icon": "coil",
+      "description": "电系伤害 +25%，电弧增加一次跳跃。",
+      "mods": {
+        "electric": 0.25,
+        "chain": 1
+      }
+    },
+    {
+      "id": "fieldwork",
+      "name": "野外实习证",
+      "icon": "card",
+      "description": "地质武器伤害 +24%。",
+      "mods": {
+        "geo": 0.24
+      }
+    },
+    {
+      "id": "takeout",
+      "name": "外卖保温袋",
+      "icon": "meal",
+      "description": "食物武器伤害 +24%，爆炸范围 +15%。",
+      "mods": {
+        "food": 0.24,
+        "blast": 0.15
+      }
+    },
+    {
+      "id": "overclock",
+      "name": "散热支架",
+      "icon": "laptop",
+      "description": "科技武器伤害 +24%，专注消耗降低 8%。",
+      "mods": {
+        "tech": 0.24,
+        "efficiency": 0.08
+      }
+    },
+    {
+      "id": "bookmark",
+      "name": "考点书签",
+      "icon": "certificate",
+      "description": "学习武器伤害 +24%。",
+      "mods": {
+        "study": 0.24
+      }
+    },
+    {
+      "id": "resilience",
+      "name": "情绪稳定",
+      "icon": "heart",
+      "description": "受到伤害降低 12%，受伤无敌时间稍长。",
+      "mods": {
+        "armor": 0.12,
+        "invuln": 0.15
+      }
+    },
+    {
+      "id": "scope",
+      "name": "标本放大镜",
+      "icon": "scope",
+      "description": "子弹尺寸 +20%，暴击率 +6%。",
+      "mods": {
+        "size": 0.2,
+        "crit": 0.06
+      }
+    },
+    {
+      "id": "club",
+      "name": "社团招新传单",
+      "icon": "slides",
+      "description": "炮台持续时间 +35%，召唤物伤害 +15%。",
+      "mods": {
+        "duration": 0.35,
+        "summon": 0.15
+      }
+    },
+    {
+      "id": "bargain",
+      "name": "二手群捡漏",
+      "icon": "parcel",
+      "description": "普通、精良武器伤害 +24%，专注恢复 +2/秒。",
+      "mods": {
+        "budget": 0.24,
+        "regen": 2
+      }
+    },
+    {
+      "id": "deadlinePass",
+      "name": "DDL 延期申请",
+      "icon": "clock",
+      "description": "主动技能冷却缩短 22%。",
+      "mods": {
+        "skill": 0.22
+      }
+    },
+    {
+      "id": "lucky",
+      "name": "转发锦鲤",
+      "icon": "mineral",
+      "description": "清房武器掉落率 +15 个百分点，暴击率 +4%。",
+      "mods": {
+        "luck": 0.15,
+        "crit": 0.04
+      }
+    },
+    {
+      "id": "shockproof",
+      "name": "防震样品箱",
+      "icon": "core",
+      "description": "护盾开始恢复的等待缩短 2 秒。",
+      "mods": {
+        "shieldDelay": 2
+      }
+    },
+    {
+      "id": "focus",
+      "name": "图书馆固定座位",
+      "icon": "chair",
+      "description": "专注消耗降低 18%，但移速降低 4%。",
+      "mods": {
+        "efficiency": 0.18,
+        "speed": -0.04
+      }
+    },
+    {
+      "id": "secondChance",
+      "name": "补考机会",
+      "icon": "letter",
+      "description": "本局首次倒下时复苏到 45% 生命，并清除敌弹。",
+      "mods": {
+        "revive": 1
+      }
+    },
+    {
+      "id": "thorn",
+      "name": "怼人表情包",
+      "icon": "phone",
+      "description": "受到伤害时，对附近敌人释放 50 点反击震波。",
+      "mods": {
+        "thorns": 50
+      }
+    },
+    {
+      "id": "mint",
+      "name": "薄荷糖",
+      "icon": "candy",
+      "description": "生命上限 +10，移动速度 +7%，立即回复 10。",
+      "mods": {
+        "hp": 10,
+        "speed": 0.07
+      },
+      "heal": 10
+    },
+    {
+      "id": "rubber",
+      "name": "降噪橡皮",
+      "icon": "eraser",
+      "description": "穿透型弹丸额外穿透 1 个敌人；护盾 +8。",
+      "mods": {
+        "pierce": 1,
+        "shield": 8
+      }
+    }
+  ],
+  "synergies": [
+    {
+      "id": "wetCircuit",
+      "name": "水电不分家",
+      "tags": [
+        "water",
+        "electric"
+      ],
+      "description": "同时携带水系与电系：电弧额外跳跃 2 次。现实中请注意用电安全。",
+      "mods": {
+        "chain": 2
+      }
+    },
+    {
+      "id": "fieldTeam",
+      "name": "野外调查小队",
+      "tags": [
+        "geo",
+        "geo"
+      ],
+      "description": "双地质武器：地质伤害 +18%，最大护盾 +12。",
+      "mods": {
+        "geo": 0.18,
+        "shield": 12
+      }
+    },
+    {
+      "id": "dorm",
+      "name": "宿舍快乐套餐",
+      "tags": [
+        "food",
+        "tech"
+      ],
+      "description": "食物 + 科技：专注恢复 +5/秒。",
+      "mods": {
+        "regen": 5
+      }
+    },
+    {
+      "id": "finalWeek",
+      "name": "期末复习周",
+      "tags": [
+        "study",
+        "study"
+      ],
+      "description": "双学习武器：暴击率 +10%，攻速 +8%。",
+      "mods": {
+        "crit": 0.1,
+        "haste": 0.08
+      }
+    },
+    {
+      "id": "survival",
+      "name": "大学生生存指南",
+      "tags": [
+        "daily",
+        "food"
+      ],
+      "description": "日常 + 食物：每次清房回复 4 生命。",
+      "mods": {
+        "roomHeal": 4
+      }
+    },
+    {
+      "id": "steamLab",
+      "name": "蒸汽实验室",
+      "tags": [
+        "geo",
+        "water"
+      ],
+      "description": "地质 + 水系：潮湿目标额外受到 18% 伤害。",
+      "mods": {
+        "wetBonus": 0.18
+      }
+    },
+    {
+      "id": "network",
+      "name": "宿舍局域网",
+      "tags": [
+        "tech",
+        "tech"
+      ],
+      "description": "双科技武器：召唤物伤害 +20%，专注消耗降低 10%。",
+      "mods": {
+        "summon": 0.2,
+        "efficiency": 0.1
+      }
+    },
+    {
+      "id": "applied",
+      "name": "理论联系实际",
+      "tags": [
+        "study",
+        "geo"
+      ],
+      "description": "学习 + 地质：全伤害 +10%，暴击率 +4%。",
+      "mods": {
+        "damage": 0.1,
+        "crit": 0.04
+      }
+    }
+  ],
+  "characters": [
+    {
+      "id": "geo",
+      "name": "地质实习生",
+      "subtitle": "岩层会说话，作业不会。",
+      "color": "#72d5b0",
+      "hp": 110,
+      "energy": 100,
+      "speed": 224,
+      "regen": 14,
+      "starter": "hammer",
+      "secondary": "waterbook",
+      "mods": {
+        "geo": 0.12
+      },
+      "passive": "地质伤害 +12% · 110 生命"
+    },
+    {
+      "id": "early",
+      "name": "早八幸存者",
+      "subtitle": "出勤率不高，求生欲很高。",
+      "color": "#ffc873",
+      "hp": 100,
+      "energy": 100,
+      "speed": 240,
+      "regen": 14,
+      "starter": "waterbook",
+      "secondary": "slipper",
+      "mods": {
+        "dash": 0.18
+      },
+      "passive": "移动更快 · 闪避冷却缩短 18%"
+    },
+    {
+      "id": "cram",
+      "name": "期末突击人",
+      "subtitle": "一晚一支笔，一个奇迹。",
+      "color": "#c5a2ed",
+      "hp": 90,
+      "energy": 125,
+      "speed": 229,
+      "regen": 17,
+      "starter": "pencil",
+      "secondary": "thermos",
+      "mods": {
+        "crit": 0.07
+      },
+      "passive": "125 专注 · 恢复更快 · 暴击 +7%"
+    }
+  ],
+  "difficulties": {
+    "chill": {
+      "name": "轻松旁听",
+      "description": "敌人伤害 ×0.70，生命 ×0.85；更适合第一次醒来。",
+      "enemyHp": 0.85,
+      "enemyDamage": 0.7,
+      "bulletSpeed": 0.88,
+      "reward": 0.85
+    },
+    "normal": {
+      "name": "正常修读",
+      "description": "标准数值；注意预警、灵活换武器即可。",
+      "enemyHp": 1,
+      "enemyDamage": 1,
+      "bulletSpeed": 1,
+      "reward": 1
+    },
+    "nightmare": {
+      "name": "期末噩梦",
+      "description": "敌人伤害 ×1.22，生命 ×1.20，弹速 ×1.10。",
+      "enemyHp": 1.2,
+      "enemyDamage": 1.22,
+      "bulletSpeed": 1.1,
+      "reward": 1.25
+    }
+  },
+  "floors": [
+    {
+      "name": "第一章 · 永无止境的早八",
+      "short": "教学楼",
+      "subtitle": "投影仪还在放第 1 页。你已经睡进第 36 页。",
+      "palette": [
+        "#263d37",
+        "#2d4740",
+        "#426456",
+        "#76bd96"
+      ],
+      "boss": "ta",
+      "bossName": "点名助教",
+      "bossQuote": "“这位同学，请回答一下！”",
+      "baseHp": 1,
+      "baseDamage": 1,
+      "bossHp": 660,
+      "mobs": [
+        "paper",
+        "slime",
+        "rollcall",
+        "charger",
+        "printer"
+      ]
+    },
+    {
+      "name": "第二章 · 饭点生存法则",
+      "short": "食堂 / 宿舍",
+      "subtitle": "取餐码失效了，阿姨的手却抖出了弹幕。",
+      "palette": [
+        "#423e32",
+        "#514b3c",
+        "#736248",
+        "#d9b074"
+      ],
+      "boss": "chef",
+      "bossName": "手抖阿姨 · 盛饭机甲",
+      "bossQuote": "“同学，少打一点也是为你好。”",
+      "baseHp": 1.42,
+      "baseDamage": 1.15,
+      "bossHp": 1090,
+      "mobs": [
+        "paper",
+        "charger",
+        "printer",
+        "bomb",
+        "cleaner",
+        "mosquito",
+        "summoner"
+      ]
+    },
+    {
+      "name": "第三章 · 学分尽头的高塔",
+      "short": "行政楼",
+      "subtitle": "公章盖过了现实，毕业只差最后一个同意。",
+      "palette": [
+        "#363545",
+        "#454052",
+        "#675b78",
+        "#b49acd"
+      ],
+      "boss": "principal",
+      "bossName": "梦境校长 · 学分之主",
+      "bossQuote": "“还差一个学分，就可以醒来了。”",
+      "baseHp": 1.92,
+      "baseDamage": 1.3,
+      "bossHp": 1860,
+      "mobs": [
+        "rollcall",
+        "printer",
+        "ghost",
+        "proctor",
+        "slide",
+        "summoner",
+        "cleaner",
+        "bomb"
+      ]
+    }
+  ],
+  "enemies": {
+    "paper": {
+      "name": "会跑的作业",
+      "hp": 38,
+      "speed": 93,
+      "r": 15,
+      "color": "#eee3b6",
+      "cost": 1,
+      "behavior": "chase",
+      "damage": 10
+    },
+    "slime": {
+      "name": "学分软泥",
+      "hp": 48,
+      "speed": 65,
+      "r": 19,
+      "color": "#a1d99a",
+      "cost": 1.2,
+      "behavior": "split",
+      "damage": 10
+    },
+    "mini": {
+      "name": "零点五学分",
+      "hp": 16,
+      "speed": 105,
+      "r": 10,
+      "color": "#b5e997",
+      "cost": 0.3,
+      "behavior": "chase",
+      "damage": 6
+    },
+    "rollcall": {
+      "name": "点名册",
+      "hp": 42,
+      "speed": 57,
+      "r": 17,
+      "color": "#d68e84",
+      "cost": 1.4,
+      "behavior": "shoot",
+      "damage": 11
+    },
+    "charger": {
+      "name": "内卷冲刺人",
+      "hp": 62,
+      "speed": 72,
+      "r": 17,
+      "color": "#ecb572",
+      "cost": 1.6,
+      "behavior": "charge",
+      "damage": 13
+    },
+    "printer": {
+      "name": "卡纸打印机",
+      "hp": 68,
+      "speed": 0,
+      "r": 21,
+      "color": "#94b3b5",
+      "cost": 1.8,
+      "behavior": "fan",
+      "damage": 10
+    },
+    "bomb": {
+      "name": "爆炸催缴单",
+      "hp": 30,
+      "speed": 108,
+      "r": 15,
+      "color": "#ed8b85",
+      "cost": 1.3,
+      "behavior": "bomb",
+      "damage": 15
+    },
+    "cleaner": {
+      "name": "扫地大魔王",
+      "hp": 135,
+      "speed": 64,
+      "r": 24,
+      "color": "#afc7b9",
+      "cost": 2.6,
+      "behavior": "slam",
+      "damage": 15
+    },
+    "mosquito": {
+      "name": "熄灯后蚊子",
+      "hp": 34,
+      "speed": 105,
+      "r": 13,
+      "color": "#bea7d5",
+      "cost": 1.3,
+      "behavior": "strafe",
+      "damage": 9
+    },
+    "summoner": {
+      "name": "小组甩锅王",
+      "hp": 79,
+      "speed": 47,
+      "r": 20,
+      "color": "#d7a994",
+      "cost": 2.4,
+      "behavior": "summon",
+      "damage": 11
+    },
+    "ghost": {
+      "name": "断线校园网",
+      "hp": 63,
+      "speed": 67,
+      "r": 18,
+      "color": "#8bd4d1",
+      "cost": 2.1,
+      "behavior": "teleport",
+      "damage": 12
+    },
+    "proctor": {
+      "name": "监考铁壁",
+      "hp": 127,
+      "speed": 62,
+      "r": 23,
+      "color": "#9b9bae",
+      "cost": 2.4,
+      "behavior": "guard",
+      "damage": 14
+    },
+    "slide": {
+      "name": "无限下一页",
+      "hp": 81,
+      "speed": 44,
+      "r": 21,
+      "color": "#bfa2d2",
+      "cost": 2.2,
+      "behavior": "radial",
+      "damage": 11
+    }
+  },
+  "events": [
+    {
+      "id": "nap",
+      "title": "自习室的空沙发",
+      "text": "一张没有人占座的沙发，简直像个陷阱。不过你真的有点困。",
+      "choices": [
+        {
+          "text": "眯五分钟",
+          "detail": "回复 32 生命",
+          "heal": 32
+        },
+        {
+          "text": "继续奋斗",
+          "detail": "获得 24 学分币",
+          "coins": 24
+        }
+      ]
+    },
+    {
+      "id": "corebox",
+      "title": "无人认领的岩芯箱",
+      "text": "箱盖上写着“珍贵样品，请轻拿轻放”。里面也许藏着一整段地质史。",
+      "choices": [
+        {
+          "text": "认真鉴定",
+          "detail": "获得一件地质武器",
+          "weaponTag": "geo"
+        },
+        {
+          "text": "归还实验室",
+          "detail": "回复 18 生命 + 18 学分币",
+          "heal": 18,
+          "coins": 18
+        }
+      ]
+    },
+    {
+      "id": "deal",
+      "title": "二手群神秘学长",
+      "text": "“九成新，仅拆封，毕业带不走。”这句熟悉的话让你产生了亲切感。",
+      "choices": [
+        {
+          "text": "以旧换梦",
+          "detail": "花费 28 学分币，获得稀有以上武器",
+          "cost": 28,
+          "weaponTier": 2
+        },
+        {
+          "text": "婉拒并领红包",
+          "detail": "获得 12 学分币",
+          "coins": 12
+        }
+      ]
+    },
+    {
+      "id": "group",
+      "title": "小组作业群（99+）",
+      "text": "消息 1：“在吗？”消息 99：“那你一个人做一下吧。”",
+      "choices": [
+        {
+          "text": "拒绝内耗",
+          "detail": "回复 20 生命，专注回满",
+          "heal": 20,
+          "refill": true
+        },
+        {
+          "text": "按贡献分工",
+          "detail": "获得一件随机遗物",
+          "relic": true
+        }
+      ]
+    },
+    {
+      "id": "vending",
+      "title": "不收现金的贩卖机",
+      "text": "机器上贴着一张便利贴：“今日接受烦恼支付。”",
+      "choices": [
+        {
+          "text": "投进一点压力",
+          "detail": "付出 12 生命（不会致死），获得 40 学分币",
+          "hurt": 12,
+          "coins": 40
+        },
+        {
+          "text": "接杯温水",
+          "detail": "回复 15 生命",
+          "heal": 15
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "title": "图书馆的隐藏书架",
+      "text": "这层书架没有教材，只有“如何在截止日期前保持清醒”。",
+      "choices": [
+        {
+          "text": "借一本回去",
+          "detail": "获得一件学习武器",
+          "weaponTag": "study"
+        },
+        {
+          "text": "安静阅读",
+          "detail": "获得一件随机遗物",
+          "relic": true
+        }
+      ]
+    },
+    {
+      "id": "rain",
+      "title": "突如其来的校园阵雨",
+      "text": "梦里的天气预报也不准。有人把一把伞放在了你手里。",
+      "choices": [
+        {
+          "text": "收下雨伞",
+          "detail": "获得「八级风暴雨伞」",
+          "weapon": "umbrella"
+        },
+        {
+          "text": "把伞留给别人",
+          "detail": "回复 25 生命 + 12 学分币",
+          "heal": 25,
+          "coins": 12
+        }
+      ]
+    },
+    {
+      "id": "office",
+      "title": "导师的办公室",
+      "text": "“模型只是表达，预测要有依据。”老师递给你一张野外实习证。",
+      "choices": [
+        {
+          "text": "认真做记录",
+          "detail": "获得「野外实习证」；已有则获得其他遗物",
+          "specificRelic": "fieldwork"
+        },
+        {
+          "text": "请教实验方法",
+          "detail": "获得一件地质武器",
+          "weaponTag": "geo"
+        }
+      ]
+    }
+  ],
+  "types": {
+    "shot": "直射",
+    "spread": "散射",
+    "burst": "连发",
+    "beam": "贯穿激光",
+    "homing": "追踪",
+    "lob": "抛物爆弹",
+    "boomerang": "往返回旋",
+    "melee": "扇形近战",
+    "wave": "穿透冲击波",
+    "chain": "连锁电弧",
+    "orbit": "环绕护体",
+    "turret": "自动炮台",
+    "mine": "延时陷阱"
+  },
+  "tags": {
+    "water": "水系",
+    "food": "食物",
+    "geo": "地质",
+    "study": "学习",
+    "tech": "科技",
+    "daily": "日常",
+    "electric": "电系"
+  }
+}

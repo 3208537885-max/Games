@@ -1,0 +1,243 @@
+{
+  "passed": 59,
+  "failed": 0,
+  "baseUrl": "http://127.0.0.1:8787",
+  "checks": [
+    {
+      "name": "Relative runtime asset assets/favicon.svg",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source assets/favicon.svg",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes assets/favicon.svg",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset styles.css",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source styles.css",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes styles.css",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset config.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source config.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes config.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML config.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/data.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/data.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/data.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/data.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/core.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/core.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/core.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/core.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/game.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/game.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/game.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/game.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/art.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/art.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/art.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/art.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/renderer.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/renderer.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/renderer.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/renderer.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/audio.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/audio.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/audio.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/audio.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/ui.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/ui.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/ui.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/ui.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset src/main.js",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source src/main.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes src/main.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP JavaScript is not HTML src/main.js",
+      "pass": true
+    },
+    {
+      "name": "Relative runtime asset assets/key-art.svg",
+      "pass": true
+    },
+    {
+      "name": "dist mirrors source assets/key-art.svg",
+      "pass": true
+    },
+    {
+      "name": "HTTP response bytes assets/key-art.svg",
+      "pass": true
+    },
+    {
+      "name": "Standalone has no external script tags",
+      "pass": true
+    },
+    {
+      "name": "Standalone has no external stylesheet link",
+      "pass": true
+    },
+    {
+      "name": "Standalone embeds original cover",
+      "pass": true
+    },
+    {
+      "name": "Standalone contains both engine and API",
+      "pass": true
+    },
+    {
+      "name": "Production default debug is false",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes CODEX_HANDOFF.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes README.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes LICENSE",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/ARCHITECTURE.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/GAME_DESIGN.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/CONTENT_CATALOG.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/BALANCE.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/KNOWN_LIMITATIONS.md",
+      "pass": true
+    },
+    {
+      "name": "Delivery includes docs/DEPLOYMENT.md",
+      "pass": true
+    }
+  ]
+}
