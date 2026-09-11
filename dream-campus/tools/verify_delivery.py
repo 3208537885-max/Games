@@ -27,7 +27,7 @@ check('Standalone has no external script tags',not re.search(r'<script[^>]+src='
 check('Standalone has no external stylesheet link',not re.search(r'<link[^>]+rel="stylesheet"',solo))
 check('Standalone embeds original cover', 'data:image/svg+xml;base64,' in solo)
 check('Standalone contains both engine and API', 'class Game{' in solo and 'window.DreamCampus=Object.freeze(api)' in solo)
-check('Production default debug is false', 'debug: false' in (ROOT/'config.js').read_text())
+check('Production default debug is false', 'debug: false' in (ROOT/'config.js').read_text(encoding='utf-8'))
 required=['CODEX_HANDOFF.md','README.md','LICENSE','docs/ARCHITECTURE.md','docs/GAME_DESIGN.md','docs/CONTENT_CATALOG.md','docs/BALANCE.md','docs/KNOWN_LIMITATIONS.md','docs/DEPLOYMENT.md']
 for name in required:check('Delivery includes '+name,(ROOT/name).is_file())
 report={'passed':sum(c['pass'] for c in checks),'failed':sum(not c['pass'] for c in checks),'baseUrl':args.base_url,'checks':checks}

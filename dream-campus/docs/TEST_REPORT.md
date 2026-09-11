@@ -5,10 +5,10 @@
 ## 环境与结果
 
 - Python：3.13.5；Node：v22.16.0；实际运行浏览器为系统 Chromium（无头模式）。
-- 无 DOM 核心/模拟：**22 组通过 / 0 组失败**，共 429,585 次断言。
+- 无 DOM 核心/模拟：**22 组通过 / 0 组失败**，共 429,809 次断言。
 - 真实浏览器 UI/输入：**48 项通过 / 0 项失败**，已测路径无未捕获 JavaScript 错误。
-- 发布完整性与本地 HTTP：**59 项通过 / 0 项失败**。
-- 伤害实验：54 件武器 × 两个距离 × 每场 30 秒；结果见 `BALANCE.md` 和 JSON/CSV。
+- 发布完整性：**38 项通过 / 0 项失败**。
+- 伤害实验：62 件武器 × 两个距离 × 每场 30 秒；结果见 `BALANCE.md` 和 JSON/CSV。
 
 ## 口径，尤其是没有测到的内容
 
@@ -24,7 +24,7 @@
 
 | 测试 | 结果 |
 |---|---|
-| Content: 54 unique weapons, 28 relics, 8 synergies, 13 attack behaviors | PASS |
+| Content: 62 unique weapons, 28 relics, 8 synergies, 13 attack behaviors | PASS |
 | Seeded maps: 1,500 floors, unique cells, connected graph, guaranteed special rooms | PASS |
 | Interior navigation: 450 generated layouts preserve a connected walkable field | PASS |
 | Movement and rays: dash cannot tunnel through a thin prop; room bounds clip rays | PASS |
@@ -32,7 +32,7 @@
 | Synergies require two separate tags; stat ceilings and +3 upgrade ceiling | PASS |
 | Pause freezes all gameplay clocks and player coordinates | PASS |
 | Focus recovery, drinking, dash immunity, and per-slot fire cooldowns | PASS |
-| All 54 weapons create real damage with their actual engine behavior | PASS |
+| All 62 weapons create real damage with their actual engine behavior | PASS |
 | Beam and very fast projectiles hit front targets but not through cover | PASS |
 | Water/electric interaction applies 35% bonus; boss stun has a short cap | PASS |
 | Visual settings do not alter combat RNG or critical damage | PASS |
@@ -72,7 +72,7 @@
 | Shop upgrade debits currency and persists +1 | PASS |
 | Returning home exposes the checkpoint Continue button | PASS |
 | Continue reloads the room and the upgraded weapon | PASS |
-| Catalog initially contains all 54 implemented weapons | PASS |
+| Catalog initially contains all 62 implemented weapons | PASS |
 | Catalog search filters actual content | PASS |
 | Settings checkbox changes the live audio setting | PASS |
 | Save export/import transaction keeps a valid checkpoint | PASS |
@@ -122,4 +122,4 @@ python tools/verify_delivery.py --base-url http://127.0.0.1:8787
 
 ## 尚未执行
 
-没有进入用户个人项目，没有执行其构建命令，没有连接其托管账号，没有推送其仓库，没有公开上线。没有长期玩家留存或通关率数据，没有负载/联网安全测试，也没有真实手机性能矩阵。
+没有长期玩家留存或通关率数据，没有负载/联网安全测试，也没有真实手机性能矩阵。本报告验证本地构建与游戏厅入口；GitHub Pages 的最终缓存刷新时间由托管平台决定。

@@ -5,6 +5,7 @@ browser's native disk persistence. The first test also checks the no-storage fal
 Requires Playwright only for QA; the game has zero runtime dependencies.
 """
 from pathlib import Path
+import os, sys
 import json, time, argparse
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]; OUT=ROOT/'tests/artifacts'
@@ -33,7 +34,12 @@ def check_layout(page,name):
     record(name,max(r['scroll'],r['body'])<=r['width']+1,str(r))
 
 with sync_playwright() as p:
-    browser=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
+    browser_path=os.environ.get('DREAM_CAMPUS_BROWSER')
+    if not browser_path:
+        candidates=['/usr/bin/chromium',r'C:\Program Files\Google\Chrome\Application\chrome.exe',r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe']
+        browser_path=next((str(p) for p in candidates if Path(p).is_file()),None)
+    launch_args=['--no-sandbox'] if sys.platform!='win32' else []
+    browser=p.chromium.launch(executable_path=browser_path,headless=True,args=launch_args)
     ctx,page=boot(browser,shim=False)
     record('No-storage fallback boots and offers a playable game',page.evaluate("!!DreamCampus&&!__DC_DEBUG__.game.storage.available"))
     page.evaluate("DreamCampus.start({skipStory:true,seed:'FALLBACK'})");page.wait_for_timeout(150)
@@ -64,7 +70,7 @@ with sync_playwright() as p:
     page.keyboard.press('f');page.evaluate("__DC_DEBUG__.game.offerRelics('浏览器测试')")
     record('Relic choice displays three unique options',page.locator('[data-action="relic"]').count()==3)
     screenshot(page,'relics.png');page.locator('[data-action="relic"]').first.click();record('Relic choice applies and resumes',page.evaluate("__DC_DEBUG__.game.run.relics.length===1&&__DC_DEBUG__.game.mode==='playing'"))
-    page.evaluate("__DC_DEBUG__.game.offerWeapon('laptop')");screenshot(page,'weapon.png');page.locator('[data-action="replace"][data-slot="0"]').click()
+    page.evaluate("__DC_DEBUG__.game.offerWeapon('laptop')");page.wait_for_timeout(900);screenshot(page,'weapon.png');page.locator('[data-action="replace"][data-slot="0"]').click()
     record('Weapon replacement applies the selected item',page.evaluate("__DC_DEBUG__.game.run.inventory[0].id==='laptop'"))
     page.evaluate("let r=__DC_DEBUG__.game.run.floors[0].rooms.find(r=>r.type==='shop');__DC_DEBUG__.warp(0,r.id);__DC_DEBUG__.game.run.coins=300;__DC_DEBUG__.game.openShop()")
     screenshot(page,'shop.png');page.locator('[data-action="upgrade"][data-slot="0"]').click()
@@ -73,8 +79,8 @@ with sync_playwright() as p:
     record('Returning home exposes the checkpoint Continue button',page.locator('#continueBtn').is_visible());page.locator('#continueBtn').click()
     record('Continue reloads the room and the upgraded weapon',page.evaluate("__DC_DEBUG__.game.mode==='playing'&&__DC_DEBUG__.game.weapon.id==='laptop'&&__DC_DEBUG__.game.run.inventory[0].level===1"))
     page.evaluate("__DC_DEBUG__.game.returnToMenu()");page.locator('[data-action="catalog"]').click()
-    record('Catalog initially contains all 48 implemented weapons',page.locator('.catalog-card').count()==48)
-    page.locator('#catalogSearch').fill('地质');record('Catalog search filters actual content',0<page.locator('.catalog-card').count()<48);screenshot(page,'catalog.png');page.keyboard.press('Escape')
+    record('Catalog initially contains all 62 implemented weapons',page.locator('.catalog-card').count()==62)
+    page.locator('#catalogSearch').fill('地质');record('Catalog search filters actual content',0<page.locator('.catalog-card').count()<62);screenshot(page,'catalog.png');page.keyboard.press('Escape')
     page.locator('.home [data-action="settings"]').click();page.locator('[data-setting="music"]').uncheck()
     record('Settings checkbox changes the live audio setting',page.evaluate('!__DC_DEBUG__.game.meta.settings.music'))
     page.keyboard.press('Escape');payload=page.evaluate('DreamCampus.exportSave()');page.evaluate('DreamCampus.importSave(DreamCampus.exportSave())')

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T10:47:43.522Z",
+  "generatedAt": "2026-09-11T11:29:36.459Z",
   "method": "30-second continuous-fire stationary-target test; no character/relic/meta/synergy boosts; 100 initial focus +14/s regen; no drinking or skill; targets at95/280px; target knockback reset; inherent weapon crit retained.",
   "weapons": [
     {
@@ -91,6 +91,21 @@
       "spent30s": 114,
       "firstFarHit": 0.533,
       "maxBullets": 1
+    },
+    {
+      "id": "attendance",
+      "name": "早八签到卡",
+      "rarity": "普通",
+      "tier": 0,
+      "behavior": "shot",
+      "baseDamage": 12,
+      "interval": 0.24,
+      "energy": 0,
+      "closeDPS": 48,
+      "farDPS": 47.6,
+      "spent30s": 0,
+      "firstFarHit": 0.317,
+      "maxBullets": 4
     },
     {
       "id": "card",
@@ -196,6 +211,36 @@
       "spent30s": 216,
       "firstFarHit": 0.367,
       "maxBullets": 5
+    },
+    {
+      "id": "usedbook",
+      "name": "二手教材砖",
+      "rarity": "精良",
+      "tier": 1,
+      "behavior": "boomerang",
+      "baseDamage": 30,
+      "interval": 0.68,
+      "energy": 1,
+      "closeDPS": 95.7,
+      "farDPS": 95.7,
+      "spent30s": 44,
+      "firstFarHit": 0.5,
+      "maxBullets": 2
+    },
+    {
+      "id": "overnightBoba",
+      "name": "隔夜奶茶",
+      "rarity": "精良",
+      "tier": 1,
+      "behavior": "spread",
+      "baseDamage": 8,
+      "interval": 0.42,
+      "energy": 2,
+      "closeDPS": 81.84,
+      "farDPS": 60.72,
+      "spent30s": 140,
+      "firstFarHit": 0.467,
+      "maxBullets": 8
     },
     {
       "id": "courseLock",
@@ -438,6 +483,36 @@
       "maxBullets": 3
     },
     {
+      "id": "broadcast",
+      "name": "校园广播喇叭",
+      "rarity": "稀有",
+      "tier": 2,
+      "behavior": "wave",
+      "baseDamage": 34,
+      "interval": 0.64,
+      "energy": 4,
+      "closeDPS": 64.99,
+      "farDPS": 63.6,
+      "spent30s": 188,
+      "firstFarHit": 0.433,
+      "maxBullets": 2
+    },
+    {
+      "id": "seatHolder",
+      "name": "图书馆占座伞",
+      "rarity": "稀有",
+      "tier": 2,
+      "behavior": "orbit",
+      "baseDamage": 16,
+      "interval": 1.85,
+      "energy": 9,
+      "closeDPS": 26.68,
+      "farDPS": 0,
+      "spent30s": 45,
+      "firstFarHit": null,
+      "maxBullets": 0
+    },
+    {
       "id": "hotpot",
       "name": "宿舍违禁小火锅",
       "rarity": "史诗",
@@ -633,6 +708,36 @@
       "maxBullets": 10
     },
     {
+      "id": "redPen",
+      "name": "论文批注红笔",
+      "rarity": "史诗",
+      "tier": 3,
+      "behavior": "burst",
+      "baseDamage": 14,
+      "interval": 0.56,
+      "energy": 5,
+      "closeDPS": 142.38,
+      "farDPS": 145.47,
+      "spent30s": 265,
+      "firstFarHit": 0.283,
+      "maxBullets": 8
+    },
+    {
+      "id": "centrifuge",
+      "name": "实验室离心机",
+      "rarity": "史诗",
+      "tier": 3,
+      "behavior": "orbit",
+      "baseDamage": 22,
+      "interval": 2.05,
+      "energy": 13,
+      "closeDPS": 55.44,
+      "farDPS": 0,
+      "spent30s": 65,
+      "firstFarHit": null,
+      "maxBullets": 0
+    },
+    {
       "id": "quantum",
       "name": "量子游戏本",
       "rarity": "传说",
@@ -796,6 +901,21 @@
       "spent30s": 324,
       "firstFarHit": 0.517,
       "maxBullets": 2
+    },
+    {
+      "id": "registrarStamp",
+      "name": "教务处万能章",
+      "rarity": "传说",
+      "tier": 4,
+      "behavior": "lob",
+      "baseDamage": 94,
+      "interval": 0.96,
+      "energy": 9,
+      "closeDPS": 134.42,
+      "farDPS": 135.75,
+      "spent30s": 288,
+      "firstFarHit": 0.467,
+      "maxBullets": 5
     },
     {
       "id": "diploma",

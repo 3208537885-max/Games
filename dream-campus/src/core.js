@@ -121,6 +121,29 @@
       crit:clamp(mods.crit,0,.65),armor:clamp(mods.armor,0,.45),efficiency:clamp(mods.efficiency,0,.5),dashCooldown:1.10*Math.max(.55,1-mods.dash),skillCooldown:12*Math.max(.5,1-mods.skill)});
   }
   function weaponDamage(w,level,stats){return w.damage*DC.RARITIES[w.rarity].scale*(1+.14*clamp(level||0,0,3))*(1+stats.damage+(stats[w.tag]||0)+(w.rarity<=1?(stats.budget||0):0));}
+  function weaponProfile(w,level=0,stats={}){
+    const s=Object.assign({damage:0,haste:0,crit:.05,efficiency:0,energyRegen:14},stats||{}),damage=weaponDamage(w,level,s);
+    let hits=1;
+    if(w.type==='spread')hits=1+Math.max(0,(w.pellets||1)-1)*.62;
+    else if(w.type==='burst')hits=Math.max(1,w.burst||1)*.93;
+    else if(w.type==='boomerang')hits=1.72;
+    else if(w.type==='homing')hits=Math.max(1,w.pellets||1)*.96;
+    let dps=damage*hits*(1+s.haste)/Math.max(.1,w.interval||1);
+    if(w.type==='turret')dps=damage*Math.max(1,w.pellets||1)*1.7/Math.max(.2,w.rate||1);
+    if(w.type==='orbit')dps=damage*Math.max(1,w.count||1)*.72/.55;
+    dps*=1+Math.max(0,(w.crit||0))*.7;
+    const output=clamp(Math.round(18+Math.sqrt(Math.max(0,dps))*5.35),12,100);
+    const control=clamp(Math.round(10+(w.pierce||0)*5+(w.jumps||0)*7+(w.radius||0)*.16+(w.slow?16:0)+(w.stun||0)*38+(w.knock||0)*.055+(w.clear?24:0)+(w.wet?6:0)),8,100);
+    const reach=w.range||((w.speed||0)*(w.life||1));
+    const safety=clamp(Math.round(20+Math.min(34,reach/18)+(w.type==='homing'?15:0)+(w.type==='turret'?18:0)+(w.type==='orbit'?14:0)+(w.clear?18:0)-(w.type==='melee'?13:0)),8,100);
+    const drain=(w.energy||0)/Math.max(.15,w.interval||1),sustain=clamp(Math.round(100-drain*2.8+(w.energy===0?8:0)),12,100);
+    const tactical=output*.50+control*.22+safety*.17+sustain*.11;
+    const score=clamp(Math.round(tactical*1.32),1,100);
+    const grade=score>=90?'S':score>=80?'A':score>=70?'B':score>=60?'C':'D';
+    const axes={output,control,safety,sustain},labels={output:'输出',control:'控场',safety:'安全',sustain:'续航'};
+    const role=labels[Object.entries(axes).sort((a,b)=>b[1]-a[1])[0][0]];
+    return{score,grade,role,axes,dps:Math.round(dps)};
+  }
   function rollWeapon(rng,floor,minTier=0,tag=null,unlocked=false){
     const pools=[[[0,30],[1,40],[2,23],[3,6],[4,1]],[[0,8],[1,25],[2,40],[3,23],[4,4]],[[1,8],[2,35],[3,40],[4,17]]];
     let entries=pools[clamp(floor,0,2)].filter(x=>x[0]>=minTier),total=entries.reduce((s,v)=>s+v[1],0),roll=rng.next()*total,tier=minTier;
@@ -148,5 +171,5 @@
       return d;
     }
   }
-  Object.assign(DC,{W,H,PAD,TAU,clamp,dist,hash,RNG,circleRect,isFree,moveEntity,segmentCircle,segmentActor,rayRect,lineEnd,los,DIRECTIONS,generateFloor,makeObstacles,FlowField,activeSynergies,makeStats,weaponDamage,rollWeapon,safeText,Storage,defaultMeta});
+  Object.assign(DC,{W,H,PAD,TAU,clamp,dist,hash,RNG,circleRect,isFree,moveEntity,segmentCircle,segmentActor,rayRect,lineEnd,los,DIRECTIONS,generateFloor,makeObstacles,FlowField,activeSynergies,makeStats,weaponDamage,weaponProfile,rollWeapon,safeText,Storage,defaultMeta});
 })(typeof window!=='undefined'?window:globalThis);

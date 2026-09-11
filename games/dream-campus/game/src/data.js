@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.18';
+  DC.VERSION = '0.1.19';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
@@ -19,6 +19,7 @@
     ['thermos','保温杯',0,'spread',7,0.44,1,400,'water','cup','枸杞三连喷；近距离尤其管用。',{pellets:3,spread:0.24,wet:2,life:0.65}],
     ['ruler','三角尺',0,'melee',39,0.55,0,0,'study','ruler','谁说几何没有杀伤力？扇形挥砍并击退。',{range:110,arc:1.6,knock:180}],
     ['noodles','泡面调料包',0,'lob',35,0.80,3,430,'food','noodle','撕开、抛出，炸出一片红烧牛肉味。',{radius:66,burn:2,life:0.68}],
+    ['attendance','早八签到卡',0,'shot',12,0.24,0,720,'study','card','滴的一声完成签到。零耗能、高弹速，适合稳定点掉漏网的小怪。',{life:0.92,pierce:1,bulletStyle:'stamp'}],
     ['card','回旋校园卡',1,'boomerang',24,0.55,2,470,'daily','card','余额为零，但攻击不是。穿透后自动归位。',{range:330,life:1.4}],
     ['coffee','冰美式',1,'spread',6,0.34,2,540,'food','cup','把疲惫泼向敌人。五束咖啡令目标减速。',{pellets:5,spread:0.42,slow:1.5,life:0.7}],
     ['laser','老师的激光笔',1,'beam',11,0.19,3,0,'tech','laser','老师说“看这里”，这一整条线上都得看。',{range:750,width:4}],
@@ -26,6 +27,8 @@
     ['duckrice','鸭腿饭',1,'lob',63,0.86,4,450,'food','meal','鸭腿先到，作业靠后。落地后炸出油亮的范围冲击，并分裂出三枚饭粒弹。',{radius:78,burn:3.4,life:0.72,fragments:3,bulletStyle:'food'}],
     ['chickenrice','鸡腿饭',1,'boomerang',38,0.58,2,570,'food','drumstick','鸡腿饭盒绕场一周，去程和回程都能命中；回程会自动找回你。',{range:350,life:1.55,bulletStyle:'drumstick'}],
     ['keyboard','机械键盘',1,'spread',6,0.40,3,620,'tech','keyboard','WASD 四键齐发，终于不用只负责逃跑。',{pellets:4,spread:0.25,life:0.8}],
+    ['usedbook','二手教材砖',1,'boomerang',30,0.68,1,455,'study','book','知识很重，物理意义上也是。飞出去拍一遍，返程再补一遍。',{range:325,life:1.48,bulletStyle:'paper'}],
+    ['overnightBoba','隔夜奶茶',1,'spread',8,0.42,2,500,'food','boba','四颗珍珠黏住前排目标。伤害普通，但能给后续输出争取空间。',{pellets:4,spread:0.34,slow:1.65,life:0.82,bulletStyle:'boba'}],
     ['courseLock','卡死的选课网站',2,'mine',76,1.18,6,0,'tech','laptop','鼠标转圈五分钟，敌人只要靠近就会触发崩溃爆炸。',{radius:104,arm:.6,duration:4.5,range:360,bulletStyle:'glitch'}],
     ['refreshQueue','抢课刷新器',2,'burst',14,0.52,3,780,'tech','keyboard','连续刷新四次，每一发都带着“请稍候”的残影。',{burst:4,delay:.06,spread:.06,life:.7,bulletStyle:'glitch'}],
     ['hammer','地质锤',1,'melee',49,0.59,1,0,'geo','hammer','敲开作业的岩壳。近战震击，附带击退。',{range:126,arc:1.9,knock:220,stun:0.30}],
@@ -42,6 +45,8 @@
     ['umbrella','八级风暴雨伞',2,'melee',52,0.67,4,0,'water','umbrella','开伞就是一圈反击。挥砍同时清除附近敌弹。',{range:148,arc:3.6,clear:true,knock:230}],
     ['wifi','满格校园网',2,'turret',12,3.0,13,0,'tech','router','部署路由炮台，自动向最近且可见的怪物发包。',{duration:11,rate:0.40,range:430}],
     ['mouse','电竞鼠标',2,'burst',12,0.43,4,780,'tech','mouse','三连点，物理级手速。',{burst:3,delay:0.055,spread:0.025,life:0.85}],
+    ['broadcast','校园广播喇叭',2,'wave',34,0.64,4,485,'daily','alarm','下课通知形成宽幅声浪，穿透一排敌人并把它们向后推开。',{size:23,pierce:7,knock:175,life:1.1,bulletStyle:'sound'}],
+    ['seatHolder','图书馆占座伞',2,'orbit',16,1.85,9,0,'study','umbrella','三把占座伞绕身巡逻。部署后切走武器，防线仍会继续工作。',{count:3,duration:7.4,range:106,bulletStyle:'paper'}],
     ['hotpot','宿舍违禁小火锅',3,'lob',59,0.90,8,390,'food','pot','不鼓励违纪，只鼓励把梦里的作业煮熟。',{radius:100,burn:3.8,life:0.85}],
     ['ppt','八百页 PPT',3,'orbit',19,1.9,12,0,'study','slides','还没讲完，但已经把你围住了。四张幻灯片自动护体。',{count:4,duration:7,range:108}],
     ['deadline','DDL 倒计时',3,'mine',70,1.35,8,0,'study','clock','在准星附近留下倒计时。靠近触发，逾期自动爆炸。',{radius:108,arm:0.65,duration:4,range:340}],
@@ -55,6 +60,8 @@
     ['drone','航拍测绘无人机',3,'turret',22,3.2,16,0,'geo','drone','原地悬停测绘，追踪弹自动标注地表异常。',{duration:11,rate:0.65,homing:true,range:500}],
     ['lint','滚筒洗衣机',3,'wave',39,0.58,7,460,'daily','washer','把知识拧干，洗涤波穿透并推开前方敌人。',{size:19,pierce:6,knock:180,wet:2,life:1.0}],
     ['mineral','矿物标本盒',3,'spread',15,0.78,7,540,'geo','mineral','石英、长石、云母齐射；每枚晶片可再穿一只。',{pellets:5,spread:0.46,pierce:1,life:0.9}],
+    ['redPen','论文批注红笔',3,'burst',14,0.56,5,790,'study','pen','四连红字批注精准追责；最后一笔更容易打出暴击。',{burst:4,delay:0.055,spread:0.035,pierce:1,crit:0.12,life:0.92,bulletStyle:'ink'}],
+    ['centrifuge','实验室离心机',3,'orbit',22,2.05,13,0,'tech','washer','四枚高速样品管绕身离心，适合贴近敌群后切回主武器输出。',{count:4,duration:8.2,range:119,bulletStyle:'scan'}],
     ['quantum','量子游戏本',4,'burst',11,0.43,8,760,'tech','laptop','风扇变成涡轮。五发超频弹，强但吃专注值。',{burst:5,delay:0.045,pierce:1,life:1.0}],
     ['petrel','三维建模工作站',4,'turret',18,3.8,19,0,'geo','station','把敌人也纳入网格：双弹自动建模炮台。',{duration:13,rate:0.78,pellets:2,range:520}],
     ['steam','SAGD 蒸汽双井',4,'spread',15,0.47,7,480,'geo','pipe','双井并行，三束高温蒸汽同时开采梦境。',{pellets:3,spread:0.15,burn:2.2,wet:2,life:1.05,pierce:1}],
@@ -66,6 +73,7 @@
     ['storm','实验室特斯拉线圈',4,'chain',41,0.66,8,0,'electric','coil','五次连锁电击；潮湿敌人会受到额外电伤。',{range:490,jumps:5,jumpRange:175}],
     ['meteor','野外实习陨石锤',4,'lob',87,1.06,10,380,'geo','meteor','野外捡来的标本，带一点天体级冲击力。',{radius:127,burn:2.5,life:0.92,fragments:5}],
     ['roommate','室友的起床气',4,'wave',65,0.85,9,400,'daily','alarm','不要惹早八室友。这道声浪让整排敌人短暂眩晕。',{pierce:10,size:26,stun:0.60,life:1.3}],
+    ['registrarStamp','教务处万能章',4,'lob',94,0.96,9,490,'study','certificate','一章盖下，全场生效。大范围爆炸后飞出四枚红印碎片，并短暂打断敌人。',{radius:124,fragments:4,stun:0.28,life:0.88,bulletStyle:'stamp'}],
     ['diploma','毕业证发射器',5,'homing',29,0.35,5,520,'study','diploma','你已经醒来过一次。毕业证会追踪目标并穿透一次。',{turn:5.4,pierce:1,life:1.9,unlock:'win'}]
   ];
   DC.WEAPONS = Object.fromEntries(weapons.map(w => [w[0], Object.assign({id:w[0],name:w[1],rarity:w[2],type:w[3],damage:w[4],interval:w[5],energy:w[6],speed:w[7],tag:w[8],icon:w[9],description:w[10],life:1,spread:0,pellets:1,pierce:0,size:5}, w[11])]));

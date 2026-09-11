@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T18:18:54Z",
+  "generatedAt": "2026-09-11T11:39:32Z",
   "transport": "Offline standalone HTML via Playwright set_content; real Chromium canvas/DOM/input/audio; browser disk persistence replaced by a documented in-memory Web Storage shim except the fallback test.",
   "passed": 48,
   "failed": 0,
@@ -101,7 +101,7 @@
       "detail": ""
     },
     {
-      "name": "Catalog initially contains all 48 implemented weapons",
+      "name": "Catalog initially contains all 62 implemented weapons",
       "pass": true,
       "detail": ""
     },
