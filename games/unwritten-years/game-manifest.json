@@ -1,0 +1,25 @@
+{
+  "id": "unwritten-years",
+  "title": "未完的四年 · 上大",
+  "subtitle": "一个上大，四年生活，36条成长路",
+  "description": "暗色单机上海大学生活模拟。118种行动、24位虚构成年角色、40项技能、72种结局。四年手帐连接阅读、友情、项目、升学与创业。",
+  "entry": "index.html",
+  "version": "3.0.0",
+  "rulesVersion": "uy-shu-3.0.0",
+  "category": "simulation",
+  "tags": [
+    "单机",
+    "暗色",
+    "人生模拟",
+    "回合制",
+    "上海大学",
+    "多结局"
+  ],
+  "offline": true,
+  "runtimeDependencies": [],
+  "mobile": true,
+  "keyboard": true,
+  "backendRequired": false,
+  "saveNamespace": "unwritten-years:shu:v3",
+  "cover": "cover.svg"
+}
