@@ -74,6 +74,20 @@ html[data-control-mode="touch"] .control-strip{display:none!important}
   .touch-play:after{content:"横屏游玩，视野与操作更舒适";position:absolute;top:calc(111px + 62.5vw);left:0;right:0;text-align:center;color:#abc09c;font-size:11px;pointer-events:none}
 }
 
+/* 0.1.24 visual pass: the menu follows the dark green and purple game-hall palette. */
+.home{--paper:#172c27;--paper-deep:#213b31;--ink:#e7efd8;--muted:#9caf9a;--teal:#91d0a0;--line:#43604c;color:var(--ink);background:transparent}
+.home .enroll-card{background:#19382acc;border-color:#43604c;box-shadow:0 7px 0 #081a1438,0 25px 50px #06150f40}
+.home .character-card{background:#203e31;border-color:#4b6a53;color:#e7efd8}
+.home .character-card.selected{background:#2a4d38;border-color:#91c987}
+.home .character-card p,.home .minor-text,.home .hero-description,.home .home-footer{color:#a5b89b}
+.home .run-options input,.home .run-options select{background:#142d26;border-color:#4b6a53;color:#e7efd8}
+.home .hero-pills span{background:#29473580;border-color:#54715a;color:#c1d9ad}
+.home .top-sticker{background:#19382acc;border-color:#4b6a53;color:#bdd0ae}
+.home .bottom-sticker{background:#294735;color:#d1e2bd;box-shadow:3px 4px 0 #0d2119}
+.home .brand-mark{background:#2d6148;color:#e7efd8;box-shadow:3px 3px 0 #547b5b}
+.home .button.secondary{background:#2b5137;color:#d6e4bb;border-color:#5b7a4b}
+.home .button.ghost,.home .icon-button{border-color:#54715a;color:#c8dabc}
+
 </style>
 </head>
 <body>
@@ -136,7 +150,7 @@ window.DREAM_CAMPUS_CONFIG = Object.assign({
 (function (root) {
   'use strict';
   const DC = root.DC = root.DC || {};
-  DC.VERSION = '0.1.23';
+  DC.VERSION = '0.1.24';
   DC.RARITIES = [
     { name:'普通', color:'#c3d0c7', scale:1, price:28 },
     { name:'精良', color:'#80dba1', scale:1.10, price:42 },
