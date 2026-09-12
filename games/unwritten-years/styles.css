@@ -75,3 +75,20 @@ input,select,textarea{background:#0f1a24;color:var(--ink);border-color:var(--lin
 .shu-task .progress>span{background:var(--green)}.btn.primary,.brand-mark{color:#0a231c}.tag.gold{color:var(--gold)}.shu-map .quick-help{display:block}.shu-task-links button:disabled{color:var(--muted)}
 /* The full SHU title and five controls remain readable on narrow screens. */
 @media(max-width:460px){.topbar{flex-wrap:wrap;row-gap:9px}.brand{max-width:100%}.top-actions{width:100%;justify-content:flex-end;margin-left:0}.top-actions .mobile-stats-btn{margin-left:0}}
+
+/* 3.1 polish: make the planning rhythm easier to scan and give important choices a clear response. */
+body{background:radial-gradient(circle at 15% 0%,rgba(105,218,180,.08),transparent 32rem),radial-gradient(circle at 90% 18%,rgba(115,90,160,.09),transparent 28rem),radial-gradient(#2942480a .7px,transparent .7px) 0 0/6px 6px,var(--paper)}
+.panel{transition:border-color .2s ease,box-shadow .2s ease}
+.panel:hover{border-color:#355565;box-shadow:0 18px 44px #00000035}
+.admission,.campus-header,.shu-welcome-note,.shu-agenda{overflow:hidden}
+.admission:after,.campus-header:after{content:'';position:absolute;inset:auto -12% -45% 42%;height:180px;background:radial-gradient(ellipse,rgba(105,218,180,.12),transparent 68%);pointer-events:none}
+.action-card:not(.locked):focus-within,.action-card:not(.locked):hover{box-shadow:0 10px 26px #00000030;border-color:#527f74}
+.action-add{transition:transform .18s ease,background .18s ease,color .18s ease}
+.action-card:hover .action-add:not(:disabled){transform:scale(1.08)}
+.plan-slot.filled{box-shadow:inset 3px 0 #69dab4}
+.shu-task.completed{background:linear-gradient(145deg,rgba(194,163,102,.09),transparent 55%),var(--card)}
+.shu-chapter-tabs button{transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.shu-chapter-tabs button:hover,.shu-chapter-tabs button:focus-visible{transform:translateY(-2px);border-color:var(--teal)}
+.toast,#toast{box-shadow:0 12px 30px #0008;animation:toast-in .24s ease both}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){.welcome{padding-left:16px;padding-right:16px}.game-shell{padding-left:16px;padding-right:16px}.admission:after,.campus-header:after{display:none}.panel:hover{box-shadow:var(--shadow)}}
